@@ -111,7 +111,112 @@
       cursor: pointer;
       text-align: center;
     }
-    .ga-button:active { background: #cffafe; }
+    /* ===================== MÓDULO DMG ===================== */
+    .dmg-source-banner {
+      margin: 4px 0 16px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+    .dmg-source-banner a { color: #1d4ed8; }
+    .dmg-danger-banner {
+      margin: 0 0 16px;
+      padding: 12px 13px;
+      border-radius: 12px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #7f1d1d;
+      font-size: 12px;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+    .dmg-section {
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dmg-section:last-child { border-bottom: none; }
+    .dmg-section h3 {
+      font-size: 14.5px;
+      margin: 0 0 4px;
+      color: #0f172a;
+    }
+    .dmg-section .dmg-rec-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+    .dmg-calc-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; margin: 10px 0; }
+    .dmg-result {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+      color: white;
+    }
+    .dmg-result.show { display: block; }
+    .dmg-result .dmg-dose-big { font-size: 26px; font-weight: 800; }
+    .dmg-result .dmg-dose-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; }
+    .dmg-result .dmg-dose-note { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.25); font-size: 11.5px; line-height: 1.6; }
+    .dmg-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 8px; }
+    .dmg-table th {
+      text-align: left;
+      padding: 7px 6px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid var(--border);
+    }
+    .dmg-table td { padding: 8px 6px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .dmg-cat {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .dmg-cat-a { background: #dcfce7; color: #15803d; }
+    .dmg-cat-b { background: #e0f2fe; color: #0369a1; }
+    .dmg-cat-c { background: #fef3c7; color: #a16207; }
+    .dmg-list { margin: 8px 0 0; padding-left: 18px; font-size: 12.5px; line-height: 1.7; color: #334155; }
+    .dmg-list.dmg-list-bad { color: #b91c1c; }
+    .dmg-info-box {
+      margin-top: 10px;
+      padding: 11px 12px;
+      border-radius: 11px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      line-height: 1.6;
+      color: #334155;
+    }
+    .dmg-info-box strong { color: #0f172a; }
+    .dmg-button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .dmg-button:active { background: #fee2e2; }
     .searchbox input {
       width: 100%;
       padding: 14px 42px 14px 14px;
@@ -371,23 +476,34 @@
     .info a { color: var(--primary-light); text-decoration: none; font-size: 12.5px; }
     .ga-tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 6px;
+      margin-bottom: 10px;
       background: #f1f5f9;
       padding: 4px;
       border-radius: 12px;
     }
     .ga-tab {
       flex: 1;
-      padding: 9px;
+      padding: 9px 4px;
       border: none;
       border-radius: 9px;
       background: transparent;
       color: var(--muted);
       font-weight: 700;
-      font-size: 12.5px;
+      font-size: 11.5px;
       cursor: pointer;
     }
+    .ga-method-note {
+      display: none;
+      margin-bottom: 14px;
+      padding: 10px 11px;
+      border-radius: 11px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .ga-method-note.show { display: block; }
     .ga-tab.active { background: var(--white); color: var(--primary); box-shadow: 0 1px 3px rgba(15,23,42,0.12); }
     .ga-label {
       display: block;
@@ -416,7 +532,15 @@
       background: linear-gradient(135deg, #164e63, #0891b2);
       color: white;
     }
-    .ga-result .ga-weeks { font-size: 22px; font-weight: 800; }
+    .ga-result .ga-label-result {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+    .ga-result .ga-weeks { font-size: 28px; font-weight: 800; line-height: 1.15; }
     .ga-result .ga-trimester { font-size: 12px; opacity: 0.9; margin-top: 2px; }
     .ga-result .ga-dpp { margin-top: 10px; font-size: 12.5px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.25); }
     .ga-disclaimer { margin: 14px 0 4px; font-size: 10.5px; color: var(--muted); line-height: 1.5; }
@@ -461,6 +585,9 @@
     <main>
       <button class="ga-button" id="gaButton" onclick="GestMedApp.openGaCalculator()">
         📅 Calcular idade gestacional
+      </button>
+      <button class="dmg-button" id="dmgButton" onclick="GestMedApp.openDmgModule()">
+        🩸 Diabetes Gestacional (DMG)
       </button>
       <div class="searchbox">
         <input id="search" type="text" placeholder="Buscar por princípio ativo, classe ou indicação..." autocomplete="off">
@@ -525,20 +652,25 @@
       <div class="handle"></div>
       <button class="close" onclick="GestMedApp.closeGaCalculator()">×</button>
       <h2 style="margin:4px 0 12px;">Calculadora de idade gestacional</h2>
+      <p style="margin:0 0 14px; font-size:12px; color:#64748b; line-height:1.5;">
+        Escolha a informação que você já tem em mãos — o resultado mostra a <strong>idade gestacional de hoje</strong> e a data provável do parto.
+      </p>
 
       <div class="ga-tabs">
         <button class="ga-tab active" id="gaTabDum" onclick="GestMedApp.switchGaTab('dum')">Por DUM</button>
-        <button class="ga-tab" id="gaTabUs" onclick="GestMedApp.switchGaTab('us')">Por ultrassom</button>
+        <button class="ga-tab" id="gaTabUs" onclick="GestMedApp.switchGaTab('us')">Por Ultrassom</button>
       </div>
+
+      <div class="ga-method-note" id="gaMethodNote"></div>
 
       <div id="gaPanelDum" class="ga-panel">
         <label class="ga-label">Data da última menstruação (DUM)</label>
         <input type="date" id="gaDumDate" class="ga-input" onchange="GestMedApp.calcGaDum()">
-        <p class="ga-hint">Método clássico (regra de Naegele). Menos preciso se o ciclo menstrual for irregular.</p>
+        <p class="ga-hint">Use quando você sabe o primeiro dia da última menstruação da paciente. Método clássico (regra de Naegele) — menos preciso se o ciclo menstrual for irregular.</p>
       </div>
 
       <div id="gaPanelUs" class="ga-panel" style="display:none;">
-        <label class="ga-label">Data do ultrassom obstétrico</label>
+        <label class="ga-label">Data do Ultrassom obstétrico</label>
         <input type="date" id="gaUsExamDate" class="ga-input" onchange="GestMedApp.calcGaUs()">
         <label class="ga-label">Idade gestacional apontada no laudo, nessa data</label>
         <div class="ga-row">
@@ -549,14 +681,188 @@
             <input type="number" id="gaUsDays" class="ga-input" min="0" max="6" placeholder="Dias" oninput="GestMedApp.calcGaUs()">
           </div>
         </div>
-        <p class="ga-hint">Mais preciso para datação, especialmente se feito no 1º trimestre.</p>
+        <p class="ga-hint">Use quando você tem em mãos o laudo de um Ultrassom, com data do exame e a idade gestacional que ele apontou naquele dia. Mais preciso para datação, especialmente se feito no 1º trimestre.</p>
       </div>
+
 
       <div id="gaResult" class="ga-result" style="display:none;"></div>
 
       <p class="ga-disclaimer">
         Cálculo estimado. Não substitui avaliação obstétrica — a idade gestacional oficial do
         pré-natal deve ser confirmada e registrada pelo profissional responsável.
+      </p>
+    </div>
+  </div>
+
+  <div class="modal" id="dmgModal" onclick="GestMedApp.fecharDmgModalAoClicarFora(event)">
+    <div class="sheet">
+      <div class="handle"></div>
+      <button class="close" onclick="GestMedApp.closeDmgModule()">×</button>
+      <h2 style="margin:4px 0 10px;">Diabetes Mellitus Gestacional (DMG)</h2>
+
+      <div class="dmg-source-banner">
+        Conteúdo baseado na <strong>Diretriz da Sociedade Brasileira de Diabetes (SBD) — Edição 2025</strong>,
+        capítulo "Tratamento farmacológico do diabetes na gestação" (Zajdenverg et al., DOI:
+        10.29327/557753.2022-13). Cada recomendação abaixo traz a classe e o nível de evidência originais.
+        <a href="https://diretriz.diabetes.org.br/tratamento-farmacologico-do-dm2-e-dmg-na-gestacao/" target="_blank" rel="noopener noreferrer">Ver diretriz completa ↗</a>
+      </div>
+
+      <div class="dmg-danger-banner">
+        ⚠ Este módulo é <strong>apoio de referência</strong>, não uma prescrição automática. Toda dose de
+        insulina ou metformina deve ser validada, ajustada e monitorada por médico/enfermeiro obstetra ou
+        endocrinologista responsável pelo caso. Nunca inicie ou altere tratamento de diabetes gestacional
+        com base apenas neste app.
+      </div>
+
+      <!-- ===================== SEÇÃO 1: QUANDO INICIAR ===================== -->
+      <div class="dmg-section">
+        <h3>1. Quando considerar terapia farmacológica</h3>
+        <span class="dmg-rec-tag">R1 · Classe IIb · Nível C</span>
+        <p style="font-size:12.5px; line-height:1.6; margin:0; color:#334155;">
+          Pode ser considerado o início de tratamento farmacológico quando duas ou mais medidas de glicemia,
+          avaliadas após 7 a 14 dias de terapia nutricional isolada, estiverem acima da meta — ou quando
+          30% a 50% das medidas estiverem alteradas em uma semana.
+        </p>
+        <div class="dmg-info-box">
+          <strong>R2 · Classe I · Nível A —</strong> A insulina é a terapia farmacológica de
+          <strong>primeira escolha</strong> para controle glicêmico no DMG.
+        </div>
+      </div>
+
+      <!-- ===================== SEÇÃO 2: CALCULADORA DE DOSE DE INSULINA ===================== -->
+      <div class="dmg-section">
+        <h3>2. Estimativa de dose inicial de insulina</h3>
+        <span class="dmg-rec-tag">R4 · Classe IIb · Nível C</span>
+        <p style="font-size:12.5px; line-height:1.6; margin:0 0 8px; color:#334155;">
+          A diretriz indica que a dose total inicial <strong>pode ser considerada</strong> em 0,5 UI/kg/dia,
+          com ajustes individualizados a cada 1-2 semanas conforme o monitoramento diário da glicose.
+        </p>
+        <label class="ga-label">Peso atual da gestante (kg)</label>
+        <div class="dmg-calc-row">
+          <input type="number" id="dmgPeso" class="ga-input" min="30" max="200" step="0.1" placeholder="Ex.: 68.5" oninput="GestMedApp.calcDmgInsulina()">
+        </div>
+
+        <div id="dmgInsulinaResult" class="dmg-result">
+          <div class="dmg-dose-label">Dose total inicial de referência (0,5 UI/kg/dia)</div>
+          <div class="dmg-dose-big" id="dmgDoseValor">—</div>
+          <div class="dmg-dose-note">
+            <strong>Isto não é a prescrição final.</strong> A distribuição entre insulina basal
+            (NPH ou análogo de ação prolongada) e prandial (Regular ou análogo de ação rápida) depende do
+            perfil da automonitorização da glicose e deve ser definida pela equipe assistente. Reavaliar em
+            1 a 2 semanas.
+          </div>
+        </div>
+
+        <div class="dmg-info-box">
+          <strong>Nota importante 4 (regime simplificado):</strong> quando os valores alterados de glicose
+          ocorrem só em um horário específico do dia (ex.: apenas em jejum, ou apenas após uma refeição),
+          a dose inicial pode ser bem menor — entre <strong>0,1 e 0,2 UI/kg/dia</strong> — aplicada apenas
+          naquele horário (ex.: NPH noturna isolada para hiperglicemia só em jejum).
+        </div>
+      </div>
+
+      <!-- ===================== SEÇÃO 3: TIPOS DE INSULINA ===================== -->
+      <div class="dmg-section">
+        <h3>3. Insulinas aprovadas para uso na gestação</h3>
+        <span class="dmg-rec-tag">R5/R6/R15 · Quadro 1 (categorias Anvisa)</span>
+        <p style="font-size:12.5px; line-height:1.6; margin:0 0 4px; color:#334155;">
+          Insulinas humanas (NPH e Regular) são as mais acessíveis e de baixo custo no Brasil. Análogos
+          podem ser considerados em casos de difícil controle pós-prandial ou se a gestante já os usava
+          antes da gravidez.
+        </p>
+        <table class="dmg-table">
+          <thead>
+            <tr><th>Insulina</th><th>Tipo</th><th>Categoria Anvisa</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>NPH</td><td>Basal (intermediária)</td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
+            <tr><td>Regular (R)</td><td>Prandial (curta)</td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
+            <tr><td>Lispro</td><td>Prandial (rápida)</td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
+            <tr><td>Asparte</td><td>Prandial (rápida)</td><td><span class="dmg-cat dmg-cat-a">A</span></td></tr>
+            <tr><td>Fast-Asparte</td><td>Prandial (ultrarrápida)</td><td><span class="dmg-cat dmg-cat-a">A</span></td></tr>
+            <tr><td>Glulisina</td><td>Prandial (rápida)</td><td><span class="dmg-cat dmg-cat-c">C</span></td></tr>
+            <tr><td>Degludeca</td><td>Basal (longa)</td><td><span class="dmg-cat dmg-cat-a">A</span></td></tr>
+            <tr><td>Glargina</td><td>Basal (longa)</td><td><span class="dmg-cat dmg-cat-c">C</span></td></tr>
+            <tr><td>Glargina U300</td><td>Basal (longa)</td><td><span class="dmg-cat dmg-cat-c">C</span></td></tr>
+            <tr><td>Inalada</td><td>Prandial</td><td><span class="dmg-cat dmg-cat-c">C</span></td></tr>
+          </tbody>
+        </table>
+        <div class="dmg-info-box">
+          <strong>R14 —</strong> Análogos rápidos/ultrarrápidos (Lispro, Asparte, Fast-Asparte) são
+          recomendados para controle da glicemia pós-prandial, com menor risco de hipoglicemia.
+          <br><br>
+          <strong>R15 —</strong> Análogos de ação prolongada já em uso antes da gestação podem ser
+          mantidos, mas a indicação de iniciar Glargina (categoria C) na gestação deve ser cautelosa e
+          combinada com a paciente.
+        </div>
+      </div>
+
+      <!-- ===================== SEÇÃO 4: METFORMINA ===================== -->
+      <div class="dmg-section">
+        <h3>4. Metformina — quando considerar</h3>
+        <span class="dmg-rec-tag">R7 · Classe I · Nível B</span>
+        <p style="font-size:12.5px; line-height:1.6; margin:0 0 8px; color:#334155;">
+          Recomendada como alternativa terapêutica em gestantes sem controle glicêmico adequado com
+          medidas não farmacológicas, <strong>quando o uso de insulina não for viável</strong>.
+        </p>
+
+        <p style="font-size:12px; font-weight:700; margin:10px 0 2px; color:#0f172a;">Indicações como alternativa à insulina:</p>
+        <ul class="dmg-list">
+          <li>Falta de adesão à insulinoterapia</li>
+          <li>Não acessibilidade à insulina — inclui <strong>dificuldade de conservação refrigerada</strong> (ex.: domicílios sem geladeira ou energia elétrica confiável), um obstáculo prático real em parte do Brasil</li>
+          <li>Dificuldade na autoaplicação da insulina</li>
+          <li>Estresse exacerbado com o uso de insulina</li>
+          <li>Restrição alimentar excessiva da gestante só para evitar a insulina</li>
+        </ul>
+
+        <p style="font-size:12px; font-weight:700; margin:12px 0 2px; color:#0f172a;">Indicações associada à insulina (R8 · Classe IIa · Nível B):</p>
+        <ul class="dmg-list">
+          <li>Doses elevadas de insulina (acima de 2 UI/kg/dia) sem controle glicêmico adequado</li>
+          <li>Ganho de peso materno excessivo</li>
+          <li>Ganho de peso fetal excessivo</li>
+        </ul>
+
+        <p style="font-size:12px; font-weight:700; margin:12px 0 2px; color:#b91c1c;">Contraindicações à metformina no DMG:</p>
+        <ul class="dmg-list dmg-list-bad">
+          <li>Fetos abaixo do percentil 50 de peso</li>
+          <li>Restrição de crescimento intrauterino</li>
+          <li>Gestante com doença renal crônica</li>
+        </ul>
+
+        <div class="dmg-info-box">
+          <strong>Esquema de dose (bula/diretriz):</strong> início com 500 mg, uma a duas vezes ao dia,
+          junto com a alimentação. Titular a cada 1-2 semanas conforme resposta glicêmica, até dose
+          máxima de <strong>2.500 mg/dia</strong>.
+          <br><br>
+          <strong>Nota importante 5 (falha da metformina):</strong> idade materna avançada, glicemia de
+          jejum elevada e diagnóstico precoce de DMG indicam maior chance de a metformina não ser
+          suficiente sozinha — nesses casos, o uso de insulina é mandatório.
+        </div>
+      </div>
+
+      <!-- ===================== SEÇÃO 5: ALERTAS ADICIONAIS ===================== -->
+      <div class="dmg-section" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
+        <h3>5. Alertas importantes</h3>
+        <div class="dmg-info-box" style="border-color:#fecaca; background:#fef2f2; color:#7f1d1d;">
+          <strong>R9 · Classe III · Nível A —</strong> O uso de <strong>glibenclamida NÃO é recomendado</strong>
+          para DMG, por aumento comprovado do risco de macrossomia e hipoglicemia neonatal.
+        </div>
+        <div class="dmg-info-box">
+          <strong>R12 —</strong> Após o parto, em mulheres com DM1, reduzir a dose de insulina em 50% da
+          usada antes da gestação/1º trimestre, ou em 70% da dose usada no final da gravidez. Ajustes
+          adicionais são necessários ao longo do puerpério.
+        </div>
+        <div class="dmg-info-box">
+          <strong>R13 —</strong> Se houver indicação de corticosteroide para maturação pulmonar fetal
+          (ex.: betametasona), aumentar a dose de insulina e intensificar o monitoramento da glicose por
+          até 72 horas após a última dose — risco de hiperglicemia é maior nas primeiras 48h.
+        </div>
+      </div>
+
+      <p class="ga-disclaimer" style="margin-top:16px;">
+        Ferramenta educacional baseada na Diretriz SBD 2025. Não substitui avaliação, prescrição e
+        acompanhamento por endocrinologista ou obstetra. Doses de insulina e metformina exigem ajuste
+        individualizado contínuo conforme monitorização glicêmica real da paciente.
       </p>
     </div>
   </div>
@@ -1085,6 +1391,17 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     document.getElementById("gaPanelDum").style.display = tab === "dum" ? "block" : "none";
     document.getElementById("gaPanelUs").style.display = tab === "us" ? "block" : "none";
     elGaResult.style.display = "none";
+
+    const note = document.getElementById("gaMethodNote");
+    if (tab === "dum") {
+      note.textContent =
+        "Calculado a partir da data da última menstruação. Se também houver um ultrassom do 1º trimestre, ele costuma ser mais preciso — é normal os métodos darem datas um pouco diferentes.";
+      note.classList.add("show");
+    } else if (tab === "us") {
+      note.textContent =
+        "Calculado a partir da idade gestacional apontada no laudo do ultrassom. É esperado que difira um pouco da conta feita só pela DUM — isso não é erro, é a diferença normal entre os métodos de datação.";
+      note.classList.add("show");
+    }
   }
 
   function parseLocalDate(dateStr) {
@@ -1138,6 +1455,7 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
 
     elGaResult.style.display = "block";
     elGaResult.innerHTML = `
+      <div class="ga-label-result">Idade gestacional hoje</div>
       <div class="ga-weeks">${weeks} semanas e ${days} dia${days === 1 ? "" : "s"}</div>
       <div class="ga-trimester">${trimesterFromWeeks(weeks)} · hoje (${formatDateBr(new Date())})</div>
       <div class="ga-dpp">Data provável do parto (DPP): <strong>${formatDateBr(dppDate)}</strong></div>
@@ -1171,7 +1489,23 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     const weeksAtExam = weeksInput === "" ? null : Number(weeksInput);
     const daysAtExam = daysInput === "" ? 0 : Number(daysInput);
 
-    if (!examDate || weeksAtExam === null || isNaN(weeksAtExam)) {
+    if (!examDate && weeksAtExam === null) {
+      elGaResult.style.display = "none";
+      return;
+    }
+    if (examDate && weeksAtExam === null) {
+      elGaResult.style.display = "block";
+      elGaResult.innerHTML =
+        '<div style="font-size:13px;">Falta preencher as <strong>semanas</strong> da idade gestacional apontada no laudo do ultrassom (o campo "Dias" pode ficar em branco se o laudo não especificar).</div>';
+      return;
+    }
+    if (!examDate && weeksAtExam !== null) {
+      elGaResult.style.display = "block";
+      elGaResult.innerHTML =
+        '<div style="font-size:13px;">Falta selecionar a <strong>data do ultrassom</strong>.</div>';
+      return;
+    }
+    if (isNaN(weeksAtExam)) {
       elGaResult.style.display = "none";
       return;
     }
@@ -1188,6 +1522,50 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     dpp.setDate(dpp.getDate() + daysRemainingAtExam);
 
     renderGaResult(totalDaysToday, dpp);
+  }
+
+  // ==========================================================
+  // MÓDULO DMG (DIABETES MELLITUS GESTACIONAL)
+  // ==========================================================
+  const elDmgModal = document.getElementById("dmgModal");
+
+  function openDmgModule() {
+    elDmgModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDmgModule() {
+    elDmgModal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function fecharDmgModalAoClicarFora(event) {
+    if (event.target === elDmgModal) closeDmgModule();
+  }
+
+  function calcDmgInsulina() {
+    const pesoInput = document.getElementById("dmgPeso").value;
+    const peso = pesoInput === "" ? null : Number(pesoInput);
+    const resultBox = document.getElementById("dmgInsulinaResult");
+    const doseValorEl = document.getElementById("dmgDoseValor");
+
+    if (peso === null || isNaN(peso) || peso <= 0) {
+      resultBox.classList.remove("show");
+      return;
+    }
+
+    // R4 (SBD 2025, Classe IIb, Nível C): dose total inicial de referência = 0,5 UI/kg/dia
+    const doseTotal = peso * 0.5;
+    const doseMin = peso * 0.1;
+    const doseMax = peso * 0.2;
+
+    doseValorEl.innerHTML =
+      Math.round(doseTotal * 10) / 10 + " UI/dia" +
+      '<div style="font-size:12px; font-weight:600; opacity:0.9; margin-top:4px;">' +
+      "Regime simplificado (só um horário alterado): " + (Math.round(doseMin * 10) / 10) + " a " + (Math.round(doseMax * 10) / 10) + " UI/dia" +
+      "</div>";
+
+    resultBox.classList.add("show");
   }
 
   function init() {
@@ -1300,6 +1678,10 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     switchGaTab: switchGaTab,
     calcGaDum: calcGaDum,
     calcGaUs: calcGaUs,
+    openDmgModule: openDmgModule,
+    closeDmgModule: closeDmgModule,
+    fecharDmgModalAoClicarFora: fecharDmgModalAoClicarFora,
+    calcDmgInsulina: calcDmgInsulina,
   };
 })();
 
