@@ -258,6 +258,46 @@
       cursor: pointer;
     }
     .dmg-scheme-tab.active { background: var(--white); color: #b91c1c; box-shadow: 0 1px 3px rgba(15,23,42,0.12); }
+    .dmg-pattern-options { display: grid; gap: 8px; margin: 8px 0 14px; }
+    .dmg-pattern-btn {
+      text-align: left;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--white);
+      color: #334155;
+      font-size: 12.5px;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .dmg-pattern-btn.active {
+      border-color: #b91c1c;
+      background: #fef2f2;
+      color: #7f1d1d;
+    }
+    .dmg-calc-button {
+      width: 100%;
+      padding: 13px;
+      margin: 10px 0 18px;
+      border: none;
+      border-radius: 12px;
+      background: #b91c1c;
+      color: white;
+      font-weight: 800;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+    .dmg-calc-button:active { background: #991b1b; }
+    .dmg-scheme-block {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .dmg-scheme-block h4 {
+      font-size: 13.5px;
+      margin: 0 0 8px;
+      color: #0f172a;
+    }
     .category-subtitle { font-size: 12px; color: #64748b; margin-bottom: 14px; }
     .category-cards { display: grid; gap: 10px; }
     .category-cards .card { margin: 0; }
@@ -780,99 +820,27 @@
         com base apenas neste app.
       </div>
 
-      <!-- ===================== SEÇÃO 1: CALCULADORA DE DOSE DE INSULINA ===================== -->
+      <label class="ga-label" style="margin-top:2px;">Peso atual da gestante (kg)</label>
+      <div class="dmg-calc-row">
+        <input type="number" id="dmgPeso" class="ga-input" min="30" max="200" step="0.1" placeholder="Ex.: 68.5">
+      </div>
+      <button class="dmg-calc-button" onclick="GestMedApp.abrirDmgResultado()">Calcular dose de insulina</button>
+
+      <!-- ===================== SEÇÃO 1: SOBRE A DOSE INICIAL ===================== -->
       <div class="dmg-section">
         <h3>1. Estimativa de dose inicial de insulina</h3>
         <span class="dmg-rec-tag">R4 · Classe IIb · Nível C</span>
-        <p style="font-size:12.5px; line-height:1.6; margin:0 0 8px; color:#334155;">
+        <p style="font-size:12.5px; line-height:1.6; margin:0; color:#334155;">
           A diretriz indica que a dose total inicial <strong>pode ser considerada</strong> em 0,5 UI/kg/dia,
           com ajustes individualizados a cada 1-2 semanas conforme o monitoramento diário da glicose.
+          Preencha o peso acima e toque em "Calcular" para ver o resultado.
         </p>
-        <label class="ga-label">Peso atual da gestante (kg)</label>
-        <div class="dmg-calc-row">
-          <input type="number" id="dmgPeso" class="ga-input" min="30" max="200" step="0.1" placeholder="Ex.: 68.5" oninput="GestMedApp.calcDmgInsulina()">
-        </div>
-
-        <div id="dmgInsulinaResult" class="dmg-result">
-          <div class="dmg-dose-label">Dose total inicial de referência (0,5 UI/kg/dia)</div>
-          <div class="dmg-dose-big" id="dmgDoseValor">—</div>
-          <div class="dmg-dose-note">
-            <strong>Isto não é a prescrição final.</strong> A distribuição real entre insulina basal e
-            prandial depende do perfil da automonitorização da glicose e deve ser definida pela equipe
-            assistente. Reavaliar em 1 a 2 semanas.
-          </div>
-        </div>
 
         <div class="dmg-info-box">
           <strong>Nota importante 4 (regime simplificado):</strong> quando os valores alterados de glicose
           ocorrem só em um horário específico do dia (ex.: apenas em jejum, ou apenas após uma refeição),
           a dose inicial pode ser bem menor — entre <strong>0,1 e 0,2 UI/kg/dia</strong> — aplicada apenas
           naquele horário (ex.: NPH noturna isolada para hiperglicemia só em jejum).
-        </div>
-
-        <!-- ===== PAINEL DIDÁTICO: COMO A DOSE COSTUMA SER DIVIDIDA AO LONGO DO DIA ===== -->
-        <div id="dmgDistribuicaoPanel" style="display:none; margin-top:16px;">
-          <p style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; color:#64748b; margin:0 0 8px;">
-            Como essa dose costuma ser dividida ao longo do dia (exemplo didático)
-          </p>
-
-          <div class="dmg-nph-highlight">
-            <span class="dmg-nph-badge">🔹 NPH</span>
-            <span>= insulina <strong>basal/intermediária</strong> — cobre o período entre refeições e o jejum noturno. É a insulina de referência, mais barata e mais acessível no Brasil (R5 da diretriz).</span>
-          </div>
-
-          <div class="dmg-scheme-tabs">
-            <button class="dmg-scheme-tab active" id="dmgSchemeTab2" onclick="GestMedApp.switchDmgScheme('2')">2 aplicações/dia</button>
-            <button class="dmg-scheme-tab" id="dmgSchemeTab3" onclick="GestMedApp.switchDmgScheme('3')">3 aplicações/dia</button>
-          </div>
-
-          <!-- ESQUEMA DE 2 APLICAÇÕES/DIA -->
-          <div id="dmgScheme2" class="dmg-scheme-panel">
-            <div id="dmgDistribuicaoResumo2" style="margin-top:10px;"></div>
-            <table class="dmg-table" style="margin-top:10px;">
-              <thead>
-                <tr><th>Insulina</th><th>Manhã (café)</th><th>Noite (jantar)</th><th>Total dia</th></tr>
-              </thead>
-              <tbody id="dmgDistribuicaoBody2"></tbody>
-            </table>
-            <div class="dmg-info-box" style="margin-top:10px;">
-              <strong>Esquema convencional de 2 aplicações/dia (didático):</strong> cerca de 2/3 da dose total
-              antes do café da manhã (desses, 2/3 é NPH + 1/3 é Regular/rápida) e 1/3 da dose antes do jantar
-              (dividido meio a meio entre NPH e Regular/rápida). Fonte: Hospital Sofia Feldman — Guia de
-              Diabetes na Gravidez; TelessaúdeRS-UFRGS.
-            </div>
-          </div>
-
-          <!-- ESQUEMA DE 3 APLICAÇÕES/DIA -->
-          <div id="dmgScheme3" class="dmg-scheme-panel" style="display:none;">
-            <div id="dmgDistribuicaoResumo3" style="margin-top:10px;"></div>
-            <table class="dmg-table" style="margin-top:10px;">
-              <thead>
-                <tr><th>Insulina</th><th>Café da manhã</th><th>Almoço</th><th>Jantar/deitar</th><th>Total dia</th></tr>
-              </thead>
-              <tbody id="dmgDistribuicaoBody3"></tbody>
-            </table>
-            <div class="dmg-info-box" style="margin-top:10px;">
-              <strong>Esquema de 3 aplicações/dia (didático):</strong> 50% da dose total como NPH, dividida em
-              3 partes iguais (café da manhã, almoço e ao deitar) + 50% como Regular/ultrarrápida, dividida em
-              3 partes iguais (antes do café, antes do almoço e antes do jantar). Fonte: Hospital Universitário
-              de Brasília — Aspectos práticos da insulinoterapia nos diabetes gestacional e pré-gestacional
-              (Revista Brasília de Clínica); Protocolo de Diabetes Mellitus Gestacional (Jundiaí/SP);
-              Ministério da Saúde.
-            </div>
-          </div>
-
-          <p style="font-size:10.5px; color:#94a3b8; margin:10px 0 0;">
-            Doses arredondadas para a unidade inteira (UI) mais próxima — seringas e canetas de insulina não
-            medem frações de unidade. Por isso, a soma das doses da tabela pode diferir em 1 UI da dose
-            total de referência acima — isso é esperado e não é erro de cálculo.
-          </p>
-
-          <div class="dmg-info-box" style="margin-top:10px;">
-            <strong>Isso é só um ponto de partida didático.</strong> Na prática, a proporção real e o número
-            de aplicações são sempre ajustados pela equipe conforme os valores de glicemia capilar da própria
-            paciente — pode mudar totalmente de uma gestante para outra.
-          </div>
         </div>
       </div>
 
@@ -994,6 +962,74 @@
         acompanhamento por endocrinologista ou obstetra. Doses de insulina e metformina exigem ajuste
         individualizado contínuo conforme monitorização glicêmica real da paciente.
       </p>
+    </div>
+  </div>
+
+  <div class="modal" id="dmgResultModal" onclick="GestMedApp.fecharDmgResultModalAoClicarFora(event)">
+    <div class="sheet">
+      <div class="handle"></div>
+      <button class="close" onclick="GestMedApp.closeDmgResultModal()">×</button>
+      <h2 style="margin:4px 0 10px;">Resultado — dose de insulina</h2>
+
+      <div class="dmg-result" style="display:block;">
+        <div class="dmg-dose-label">🔹 Dose de NPH (0,5 UI/kg/dia)</div>
+        <div class="dmg-dose-big" id="dmgResultDoseValor">—</div>
+        <div class="dmg-dose-note">
+          Dose única de <strong>NPH</strong>, aplicada de madrugada.
+          <br><br>
+          <strong>Isto não é a prescrição final.</strong> O ajuste da dose depende do perfil da
+          automonitorização da glicose e deve ser definido pela equipe assistente. Reavaliar em 1 a 2 semanas.
+        </div>
+      </div>
+
+      <div class="dmg-nph-highlight" style="margin-top:16px;">
+        <span class="dmg-nph-badge">🔹 NPH</span>
+        <span>= insulina <strong>basal/intermediária</strong> — cobre o período entre refeições e o jejum noturno. É a insulina de referência, mais barata e mais acessível no Brasil (R5 da diretriz).</span>
+      </div>
+
+      <!-- BLOCO: DIVISÃO EM 2 APLICAÇÕES/DIA (SÓ NPH) -->
+      <div class="dmg-scheme-block">
+        <h4>🔹 NPH dividida em 2 aplicações/dia</h4>
+        <table class="dmg-table" style="margin-top:8px;">
+          <thead>
+            <tr><th>Horário</th><th>Proporção</th><th>Dose</th></tr>
+          </thead>
+          <tbody id="dmgResultBody2"></tbody>
+        </table>
+        <div class="dmg-info-box" style="margin-top:10px;">
+          <strong>Como se chega nisso (didático):</strong> divisão clássica de NPH em 2 aplicações — 2/3 da
+          dose total pela manhã (em jejum) + 1/3 à noite (ao deitar). Fonte: TelessaúdeRS-UFRGS; convenção
+          padrão de fracionamento de NPH em 2 aplicações diárias.
+        </div>
+      </div>
+
+      <!-- BLOCO: DIVISÃO EM 3 APLICAÇÕES/DIA (SÓ NPH) -->
+      <div class="dmg-scheme-block">
+        <h4>🔹 NPH dividida em 3 aplicações/dia</h4>
+        <table class="dmg-table" style="margin-top:8px;">
+          <thead>
+            <tr><th>Horário</th><th>Proporção</th><th>Dose</th></tr>
+          </thead>
+          <tbody id="dmgResultBody3"></tbody>
+        </table>
+        <div class="dmg-info-box" style="margin-top:10px;">
+          <strong>Como se chega nisso (didático):</strong> NPH fracionada em 3 partes iguais — café da manhã,
+          almoço e ao deitar. Fonte: Hospital Universitário de Brasília — Aspectos práticos da insulinoterapia
+          nos diabetes gestacional e pré-gestacional (Revista Brasília de Clínica).
+        </div>
+      </div>
+
+      <p style="font-size:10.5px; color:#94a3b8; margin:4px 0 0;">
+        Doses arredondadas para a unidade inteira (UI) mais próxima — seringas e canetas de insulina não
+        medem frações de unidade. Por isso, a soma das doses pode diferir em 1 UI da dose total acima — isso
+        é esperado e não é erro de cálculo.
+      </p>
+
+      <div class="dmg-info-box" style="margin-top:10px;">
+        <strong>Isso é um ponto de partida de referência.</strong> Na prática, o ajuste da dose e a
+        necessidade de complementar o tratamento são sempre definidos pela equipe assistente, conforme os
+        valores de glicemia capilar da própria paciente.
+      </div>
     </div>
   </div>
 
@@ -1674,123 +1710,82 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     if (event.target === elDmgModal) closeDmgModule();
   }
 
-  let dmgActiveScheme = "2";
+  const elDmgResultModal = document.getElementById("dmgResultModal");
 
-  function switchDmgScheme(scheme) {
-    dmgActiveScheme = scheme;
-    document.getElementById("dmgSchemeTab2").classList.toggle("active", scheme === "2");
-    document.getElementById("dmgSchemeTab3").classList.toggle("active", scheme === "3");
-    document.getElementById("dmgScheme2").style.display = scheme === "2" ? "block" : "none";
-    document.getElementById("dmgScheme3").style.display = scheme === "3" ? "block" : "none";
+  function openDmgResultModal() {
+    elDmgResultModal.classList.add("open");
+    document.body.style.overflow = "hidden";
   }
 
-  function calcDmgInsulina() {
+  function closeDmgResultModal() {
+    elDmgResultModal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function fecharDmgResultModalAoClicarFora(event) {
+    if (event.target === elDmgResultModal) closeDmgResultModal();
+  }
+
+  function abrirDmgResultado() {
     const pesoInput = document.getElementById("dmgPeso").value;
     const peso = pesoInput === "" ? null : Number(pesoInput);
-    const resultBox = document.getElementById("dmgInsulinaResult");
-    const doseValorEl = document.getElementById("dmgDoseValor");
-    const distribuicaoPanel = document.getElementById("dmgDistribuicaoPanel");
 
     if (peso === null || isNaN(peso) || peso <= 0) {
-      resultBox.classList.remove("show");
-      if (distribuicaoPanel) distribuicaoPanel.style.display = "none";
+      alert("Preencha o peso da gestante (em kg) antes de calcular.");
       return;
     }
 
-    // R4 (SBD 2025, Classe IIb, Nível C): dose total inicial de referência = 0,5 UI/kg/dia
-    const doseTotal = peso * 0.5;
-    const doseMin = peso * 0.1;
-    const doseMax = peso * 0.2;
-
-    // Insulina não se aplica em fração de unidade — seringas e canetas medem
-    // unidade inteira (UI). Por isso todo valor de dose exibido é arredondado
-    // para o inteiro mais próximo, nunca em decimais.
     function ui(n) {
       return Math.round(n);
     }
 
-    doseValorEl.innerHTML =
-      ui(doseTotal) + " UI/dia" +
-      '<div style="font-size:12px; font-weight:600; opacity:0.9; margin-top:4px;">' +
-      "Regime simplificado (só um horário alterado): " + ui(doseMin) + " a " + ui(doseMax) + " UI/dia" +
-      "</div>";
+    // R4 (SBD 2025, Classe IIb, Nível C): dose de referência = 0,5 UI/kg/dia,
+    // como NPH em dose única de madrugada.
+    const doseTotal = peso * 0.5;
+    document.getElementById("dmgResultDoseValor").textContent = ui(doseTotal) + " UI de NPH";
 
-    resultBox.classList.add("show");
-
-    // ===== ESQUEMA DE 2 APLICAÇÕES/DIA =====
-    // (Hospital Sofia Feldman — Guia de Diabetes na Gravidez; TelessaúdeRS-UFRGS)
-    // 2/3 da dose de manhã (2/3 NPH + 1/3 Regular) + 1/3 à noite (meio a meio)
-    const nphManha2 = ui((doseTotal * (2 / 3)) * (2 / 3));
-    const regularManha2 = ui((doseTotal * (2 / 3)) * (1 / 3));
-    const nphNoite2 = ui((doseTotal * (1 / 3)) / 2);
-    const regularNoite2 = ui((doseTotal * (1 / 3)) / 2);
-    const nphTotal2 = nphManha2 + nphNoite2;
-    const regularTotal2 = regularManha2 + regularNoite2;
-
-    document.getElementById("dmgDistribuicaoResumo2").innerHTML = `
-      <div class="dmg-insulin-summary-row dmg-row-nph">
-        <span>🔹 <strong>NPH</strong> (basal)</span>
-        <span><strong>${nphTotal2} UI/dia</strong></span>
-      </div>
-      <div class="dmg-insulin-summary-row">
-        <span>Regular/rápida (prandial)</span>
-        <span><strong>${regularTotal2} UI/dia</strong></span>
-      </div>
-    `;
-    document.getElementById("dmgDistribuicaoBody2").innerHTML = `
+    // ===== DIVISÃO EM 2 APLICAÇÕES/DIA (SÓ NPH) =====
+    // Convenção clássica de fracionamento de NPH: 2/3 pela manhã + 1/3 à noite.
+    const nph2Manha = ui(doseTotal * (2 / 3));
+    const nph2Noite = ui(doseTotal * (1 / 3));
+    document.getElementById("dmgResultBody2").innerHTML = `
       <tr class="dmg-row-nph">
-        <td>🔹 <strong>NPH</strong></td>
-        <td>${nphManha2} UI</td>
-        <td>${nphNoite2} UI</td>
-        <td><strong>${nphTotal2} UI</strong></td>
+        <td>Manhã (jejum)</td>
+        <td>~67%</td>
+        <td><strong>${nph2Manha} UI</strong></td>
       </tr>
-      <tr>
-        <td>Regular/rápida</td>
-        <td>${regularManha2} UI</td>
-        <td>${regularNoite2} UI</td>
-        <td><strong>${regularTotal2} UI</strong></td>
-      </tr>
-    `;
-
-    // ===== ESQUEMA DE 3 APLICAÇÕES/DIA =====
-    // (Hospital Universitário de Brasília — Aspectos práticos da insulinoterapia;
-    // Protocolo de Diabetes Mellitus Gestacional Jundiaí/SP; Ministério da Saúde)
-    // NPH: 50% da dose total, em 3 partes iguais (café, almoço, ao deitar)
-    // Regular: 50% da dose total, em 3 partes iguais (antes do café, almoço, jantar)
-    const nphPorAplicacao3 = ui((doseTotal * 0.5) / 3);
-    const regularPorAplicacao3 = ui((doseTotal * 0.5) / 3);
-    const nphTotal3 = nphPorAplicacao3 * 3;
-    const regularTotal3 = regularPorAplicacao3 * 3;
-
-    document.getElementById("dmgDistribuicaoResumo3").innerHTML = `
-      <div class="dmg-insulin-summary-row dmg-row-nph">
-        <span>🔹 <strong>NPH</strong> (basal)</span>
-        <span><strong>${nphTotal3} UI/dia</strong></span>
-      </div>
-      <div class="dmg-insulin-summary-row">
-        <span>Regular/rápida (prandial)</span>
-        <span><strong>${regularTotal3} UI/dia</strong></span>
-      </div>
-    `;
-    document.getElementById("dmgDistribuicaoBody3").innerHTML = `
       <tr class="dmg-row-nph">
-        <td>🔹 <strong>NPH</strong></td>
-        <td>${nphPorAplicacao3} UI</td>
-        <td>${nphPorAplicacao3} UI</td>
-        <td>${nphPorAplicacao3} UI (deitar)</td>
-        <td><strong>${nphTotal3} UI</strong></td>
-      </tr>
-      <tr>
-        <td>Regular/rápida</td>
-        <td>${regularPorAplicacao3} UI</td>
-        <td>${regularPorAplicacao3} UI</td>
-        <td>${regularPorAplicacao3} UI</td>
-        <td><strong>${regularTotal3} UI</strong></td>
+        <td>Noite (ao deitar)</td>
+        <td>~33%</td>
+        <td><strong>${nph2Noite} UI</strong></td>
       </tr>
     `;
 
-    if (distribuicaoPanel) distribuicaoPanel.style.display = "block";
+    // ===== DIVISÃO EM 3 APLICAÇÕES/DIA (SÓ NPH) =====
+    // Hospital Universitário de Brasília: NPH fracionada em 3 partes iguais
+    // (café da manhã, almoço, ao deitar).
+    const nph3PorAplicacao = ui(doseTotal / 3);
+    document.getElementById("dmgResultBody3").innerHTML = `
+      <tr class="dmg-row-nph">
+        <td>Café da manhã</td>
+        <td>~33%</td>
+        <td><strong>${nph3PorAplicacao} UI</strong></td>
+      </tr>
+      <tr class="dmg-row-nph">
+        <td>Almoço</td>
+        <td>~33%</td>
+        <td><strong>${nph3PorAplicacao} UI</strong></td>
+      </tr>
+      <tr class="dmg-row-nph">
+        <td>Ao deitar</td>
+        <td>~33%</td>
+        <td><strong>${nph3PorAplicacao} UI</strong></td>
+      </tr>
+    `;
+
+    openDmgResultModal();
   }
+
 
   // ==========================================================
   // MODAL DE CATEGORIA (TELA DEDICADA POR SINTOMA/CHIP)
@@ -1972,8 +1967,9 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     openDmgModule: openDmgModule,
     closeDmgModule: closeDmgModule,
     fecharDmgModalAoClicarFora: fecharDmgModalAoClicarFora,
-    calcDmgInsulina: calcDmgInsulina,
-    switchDmgScheme: switchDmgScheme,
+    abrirDmgResultado: abrirDmgResultado,
+    closeDmgResultModal: closeDmgResultModal,
+    fecharDmgResultModalAoClicarFora: fecharDmgResultModalAoClicarFora,
   };
 })();
 
