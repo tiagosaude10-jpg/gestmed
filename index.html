@@ -1185,6 +1185,18 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
       return;
     }
 
+    const term = elSearch.value.trim();
+
+    // Sem busca ativa: não renderiza a lista completa (1.500 cards deixava a
+    // página pesada/lenta para carregar no celular). Mostra uma tela de
+    // boas-vindas orientando a usar a busca ou os botões de categoria.
+    if (!term) {
+      elCount.textContent = "";
+      elCards.innerHTML =
+        '<div class="empty">Digite o nome de um medicamento na busca acima, ou toque em um dos botões de sintoma (Dor, Febre, Alergia...) para ver a lista.</div>';
+      return;
+    }
+
     const period = "todos";
     const filtered = applyFilters();
 
