@@ -203,6 +203,31 @@
       color: #334155;
     }
     .dmg-info-box strong { color: #0f172a; }
+    .dmg-row-nph { background: #fef9c3; }
+    .dmg-nph-highlight {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #713f12;
+    }
+    .dmg-nph-badge {
+      flex-shrink: 0;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #a16207;
+      color: white;
+    }
+    .category-subtitle { font-size: 12px; color: #64748b; margin-bottom: 14px; }
+    .category-cards { display: grid; gap: 10px; }
+    .category-cards .card { margin: 0; }
     .dmg-button {
       width: 100%;
       padding: 12px;
@@ -417,6 +442,7 @@
       background: rgba(15, 23, 42, 0.55);
     }
     .modal.open { display: flex; }
+    #modal { z-index: 11; }
     .sheet {
       width: min(560px, 100%);
       max-height: 91vh;
@@ -594,34 +620,16 @@
         <span class="searchicon">🔎</span>
         <div class="suggestions" id="suggestions"></div>
       </div>
-      <div class="filters">
-        <select id="period">
-          <option value="todos">Visão geral</option>
-          <option value="1">1º trimestre</option>
-          <option value="2">2º trimestre</option>
-          <option value="3">3º trimestre</option>
-          <option value="lactacao">Lactação</option>
-        </select>
-        <select id="risk">
-          <option value="todos">Todas as categorias</option>
-          <option value="preferencial">Preferencial</option>
-          <option value="permitido">Pode ser utilizado</option>
-          <option value="cautela">Uso com cautela</option>
-          <option value="especifico">Situação específica</option>
-          <option value="evitar">Evitar</option>
-          <option value="contraindicado">Contraindicado</option>
-          <option value="pendente">Pendente de revisão</option>
-        </select>
-      </div>
       <div class="quick">
-        <button class="chip" data-q="dor">Dor e febre</button>
-        <button class="chip" data-q="alergia">Alergia</button>
-        <button class="chip" data-q="náusea">Náuseas</button>
-        <button class="chip" data-q="infecção">Infecções</button>
-        <button class="chip" data-q="hipertensão">Hipertensão</button>
-        <button class="chip" data-q="antibiótico">Antibióticos</button>
-        <button class="chip" data-q="convulsão">Anticonvulsivantes</button>
-        <button class="chip" data-q="depressão">Antidepressivos</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('dor', 'Dor')">Dor</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('febre', 'Febre')">Febre</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('alergia', 'Alergia')">Alergia</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('náusea', 'Náuseas')">Náuseas</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('infecção', 'Infecções')">Infecções</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('hipertensão', 'Hipertensão')">Hipertensão</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('antibiótico', 'Antibióticos')">Antibióticos</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('convulsão', 'Anticonvulsivantes')">Anticonvulsivantes</button>
+        <button class="chip" onclick="GestMedApp.openCategoryModal('depressão', 'Antidepressivos')">Antidepressivos</button>
       </div>
       <div class="section-title">
         <h2>Medicamentos</h2>
@@ -644,6 +652,21 @@
       <div class="handle"></div>
       <button class="close" onclick="GestMedApp.closeModal()">×</button>
       <div id="detail"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal" onclick="GestMedApp.fecharCategoryModalAoClicarFora(event)">
+    <div class="sheet">
+      <div class="handle"></div>
+      <button class="close" onclick="GestMedApp.closeCategoryModal()">×</button>
+      <h2 id="categoryTitle" style="margin:4px 0 4px;"></h2>
+      <div class="category-subtitle">Medicamentos que podem ser utilizados na gestação para esse quadro</div>
+      <div class="category-cards" id="categoryCards"></div>
+      <p class="ga-disclaimer" style="margin-top:14px;">
+        Lista restrita a medicamentos classificados como preferencial ou permitido. Não inclui opções de
+        cautela, situação específica, evitar, contraindicado ou pendente — consulte a busca geral do app
+        pra ver essas categorias também, se precisar.
+      </p>
     </div>
   </div>
 
@@ -714,24 +737,9 @@
         com base apenas neste app.
       </div>
 
-      <!-- ===================== SEÇÃO 1: QUANDO INICIAR ===================== -->
+      <!-- ===================== SEÇÃO 1: CALCULADORA DE DOSE DE INSULINA ===================== -->
       <div class="dmg-section">
-        <h3>1. Quando considerar terapia farmacológica</h3>
-        <span class="dmg-rec-tag">R1 · Classe IIb · Nível C</span>
-        <p style="font-size:12.5px; line-height:1.6; margin:0; color:#334155;">
-          Pode ser considerado o início de tratamento farmacológico quando duas ou mais medidas de glicemia,
-          avaliadas após 7 a 14 dias de terapia nutricional isolada, estiverem acima da meta — ou quando
-          30% a 50% das medidas estiverem alteradas em uma semana.
-        </p>
-        <div class="dmg-info-box">
-          <strong>R2 · Classe I · Nível A —</strong> A insulina é a terapia farmacológica de
-          <strong>primeira escolha</strong> para controle glicêmico no DMG.
-        </div>
-      </div>
-
-      <!-- ===================== SEÇÃO 2: CALCULADORA DE DOSE DE INSULINA ===================== -->
-      <div class="dmg-section">
-        <h3>2. Estimativa de dose inicial de insulina</h3>
+        <h3>1. Estimativa de dose inicial de insulina</h3>
         <span class="dmg-rec-tag">R4 · Classe IIb · Nível C</span>
         <p style="font-size:12.5px; line-height:1.6; margin:0 0 8px; color:#334155;">
           A diretriz indica que a dose total inicial <strong>pode ser considerada</strong> em 0,5 UI/kg/dia,
@@ -746,10 +754,9 @@
           <div class="dmg-dose-label">Dose total inicial de referência (0,5 UI/kg/dia)</div>
           <div class="dmg-dose-big" id="dmgDoseValor">—</div>
           <div class="dmg-dose-note">
-            <strong>Isto não é a prescrição final.</strong> A distribuição entre insulina basal
-            (NPH ou análogo de ação prolongada) e prandial (Regular ou análogo de ação rápida) depende do
-            perfil da automonitorização da glicose e deve ser definida pela equipe assistente. Reavaliar em
-            1 a 2 semanas.
+            <strong>Isto não é a prescrição final.</strong> A distribuição real entre insulina basal e
+            prandial depende do perfil da automonitorização da glicose e deve ser definida pela equipe
+            assistente. Reavaliar em 1 a 2 semanas.
           </div>
         </div>
 
@@ -758,6 +765,51 @@
           ocorrem só em um horário específico do dia (ex.: apenas em jejum, ou apenas após uma refeição),
           a dose inicial pode ser bem menor — entre <strong>0,1 e 0,2 UI/kg/dia</strong> — aplicada apenas
           naquele horário (ex.: NPH noturna isolada para hiperglicemia só em jejum).
+        </div>
+
+        <!-- ===== PAINEL DIDÁTICO: COMO A DOSE COSTUMA SER DIVIDIDA AO LONGO DO DIA ===== -->
+        <div id="dmgDistribuicaoPanel" style="display:none; margin-top:16px;">
+          <p style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; color:#64748b; margin:0 0 8px;">
+            Como essa dose costuma ser dividida ao longo do dia (exemplo didático)
+          </p>
+
+          <div class="dmg-nph-highlight">
+            <span class="dmg-nph-badge">🔹 NPH</span>
+            <span>= insulina <strong>basal/intermediária</strong> — cobre o período entre refeições e o jejum noturno. É a insulina de referência, mais barata e mais acessível no Brasil (R5 da diretriz).</span>
+          </div>
+
+          <table class="dmg-table" style="margin-top:10px;">
+            <thead>
+              <tr><th>Horário</th><th>% da dose total</th><th>Insulina</th><th>Dose estimada</th></tr>
+            </thead>
+            <tbody id="dmgDistribuicaoBody"></tbody>
+          </table>
+
+          <div class="dmg-info-box" style="margin-top:10px;">
+            <strong>Esquema convencional de 2 aplicações/dia (didático):</strong> cerca de 2/3 da dose total
+            antes do café da manhã (desses, 2/3 é NPH + 1/3 é Regular/rápida) e 1/3 da dose antes do jantar
+            (dividido meio a meio entre NPH e Regular/rápida). Fonte: Hospital Sofia Feldman — Guia de
+            Diabetes na Gravidez; TelessaúdeRS-UFRGS.
+            <br><br>
+            <strong>Isso é só um ponto de partida didático.</strong> Na prática, a proporção real é sempre
+            ajustada pela equipe conforme os valores de glicemia capilar da própria paciente — pode mudar
+            totalmente de uma gestante para outra.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SEÇÃO 2: QUANDO INICIAR ===================== -->
+      <div class="dmg-section">
+        <h3>2. Quando considerar terapia farmacológica</h3>
+        <span class="dmg-rec-tag">R1 · Classe IIb · Nível C</span>
+        <p style="font-size:12.5px; line-height:1.6; margin:0; color:#334155;">
+          Pode ser considerado o início de tratamento farmacológico quando duas ou mais medidas de glicemia,
+          avaliadas após 7 a 14 dias de terapia nutricional isolada, estiverem acima da meta — ou quando
+          30% a 50% das medidas estiverem alteradas em uma semana.
+        </p>
+        <div class="dmg-info-box">
+          <strong>R2 · Classe I · Nível A —</strong> A insulina é a terapia farmacológica de
+          <strong>primeira escolha</strong> para controle glicêmico no DMG.
         </div>
       </div>
 
@@ -775,7 +827,7 @@
             <tr><th>Insulina</th><th>Tipo</th><th>Categoria Anvisa</th></tr>
           </thead>
           <tbody>
-            <tr><td>NPH</td><td>Basal (intermediária)</td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
+            <tr class="dmg-row-nph"><td>🔹 <strong>NPH</strong></td><td><strong>Basal (intermediária)</strong></td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
             <tr><td>Regular (R)</td><td>Prandial (curta)</td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
             <tr><td>Lispro</td><td>Prandial (rápida)</td><td><span class="dmg-cat dmg-cat-b">B</span></td></tr>
             <tr><td>Asparte</td><td>Prandial (rápida)</td><td><span class="dmg-cat dmg-cat-a">A</span></td></tr>
@@ -898,8 +950,6 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
   // ==========================================================
   const elSearch = document.getElementById("search");
   const elSuggestions = document.getElementById("suggestions");
-  const elPeriod = document.getElementById("period");
-  const elRisk = document.getElementById("risk");
   const elCount = document.getElementById("count");
   const elCards = document.getElementById("cards");
   const elModal = document.getElementById("modal");
@@ -1061,18 +1111,9 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     if (!RAW_DATA) return [];
 
     const term = normalizeText(elSearch.value.trim());
-    const period = elPeriod.value;
-    const riskFilter = elRisk.value;
 
     return RAW_DATA.filter(function (med) {
-      const matchesSearch = !term || searchableText(med).includes(term);
-      if (!matchesSearch) return false;
-
-      const fieldValue = fieldForPeriod(med, period);
-      const riskSlug = classifyRisk(fieldValue);
-
-      const matchesRisk = riskFilter === "todos" || riskSlug === riskFilter;
-      return matchesRisk;
+      return !term || searchableText(med).includes(term);
     });
   }
 
@@ -1103,7 +1144,7 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     }
 
     const shown = matches.slice(0, MAX_SUGGESTIONS);
-    const period = elPeriod.value;
+    const period = "todos";
 
     elSuggestions.innerHTML =
       shown
@@ -1144,7 +1185,7 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
       return;
     }
 
-    const period = elPeriod.value;
+    const period = "todos";
     const filtered = applyFilters();
 
     elCount.textContent = filtered.length + " resultado(s)";
@@ -1548,9 +1589,12 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     const peso = pesoInput === "" ? null : Number(pesoInput);
     const resultBox = document.getElementById("dmgInsulinaResult");
     const doseValorEl = document.getElementById("dmgDoseValor");
+    const distribuicaoPanel = document.getElementById("dmgDistribuicaoPanel");
+    const distribuicaoBody = document.getElementById("dmgDistribuicaoBody");
 
     if (peso === null || isNaN(peso) || peso <= 0) {
       resultBox.classList.remove("show");
+      if (distribuicaoPanel) distribuicaoPanel.style.display = "none";
       return;
     }
 
@@ -1559,13 +1603,115 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     const doseMin = peso * 0.1;
     const doseMax = peso * 0.2;
 
+    function fmt(n) {
+      return Math.round(n * 10) / 10;
+    }
+
     doseValorEl.innerHTML =
-      Math.round(doseTotal * 10) / 10 + " UI/dia" +
+      fmt(doseTotal) + " UI/dia" +
       '<div style="font-size:12px; font-weight:600; opacity:0.9; margin-top:4px;">' +
-      "Regime simplificado (só um horário alterado): " + (Math.round(doseMin * 10) / 10) + " a " + (Math.round(doseMax * 10) / 10) + " UI/dia" +
+      "Regime simplificado (só um horário alterado): " + fmt(doseMin) + " a " + fmt(doseMax) + " UI/dia" +
       "</div>";
 
     resultBox.classList.add("show");
+
+    // Exemplo didático: esquema convencional de 2 aplicações/dia
+    // (Hospital Sofia Feldman — Guia de Diabetes na Gravidez; TelessaúdeRS-UFRGS)
+    const doseManha = doseTotal * (2 / 3);
+    const doseNoite = doseTotal * (1 / 3);
+    const nphManha = doseManha * (2 / 3);
+    const regularManha = doseManha * (1 / 3);
+    const nphNoite = doseNoite / 2;
+    const regularNoite = doseNoite / 2;
+
+    if (distribuicaoBody) {
+      distribuicaoBody.innerHTML = `
+        <tr class="dmg-row-nph">
+          <td>Manhã (antes do café)</td>
+          <td>~44%</td>
+          <td>🔹 <strong>NPH</strong></td>
+          <td><strong>${fmt(nphManha)} UI</strong></td>
+        </tr>
+        <tr>
+          <td>Manhã (antes do café)</td>
+          <td>~22%</td>
+          <td>Regular/rápida</td>
+          <td>${fmt(regularManha)} UI</td>
+        </tr>
+        <tr class="dmg-row-nph">
+          <td>Noite (antes do jantar)</td>
+          <td>~17%</td>
+          <td>🔹 <strong>NPH</strong></td>
+          <td><strong>${fmt(nphNoite)} UI</strong></td>
+        </tr>
+        <tr>
+          <td>Noite (antes do jantar)</td>
+          <td>~17%</td>
+          <td>Regular/rápida</td>
+          <td>${fmt(regularNoite)} UI</td>
+        </tr>
+      `;
+    }
+    if (distribuicaoPanel) distribuicaoPanel.style.display = "block";
+  }
+
+  // ==========================================================
+  // MODAL DE CATEGORIA (TELA DEDICADA POR SINTOMA/CHIP)
+  // ==========================================================
+  const elCategoryModal = document.getElementById("categoryModal");
+  const elCategoryTitle = document.getElementById("categoryTitle");
+  const elCategoryCards = document.getElementById("categoryCards");
+
+  function openCategoryModal(term, label) {
+    if (!RAW_DATA) return;
+
+    const normTerm = normalizeText(term);
+    const matches = RAW_DATA.filter(function (med) {
+      const matchesSearch = searchableText(med).includes(normTerm);
+      if (!matchesSearch) return false;
+      const slug = classifyRisk(med.decisao_resumida_gestacao);
+      return slug === "preferencial" || slug === "permitido";
+    });
+
+    elCategoryTitle.textContent = label;
+
+    if (matches.length === 0) {
+      elCategoryCards.innerHTML =
+        '<div class="empty">Nenhum medicamento classificado como preferencial ou permitido foi encontrado para essa categoria na base atual.</div>';
+    } else {
+      elCategoryCards.innerHTML = matches
+        .map(function (med) {
+          const slug = classifyRisk(med.decisao_resumida_gestacao);
+          const derivativeFlag = isDerivative(med);
+          return `
+            <article class="card" onclick="GestMedApp.openMed(${med.id})">
+              <div class="top">
+                <div>
+                  <div class="drug">${escapeHtml(med.principio_ativo)}${
+            derivativeFlag ? ' <span class="derivative-tag">forma derivada</span>' : ""
+          }</div>
+                  <div class="class">${escapeHtml(med.classe_farmacologica)}</div>
+                </div>
+                <span class="badge ${slug}">${escapeHtml(RISK_LABELS[slug])}</span>
+              </div>
+              ${med.resumo_alerta ? `<div class="summary">${escapeHtml(med.resumo_alerta)}</div>` : ""}
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    elCategoryModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeCategoryModal() {
+    elCategoryModal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function fecharCategoryModalAoClicarFora(event) {
+    if (event.target === elCategoryModal) closeCategoryModal();
   }
 
   function init() {
@@ -1595,30 +1741,13 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
         elSuggestions.classList.remove("open");
       }
     });
-    elPeriod.addEventListener("change", function () {
-      render();
-      renderSuggestions();
-    });
-    elRisk.addEventListener("change", function () {
-      render();
-      renderSuggestions();
-    });
 
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") {
         closeModal();
+        closeCategoryModal();
         elSuggestions.classList.remove("open");
       }
-    });
-
-    const quickButtons = document.querySelectorAll(".chip");
-    quickButtons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        elSearch.value = button.dataset.q;
-        render();
-        renderSuggestions();
-        elSearch.focus();
-      });
     });
 
     render();
@@ -1678,6 +1807,9 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     switchGaTab: switchGaTab,
     calcGaDum: calcGaDum,
     calcGaUs: calcGaUs,
+    openCategoryModal: openCategoryModal,
+    closeCategoryModal: closeCategoryModal,
+    fecharCategoryModalAoClicarFora: fecharCategoryModalAoClicarFora,
     openDmgModule: openDmgModule,
     closeDmgModule: closeDmgModule,
     fecharDmgModalAoClicarFora: fecharDmgModalAoClicarFora,
