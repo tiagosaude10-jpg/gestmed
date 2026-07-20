@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#155e75">
+  <meta name="color-scheme" content="light">
 
   <!-- Instalação na tela inicial (iOS) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -40,6 +41,7 @@
       --gray-bg: #e2e8f0;
     }
     * { box-sizing: border-box; }
+    html { color-scheme: light; }
     body {
       margin: 0;
       background: var(--background);
@@ -349,6 +351,90 @@
       text-align: center;
     }
     .exames-button:active { background: #d1fae5; }
+    .crescimento-button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #fbcfe8;
+      border-radius: 14px;
+      background: #fdf2f8;
+      color: #be185d;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .crescimento-button:active { background: #fce7f3; }
+    .crescimento-week-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 2px 10px;
+      scrollbar-width: none;
+      margin-bottom: 4px;
+    }
+    .crescimento-week-tabs::-webkit-scrollbar { display: none; }
+    .crescimento-week-tab {
+      flex-shrink: 0;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1.5px solid #fbcfe8;
+      background: #fdf2f8;
+      color: #be185d;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .crescimento-week-tab.active { background: #be185d; color: #ffffff; border-color: #be185d; }
+    .crescimento-hero {
+      border-radius: 16px;
+      background: linear-gradient(135deg, #831843, #db2777);
+      color: #ffffff;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .crescimento-hero-week { font-size: 12px; font-weight: 800; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.04em; }
+    .crescimento-hero-comparacao { font-size: 19px; font-weight: 800; margin: 4px 0 12px; line-height: 1.3; }
+    .crescimento-hero-medidas {
+      display: flex;
+      gap: 10px;
+    }
+    .crescimento-hero-medida {
+      flex: 1;
+      background: rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+    .crescimento-hero-medida-label { font-size: 10px; opacity: 0.85; font-weight: 700; text-transform: uppercase; }
+    .crescimento-hero-medida-valor { font-size: 15px; font-weight: 800; margin-top: 2px; }
+    .crescimento-section {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 13px;
+      margin-bottom: 10px;
+    }
+    .crescimento-section-title { font-size: 12px; font-weight: 800; color: #be185d; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+    .crescimento-section-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+    .crescimento-nav-arrows {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .crescimento-nav-arrow {
+      flex: 1;
+      padding: 11px;
+      border-radius: 12px;
+      border: 1.5px solid #fbcfe8;
+      background: #fdf2f8;
+      color: #be185d;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .crescimento-nav-arrow:disabled { opacity: 0.35; cursor: default; }
     .exames-trimestre-header {
       display: flex;
       align-items: center;
@@ -708,6 +794,17 @@
       text-align: center;
       font-size: 13.5px;
     }
+    .empty-hint {
+      padding: 22px 16px;
+      border: 1.5px solid #fed7aa;
+      border-radius: 15px;
+      background: #fff7ed;
+      color: #9a3412;
+      text-align: center;
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
     .footer-note {
       margin: 16px 2px 40px;
       color: var(--muted);
@@ -742,6 +839,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 6px;
       margin-bottom: 6px;
     }
     .back-btn {
@@ -758,6 +856,28 @@
       cursor: pointer;
     }
     .back-btn:active { background: #e2e8f0; }
+    .clear-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1.5px solid #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .clear-btn:active { background: #fee2e2; }
+    .sheet-nav-3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .sheet-nav-3 .close { float: none; flex-shrink: 0; }
     .handle { width: 42px; height: 5px; margin: 0 auto 14px; border-radius: 4px; background: #cbd5e1; }
     .close {
       float: right;
@@ -857,17 +977,24 @@
       font-size: 16px;
       background: var(--white);
       color: var(--text);
+      color-scheme: light;
+      accent-color: var(--primary);
     }
     .ga-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .ga-hint { margin: 6px 0 0; font-size: 11px; color: var(--muted); line-height: 1.4; }
     .ga-result {
       margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ga-hero-card {
       padding: 14px;
       border-radius: 14px;
       background: linear-gradient(135deg, #164e63, #0891b2);
       color: white;
     }
-    .ga-result .ga-label-result {
+    .ga-hero-card .ga-label-result {
       font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
@@ -875,9 +1002,294 @@
       opacity: 0.85;
       margin-bottom: 4px;
     }
-    .ga-result .ga-weeks { font-size: 28px; font-weight: 800; line-height: 1.15; }
-    .ga-result .ga-trimester { font-size: 12px; opacity: 0.9; margin-top: 2px; }
-    .ga-result .ga-dpp { margin-top: 10px; font-size: 12.5px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.25); }
+    .ga-hero-card .ga-weeks { font-size: 28px; font-weight: 800; line-height: 1.15; }
+    .ga-hero-card .ga-trimester { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+    .ga-hero-card .ga-alerta-termo { margin-top: 10px; font-size: 12.5px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.25); }
+    .ga-color-card-title { font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+    .ga-dpp-card {
+      padding: 14px; border-radius: 14px; border: 1.5px solid;
+      background: #fffbeb; border-color: #fde68a; color: #78350f;
+    }
+    .ga-dpp-card .ga-dpp-valor { font-size: 21px; font-weight: 900; margin-top: 2px; }
+    .crescimento-inline-wrap {
+      background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: 14px; padding: 14px;
+    }
+    .ga-fetal-weight-card {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.25);
+    }
+    .ga-fetal-weight-card {
+      padding: 14px; border-radius: 14px; border: 1.5px solid;
+      background: #eef2ff; border-color: #c7d2fe; color: #3730a3;
+    }
+    .ga-fetal-weight-title { font-size: 12.5px; font-weight: 800; margin-bottom: 8px; color: #3730a3; }
+    .ga-fetal-weight-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .ga-fetal-weight-table th, .ga-fetal-weight-table td {
+      padding: 6px 4px;
+      text-align: center;
+      color: #4338ca;
+    }
+    .ga-fetal-weight-table th {
+      font-weight: 700;
+      opacity: 0.85;
+      font-size: 10.5px;
+      text-align: left;
+      padding-left: 6px;
+    }
+    .ga-fetal-weight-table td.p50 { font-weight: 900; font-size: 13px; color: #3730a3; }
+    .ga-fetal-weight-note {
+      font-size: 10px;
+      opacity: 0.85;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+    .ga-imc-inputs-box {
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+    }
+    .ga-imc-inputs-title { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .ga-imc-inputs-box .ga-row { margin: 0; }
+    .ga-imc-inputs-box .ga-input { font-size: 16px; padding: 9px; }
+    .ga-imc-gauge-card {
+      padding: 14px; border-radius: 14px; border: 1.5px solid;
+      background: #ecfdf5; border-color: #a7f3d0; color: #065f46;
+    }
+    .ga-imc-gauge-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; color: #065f46; }
+    .ga-imc-peso-esperado {
+      background: #ffffff;
+      border: 1px solid #a7f3d0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+    }
+    .ga-imc-peso-esperado-label { font-size: 10px; opacity: 0.8; font-weight: 700; text-transform: uppercase; color: #047857; }
+    .ga-imc-peso-esperado-valor { font-size: 15px; font-weight: 800; margin-top: 2px; color: #065f46; }
+    .imc-speedo-wrap {
+      text-align: center;
+      margin: 4px 0 14px;
+    }
+    .imc-speedo-container {
+      position: relative;
+      width: 260px;
+      height: 138px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .imc-speedo-arc {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 270deg at 50% 50%,
+        #fbbf24 0deg, #fbbf24 25.2deg,
+        #34d399 25.2deg, #34d399 72deg,
+        #fb923c 72deg, #fb923c 108deg,
+        #f87171 108deg, #f87171 180deg,
+        transparent 180deg, transparent 360deg
+      );
+      -webkit-mask: radial-gradient(circle, transparent 34%, #000 36%, #000 97%, transparent 99%);
+      mask: radial-gradient(circle, transparent 34%, #000 36%, #000 97%, transparent 99%);
+    }
+    .imc-speedo-needle {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      height: 118px;
+      background: #1e293b;
+      transform-origin: bottom center;
+      border-radius: 4px 4px 0 0;
+      transition: transform 0.4s ease;
+    }
+    .imc-speedo-hub {
+      position: absolute;
+      bottom: -9px;
+      left: 50%;
+      width: 22px;
+      height: 22px;
+      margin-left: -11px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 3px solid #ffffff;
+    }
+    .imc-speedo-label-min, .imc-speedo-label-max {
+      position: absolute;
+      bottom: 2px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .imc-speedo-label-min { left: 4px; }
+    .imc-speedo-label-max { right: 4px; }
+    .imc-speedo-readout {
+      font-size: 30px;
+      font-weight: 900;
+      margin-top: 2px;
+      line-height: 1;
+    }
+    .imc-speedo-readout-unit { font-size: 13px; font-weight: 700; opacity: 0.7; }
+    .imc-speedo-categoria {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+    .imc-speedo-legend {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .imc-speedo-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .imc-speedo-legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .ga-exames-inline-card {
+      padding: 14px; border-radius: 14px; border: 1.5px solid;
+      background: #f0f9ff; border-color: #bae6fd; color: #0c4a6e;
+    }
+    .ga-exames-inline-title { font-size: 13px; font-weight: 800; margin-bottom: 2px; color: #0c4a6e; }
+    .ga-exames-inline-sub { font-size: 11px; opacity: 0.85; margin-bottom: 10px; }
+    .ga-exames-inline-lista {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px 10px;
+    }
+    .ga-exames-inline-lista span {
+      display: block;
+      position: relative;
+      padding-left: 12px;
+      font-size: 11.5px;
+      line-height: 1.4;
+      color: #0c4a6e;
+    }
+    .ga-exames-inline-lista span::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      opacity: 0.6;
+    }
+    .ga-exames-inline-hint { font-size: 10px; opacity: 0.8; margin-top: 10px; line-height: 1.5; }
+    .ga-imc-gauge-bar {
+      position: relative;
+      display: flex;
+      height: 14px;
+      border-radius: 999px;
+      overflow: visible;
+      margin: 6px 0 18px;
+    }
+    .ga-imc-gauge-bar .seg { flex: 1; }
+    .ga-imc-gauge-bar .seg:first-child { border-radius: 999px 0 0 999px; }
+    .ga-imc-gauge-bar .seg:last-child { border-radius: 0 999px 999px 0; }
+    .ga-imc-gauge-bar .seg-baixo { background: #38bdf8; }
+    .ga-imc-gauge-bar .seg-normal { background: #34d399; }
+    .ga-imc-gauge-bar .seg-sobrepeso { background: #fbbf24; }
+    .ga-imc-gauge-bar .seg-obesidade { background: #f87171; }
+    .ga-imc-gauge-needle {
+      position: absolute;
+      top: -7px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 10px solid #065f46;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+    }
+    .ga-imc-gauge-needle-label {
+      position: absolute;
+      top: -30px;
+      transform: translateX(-50%);
+      font-size: 10.5px;
+      font-weight: 800;
+      white-space: nowrap;
+      background: #065f46;
+      color: #ffffff;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .ga-imc-gauge-range {
+      text-align: center;
+      font-size: 12.5px;
+      color: #065f46;
+    }
+    .ga-imc-gauge-range strong { font-size: 17px; display: block; margin-top: 2px; }
+    .ga-imc-gauge-hint { font-size: 10.5px; opacity: 0.8; margin-top: 8px; line-height: 1.5; text-align: center; }
+    .crescimento-inline-title { font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #831843; }
+    .crescimento-inline-wrap .crescimento-week-tabs {
+      margin: 0 -14px 10px;
+      padding: 4px 14px 8px;
+    }
+    .crescimento-inline-wrap .crescimento-week-tab {
+      background: #ffffff;
+      border-color: #fbcfe8;
+      color: #be185d;
+    }
+    .crescimento-inline-wrap .crescimento-week-tab.active { background: #be185d; color: #ffffff; border-color: #be185d; }
+    .crescimento-inline-wrap .crescimento-hero {
+      background: linear-gradient(135deg, #831843, #db2777);
+    }
+    .crescimento-inline-wrap .crescimento-section {
+      background: #ffffff;
+      border: 1px solid #fbcfe8;
+    }
+    .crescimento-inline-wrap .crescimento-nav-arrow {
+      background: #ffffff;
+      border-color: #fbcfe8;
+      color: #be185d;
+    }
+    .ganho-peso-imc-badge {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      color: #047857;
+      font-size: 12.5px;
+      margin-bottom: 10px;
+    }
+    .ganho-peso-faixa {
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .ganho-peso-faixa-label { font-size: 10.5px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+    .ganho-peso-faixa-valor { font-size: 15px; font-weight: 800; color: var(--text); margin-top: 2px; }
+    .ganho-peso-status {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid;
+      background: #ffffff;
+      font-size: 12.5px;
+      margin-top: 4px;
+    }
     .ga-disclaimer { margin: 14px 0 4px; font-size: 10.5px; color: var(--muted); line-height: 1.5; }
     .period-row {
       display: flex;
@@ -922,13 +1334,16 @@
         📅 Calcular idade gestacional
       </button>
       <button class="dmg-button" id="dmgButton" onclick="GestMedApp.openDmgModule()">
-        🩸 Diabetes Gestacional (DMG)
+        🩸 Cálculo da Insulina (DMG)
       </button>
       <button class="exames-button" id="examesButton" onclick="GestMedApp.openExamesModule()">
-        📋 Painel de Exames (Pré-natal)
+        📋 Painel de Exames (Pré-natal Habitual — Baixo Risco)
+      </button>
+      <button class="crescimento-button" id="ganhoPesoButton" onclick="GestMedApp.openGanhoPesoModule()">
+        ⚖️ Ganho de Peso Gestacional
       </button>
       <div class="searchbox">
-        <input id="search" type="text" placeholder="Digite aqui a medicação..." autocomplete="off">
+        <input id="search" type="search" placeholder="Digite aqui a medicação..." autocomplete="off">
         <span class="searchicon">🔎</span>
         <div class="suggestions" id="suggestions"></div>
       </div>
@@ -989,11 +1404,26 @@
   <div class="modal" id="gaModal" onclick="GestMedApp.fecharGaModalAoClicarFora(event)">
     <div class="sheet">
       <div class="handle"></div>
-      <button class="close" onclick="GestMedApp.closeGaCalculator()">×</button>
+      <div class="sheet-nav-3">
+        <button class="clear-btn" onclick="GestMedApp.clearGaCalculator()">🗑️ Limpar</button>
+        <button class="close" onclick="GestMedApp.closeGaCalculator()">×</button>
+      </div>
       <h2 style="margin:4px 0 12px;">Calculadora de idade gestacional</h2>
       <p style="margin:0 0 14px; font-size:12px; color:#64748b; line-height:1.5;">
         Escolha a informação que você já tem em mãos — o resultado mostra a <strong>idade gestacional de hoje</strong> e a data provável do parto.
       </p>
+
+      <div class="ga-imc-inputs-box">
+        <div class="ga-imc-inputs-title">⚖️ Peso e altura pré-gestacional <span style="font-weight:500; opacity:0.75;">(opcional — mostra o IMC saudável para a semana atual no resultado)</span></div>
+        <div class="ga-row">
+          <div>
+            <input type="number" id="gaImcPeso" class="ga-input" min="30" max="200" step="0.1" placeholder="Peso (kg)" oninput="GestMedApp.onGaImcInputsChange()">
+          </div>
+          <div>
+            <input type="number" id="gaImcAltura" class="ga-input" min="120" max="210" step="0.1" placeholder="Altura (cm)" oninput="GestMedApp.onGaImcInputsChange()">
+          </div>
+        </div>
+      </div>
 
       <div class="ga-tabs">
         <button class="ga-tab active" id="gaTabDum" onclick="GestMedApp.switchGaTab('dum')">Por DUM</button>
@@ -1038,6 +1468,7 @@
       <div class="handle"></div>
       <div class="sheet-nav">
         <button class="back-btn" onclick="GestMedApp.closeDmgModule()">← Voltar</button>
+        <button class="clear-btn" onclick="GestMedApp.clearDmgModule()">🗑️ Limpar</button>
         <button class="close" onclick="GestMedApp.closeDmgModule()">×</button>
       </div>
       <h2 style="margin:4px 0 10px;">Diabetes Mellitus Gestacional (DMG)</h2>
@@ -1512,6 +1943,39 @@
     </div>
   </div>
 
+  <!-- ===================== MODAL: CRESCIMENTO DO BEBÊ SEMANA A SEMANA ===================== -->
+  <!-- ===================== MODAL: GANHO DE PESO GESTACIONAL ===================== -->
+  <div class="modal" id="ganhoPesoModal" onclick="GestMedApp.fecharGanhoPesoModalAoClicarFora(event)">
+    <div class="sheet">
+      <div class="handle"></div>
+      <div class="sheet-nav">
+        <button class="back-btn" onclick="GestMedApp.closeGanhoPesoModule()">← Voltar</button>
+        <button class="clear-btn" onclick="GestMedApp.clearGanhoPesoModule()">🗑️ Limpar</button>
+        <button class="close" onclick="GestMedApp.closeGanhoPesoModule()">×</button>
+      </div>
+      <h2 style="margin:4px 0 10px;">⚖️ Ganho de Peso Gestacional</h2>
+      <p style="margin:0 0 14px; font-size:12px; color:#64748b; line-height:1.5;">
+        Classifica o IMC pré-gestacional e mostra a faixa de ganho de peso recomendada — total e
+        para a idade gestacional atual, se já calculada na calculadora de idade gestacional.
+      </p>
+
+      <label class="ga-label">Peso pré-gestacional (kg)</label>
+      <input type="number" id="pesoPreGestacional" class="ga-input" min="30" max="200" step="0.1" placeholder="Ex.: 65" oninput="GestMedApp.calcGanhoPeso()">
+      <label class="ga-label">Altura (cm)</label>
+      <input type="number" id="pesoAltura" class="ga-input" min="120" max="210" step="0.1" placeholder="Ex.: 165" oninput="GestMedApp.calcGanhoPeso()">
+      <label class="ga-label">Peso atual (kg)</label>
+      <input type="number" id="pesoAtual" class="ga-input" min="30" max="200" step="0.1" placeholder="Ex.: 72" oninput="GestMedApp.calcGanhoPeso()">
+      <p class="ga-hint">Se a idade gestacional ainda não tiver sido calculada em "Calcular idade gestacional", a faixa específica da semana atual não aparecerá — só a recomendação total.</p>
+
+      <div id="ganhoPesoResult" style="display:none; margin-top:14px;"></div>
+
+      <p class="ga-disclaimer">
+        Referência: Institute of Medicine (IOM, 2009), adotada pelo Ministério da Saúde. Não
+        substitui acompanhamento nutricional/obstétrico individualizado.
+      </p>
+    </div>
+  </div>
+
   <script>
 // data.js — GestMed (v182 — adicionada Metilcobalamina)
 
@@ -1536,6 +2000,284 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
 // pesquisar, filtrar e renderizar a interface.
 
 (function () {
+
+  // Dados do guia "Crescimento do Bebê" semana a semana (4 a 42 semanas)
+  const CRESCIMENTO_SEMANAS = {
+    "4": {
+      "comparacao": "uma semente de papoula",
+      "comprimento": "menos de 0,2 cm",
+      "peso": "menos de 1 g",
+      "desenvolvimento": "O óvulo fecundado (agora um blastocisto) acabou de se implantar no endométrio. Começam a se formar as três camadas germinativas que originarão todos os órgãos do bebê.",
+      "materna": "É comum ainda não haver sintomas perceptíveis. O atraso menstrual costuma ser o primeiro sinal, e o beta-hCG já pode ser detectado no sangue."
+    },
+    "5": {
+      "comparacao": "uma semente de gergelim",
+      "comprimento": "cerca de 0,3 cm",
+      "peso": "menos de 1 g",
+      "desenvolvimento": "O tubo neural (que originará o cérebro e a medula espinhal) começa a se formar e a se fechar. O coração primitivo inicia seus primeiros batimentos, ainda irregulares.",
+      "materna": "Náuseas, sensibilidade nas mamas e cansaço podem começar a aparecer, impulsionados pela rápida elevação do hCG e da progesterona."
+    },
+    "6": {
+      "comparacao": "uma ervilha",
+      "comprimento": "cerca de 0,6 cm",
+      "peso": "menos de 1 g",
+      "desenvolvimento": "Os batimentos cardíacos já costumam ser visíveis à ultrassonografia transvaginal. Começam a se formar os brotos que originarão braços e pernas, e as bolhas ópticas dos olhos.",
+      "materna": "Enjoo matinal, aumento da frequência urinária e fadiga costumam se intensificar nesta fase — o famoso início do primeiro trimestre."
+    },
+    "7": {
+      "comparacao": "um mirtilo (blueberry)",
+      "comprimento": "cerca de 1,3 cm",
+      "peso": "menos de 1 g",
+      "desenvolvimento": "O cérebro se divide em suas estruturas principais (hemisférios, cerebelo, tronco). Os braços já mostram formato de remo e pequenos sulcos indicam onde surgirão os dedos.",
+      "materna": "É comum flutuação de humor, sensibilidade a cheiros e aumento do volume das mamas. O útero começa a crescer, ainda contido na pelve."
+    },
+    "8": {
+      "comparacao": "uma framboesa",
+      "comprimento": "cerca de 1,6 cm",
+      "peso": "cerca de 1 g",
+      "desenvolvimento": "Todos os órgãos essenciais já começaram a se formar. As pálpebras começam a cobrir os olhos, e pequenos movimentos espontâneos já podem ocorrer, embora ainda não sejam percebidos pela mãe.",
+      "materna": "Sintomas de náusea, azia e distensão abdominal costumam estar no auge. A primeira consulta de pré-natal geralmente acontece por volta dessa época."
+    },
+    "9": {
+      "comparacao": "uma azeitona grande ou uva",
+      "comprimento": "cerca de 2,3 cm",
+      "peso": "cerca de 2 g",
+      "desenvolvimento": "O embrião passa a ser chamado de feto a partir da 10ª semana. Os dedos das mãos e pés se tornam distintos, e o coração já tem quatro câmaras formadas.",
+      "materna": "Roupas podem começar a apertar na cintura. Pode surgir maior sensibilidade emocional, associada às mudanças hormonais rápidas dessa fase."
+    },
+    "10": {
+      "comparacao": "um morango",
+      "comprimento": "cerca de 3,1 cm",
+      "peso": "cerca de 4 g",
+      "desenvolvimento": "As unhas começam a se formar e os ossos começam o processo de ossificação. O feto já pode fazer pequenos movimentos de flexão dos braços e pernas.",
+      "materna": "É a janela ideal para o ultrassom morfológico do 1º trimestre (11-14 semanas), que avalia translucência nucal e risco de síndromes genéticas."
+    },
+    "11": {
+      "comparacao": "um figo",
+      "comprimento": "cerca de 4,1 cm",
+      "peso": "cerca de 7 g",
+      "desenvolvimento": "A cabeça representa quase metade do comprimento do corpo. Os genitais externos começam a se diferenciar, embora ainda não seja possível identificar o sexo por ultrassom.",
+      "materna": "O risco de aborto espontâneo cai consideravelmente a partir dessa fase. Muitas mulheres começam a sentir alívio parcial das náuseas."
+    },
+    "12": {
+      "comparacao": "um limão pequeno (lime)",
+      "comprimento": "cerca de 5,4 cm",
+      "peso": "cerca de 14 g",
+      "desenvolvimento": "Os reflexos começam a aparecer — os dedos podem se abrir e fechar, e os dedos dos pés podem se curvar. O intestino, que se desenvolvia dentro do cordão umbilical, retorna para o abdome.",
+      "materna": "Fim do 1º trimestre em algumas classificações. O útero já pode ser palpado logo acima da sínfise púbica."
+    },
+    "13": {
+      "comparacao": "uma vagem",
+      "comprimento": "cerca de 7,4 cm",
+      "peso": "cerca de 23 g",
+      "desenvolvimento": "As impressões digitais já estão formadas. As cordas vocais começam a se desenvolver, e o feto pode começar a fazer movimentos respiratórios simulados de líquido amniótico.",
+      "materna": "Fim do 1º trimestre (13 semanas e 6 dias). Muitas mulheres notam aumento da energia e redução das náuseas a partir daqui."
+    },
+    "14": {
+      "comparacao": "um limão siciliano",
+      "comprimento": "cerca de 8,7 cm",
+      "peso": "cerca de 43 g",
+      "desenvolvimento": "O feto já consegue franzir a testa, fazer caretas e até chupar o dedo. O fígado e o baço começam a produzir células sanguíneas.",
+      "materna": "Início do 2º trimestre — período costuma trazer mais disposição, com menos náuseas e menos cansaço para a maioria das gestantes."
+    },
+    "15": {
+      "comparacao": "uma maçã",
+      "comprimento": "cerca de 10,1 cm",
+      "peso": "cerca de 70 g",
+      "desenvolvimento": "As pernas já são mais longas que os braços. O feto começa a desenvolver a capacidade de perceber luz, mesmo com as pálpebras ainda fechadas.",
+      "materna": "O abdômen começa a ficar visivelmente mais arredondado. Pode haver congestão nasal e sangramento gengival leve, por aumento do volume sanguíneo."
+    },
+    "16": {
+      "comparacao": "um abacate",
+      "comprimento": "cerca de 11,6 cm",
+      "peso": "cerca de 100 g",
+      "desenvolvimento": "O sistema esquelético continua a se fortalecer. Já é possível, em alguns casos, identificar o sexo do bebê por ultrassom, se a posição fetal permitir.",
+      "materna": "Muitas gestantes começam a perceber os primeiros movimentos fetais (sensação de 'borboletas') entre 16 e 20 semanas, especialmente se não for a primeira gestação."
+    },
+    "17": {
+      "comparacao": "uma pera",
+      "comprimento": "cerca de 13 cm",
+      "peso": "cerca de 140 g",
+      "desenvolvimento": "A gordura começa a se depositar sob a pele, ajudando na futura regulação da temperatura corporal. O cordão umbilical fica mais espesso e forte.",
+      "materna": "Pode haver dor ligamentar (dor no baixo ventre/virilha ao mudar de posição) pelo estiramento dos ligamentos que sustentam o útero em crescimento."
+    },
+    "18": {
+      "comparacao": "um pimentão",
+      "comprimento": "cerca de 14,2 cm",
+      "peso": "cerca de 190 g",
+      "desenvolvimento": "As orelhas já estão na posição final e o feto começa a poder ouvir sons abafados, como os batimentos cardíacos maternos e vozes.",
+      "materna": "Este é o período típico do ultrassom morfológico do 2º trimestre (20-24 semanas se aproximando) — o principal exame estrutural da gestação."
+    },
+    "19": {
+      "comparacao": "um tomate grande",
+      "comprimento": "cerca de 15,3 cm",
+      "peso": "cerca de 240 g",
+      "desenvolvimento": "Uma substância protetora chamada vérnix caseosa começa a cobrir a pele do feto. Os rins já produzem urina, que é liberada no líquido amniótico.",
+      "materna": "A altura uterina já pode ser medida na consulta de pré-natal e costuma se aproximar do número da semana gestacional a partir daqui."
+    },
+    "20": {
+      "comparacao": "uma banana",
+      "comprimento": "cerca de 16,4 cm",
+      "peso": "cerca de 300 g",
+      "desenvolvimento": "Marco da metade da gestação! O feto engole líquido amniótico regularmente, treinando o sistema digestivo. Cabelo fino (lanugo) cobre o corpo.",
+      "materna": "Época do grande ultrassom morfológico (20-24 semanas), que avalia detalhadamente todos os órgãos, a placenta e o líquido amniótico."
+    },
+    "21": {
+      "comparacao": "uma cenoura grande",
+      "comprimento": "cerca de 26,7 cm",
+      "peso": "cerca de 360 g",
+      "desenvolvimento": "A medula óssea assume a produção de células sanguíneas, antes feita pelo fígado e baço. Os movimentos fetais ficam mais fortes e coordenados.",
+      "materna": "Os movimentos do bebê ficam mais perceptíveis e frequentes. Pode surgir a linha nigra (linha escura vertical no abdome) e estrias."
+    },
+    "22": {
+      "comparacao": "um coco pequeno",
+      "comprimento": "cerca de 27,8 cm",
+      "peso": "cerca de 430 g",
+      "desenvolvimento": "As sobrancelhas e pálpebras estão bem definidas. O feto já tem um padrão de sono e vigília, ainda que diferente do que terá após o nascimento.",
+      "materna": "Contrações de Braxton-Hicks (indolores e irregulares) podem começar a ser percebidas — o útero 'treinando' para o trabalho de parto."
+    },
+    "23": {
+      "comparacao": "uma manga grande",
+      "comprimento": "cerca de 28,9 cm",
+      "peso": "cerca de 501 g",
+      "desenvolvimento": "Os pulmões continuam desenvolvendo os ramos das vias aéreas e começam a produzir surfactante, substância essencial para a respiração após o nascimento.",
+      "materna": "A partir daqui, o feto atinge o limiar de viabilidade extrauterina em muitos serviços de neonatologia (~23-24 semanas), embora com riscos elevados."
+    },
+    "24": {
+      "comparacao": "uma espiga de milho",
+      "comprimento": "cerca de 30 cm",
+      "peso": "cerca de 600 g",
+      "desenvolvimento": "O rosto está quase completamente formado. A pele ainda é fina e enrugada, mas começa a ganhar mais gordura subcutânea nas próximas semanas.",
+      "materna": "Época do teste de tolerância à glicose (TOTG 75g), para rastreio de diabetes gestacional entre 24-28 semanas."
+    },
+    "25": {
+      "comparacao": "uma rutabaga (nabo grande)",
+      "comprimento": "cerca de 34,6 cm",
+      "peso": "cerca de 660 g",
+      "desenvolvimento": "As narinas começam a abrir. Os capilares sob a pele se formam, dando um tom rosado à pele, antes translúcida.",
+      "materna": "Pode surgir inchaço leve nos pés e tornozelos, mais perceptível ao final do dia — geralmente normal, mas deve ser monitorado na pressão arterial."
+    },
+    "26": {
+      "comparacao": "uma alface americana",
+      "comprimento": "cerca de 35,6 cm",
+      "peso": "cerca de 760 g",
+      "desenvolvimento": "Os olhos começam a se abrir. O feto já responde a estímulos sonoros externos com mudanças na frequência cardíaca e nos movimentos.",
+      "materna": "Fim do 2º trimestre se aproximando. Pode surgir dor lombar por mudança do centro de gravidade do corpo."
+    },
+    "27": {
+      "comparacao": "uma couve-flor",
+      "comprimento": "cerca de 36,6 cm",
+      "peso": "cerca de 875 g",
+      "desenvolvimento": "O cérebro está em fase de rápido crescimento, com formação intensa de sulcos e circunvoluções. Padrões de soluço fetal podem começar a ser sentidos pela mãe.",
+      "materna": "Marca o fim do 2º trimestre (27 semanas e 6 dias) em algumas classificações. Consultas de pré-natal costumam ficar quinzenais a partir daqui."
+    },
+    "28": {
+      "comparacao": "uma berinjela",
+      "comprimento": "cerca de 37,6 cm",
+      "peso": "cerca de 1005 g",
+      "desenvolvimento": "Início do 3º trimestre. O feto já consegue piscar os olhos e tem ciclos de sono mais definidos, incluindo fases de sono REM.",
+      "materna": "Época da dose de imunoglobulina anti-D (se mãe Rh negativo não sensibilizada) e possível indicação de ecocardiograma fetal."
+    },
+    "29": {
+      "comparacao": "uma abóbora butternut pequena",
+      "comprimento": "cerca de 38,6 cm",
+      "peso": "cerca de 1153 g",
+      "desenvolvimento": "Os ossos estão totalmente desenvolvidos, mas ainda macios e flexíveis. A cabeça continua crescendo para acomodar o desenvolvimento cerebral acelerado.",
+      "materna": "Falta de ar leve é comum, pelo útero pressionando o diafragma. Cansaço e dores nas costas tendem a aumentar."
+    },
+    "30": {
+      "comparacao": "um repolho",
+      "comprimento": "cerca de 39,9 cm",
+      "peso": "cerca de 1319 g",
+      "desenvolvimento": "A medula óssea agora é a única responsável pela produção de glóbulos vermelhos. O feto pode abrir e fechar os olhos voluntariamente.",
+      "materna": "Consultas de pré-natal costumam se tornar mais frequentes. É comum repetir hemograma e urocultura por volta dessa fase."
+    },
+    "31": {
+      "comparacao": "um coco grande",
+      "comprimento": "cerca de 41,1 cm",
+      "peso": "cerca de 1502 g",
+      "desenvolvimento": "O sistema nervoso central amadurece o suficiente para controlar a respiração e a temperatura corporal com mais eficiência, embora ainda de forma imatura.",
+      "materna": "Pode surgir a síndrome do túnel do carpo (formigamento nas mãos) por retenção de líquidos. Cãibras nas pernas são comuns à noite."
+    },
+    "32": {
+      "comparacao": "uma jicama (batata mexicana)",
+      "comprimento": "cerca de 42,4 cm",
+      "peso": "cerca de 1702 g",
+      "desenvolvimento": "As unhas dos dedos das mãos já alcançam as pontas dos dedos. O lanugo (pelo fino) começa a cair, embora um pouco possa permanecer até o nascimento.",
+      "materna": "Contrações de Braxton-Hicks podem ficar mais frequentes. Pirose (azia) tende a piorar pela compressão do estômago."
+    },
+    "33": {
+      "comparacao": "um abacaxi pequeno",
+      "comprimento": "cerca de 43,7 cm",
+      "peso": "cerca de 1918 g",
+      "desenvolvimento": "Os ossos do crânio permanecem separados e flexíveis (não fundidos), permitindo que a cabeça se molde durante a passagem pelo canal de parto.",
+      "materna": "O ganho de peso costuma ser mais rápido nessa fase. Pode haver mais dificuldade para dormir por causa do tamanho do abdome."
+    },
+    "34": {
+      "comparacao": "um melão cantalupo",
+      "comprimento": "cerca de 45 cm",
+      "peso": "cerca de 2146 g",
+      "desenvolvimento": "Os pulmões continuam amadurecendo e a produção de surfactante aumenta significativamente — bebês nascidos a partir dessa semana geralmente têm bom prognóstico respiratório.",
+      "materna": "A cabeça do bebê pode começar a se encaixar na pelve, sobretudo em primíparas, aumentando a pressão pélvica."
+    },
+    "35": {
+      "comparacao": "um melão honeydew",
+      "comprimento": "cerca de 46,2 cm",
+      "peso": "cerca de 2383 g",
+      "desenvolvimento": "Os rins já estão totalmente desenvolvidos e o fígado já processa alguns produtos residuais. O ganho de peso é rápido nesta fase, cerca de 200-250g por semana.",
+      "materna": "Momento da pesquisa de Estreptococo do grupo B (swab vaginal/anal), realizada entre 35 e 37 semanas."
+    },
+    "36": {
+      "comparacao": "uma alface romana grande / mamão",
+      "comprimento": "cerca de 47,4 cm",
+      "peso": "cerca de 2622 g",
+      "desenvolvimento": "O bebê já está praticamente pronto para a vida fora do útero. A cabeça pode se encaixar na pelve materna, especialmente em mães de primeira viagem.",
+      "materna": "Consultas de pré-natal costumam se tornar semanais a partir daqui. É um bom momento para revisar o plano de parto com a equipe assistente."
+    },
+    "37": {
+      "comparacao": "um alho-poró grande / acelga",
+      "comprimento": "cerca de 48,6 cm",
+      "peso": "cerca de 2859 g",
+      "desenvolvimento": "A gestação é considerada 'a termo precoce' a partir de 37 semanas. O sistema digestivo já está pronto, embora o bebê só se alimente após o nascimento.",
+      "materna": "Sinais de trabalho de parto (perda do tampão mucoso, contrações regulares e progressivas) podem começar a qualquer momento a partir daqui."
+    },
+    "38": {
+      "comparacao": "uma abobrinha grande",
+      "comprimento": "cerca de 49,8 cm",
+      "peso": "cerca de 3083 g",
+      "desenvolvimento": "O cérebro e o sistema nervoso continuam amadurecendo rapidamente. A maior parte do vérnix caseoso e do lanugo já foi eliminada.",
+      "materna": "Aumento da pressão pélvica, cansaço e ansiedade em relação ao parto são comuns. Fique atenta a sinais de trabalho de parto."
+    },
+    "39": {
+      "comparacao": "uma pequena melancia",
+      "comprimento": "cerca de 50,7 cm",
+      "peso": "cerca de 3288 g",
+      "desenvolvimento": "Gestação considerada 'a termo completo' (39-40 semanas e 6 dias). Os pulmões e o cérebro continuam se preparando para as demandas da vida fora do útero.",
+      "materna": "Contrações de treinamento tendem a ficar mais fortes e frequentes. Fique atenta a sinais de início de trabalho de parto verdadeiro."
+    },
+    "40": {
+      "comparacao": "uma melancia",
+      "comprimento": "cerca de 51,2 cm",
+      "peso": "cerca de 3462 g",
+      "desenvolvimento": "Data provável do parto! O bebê está totalmente desenvolvido e pronto para nascer, embora o momento exato do parto varie — só cerca de 5% nascem exatamente na DPP.",
+      "materna": "É normal ainda não ter entrado em trabalho de parto na DPP — a gestação segue sendo considerada normal até 41 semanas e 6 dias."
+    },
+    "41": {
+      "comparacao": "uma abóbora grande",
+      "comprimento": "cerca de 51,7 cm",
+      "peso": "cerca de 3597 g",
+      "desenvolvimento": "O bebê continua ganhando peso, embora mais lentamente. A placenta começa gradualmente a ficar menos eficiente, o que é monitorado de perto pela equipe obstétrica.",
+      "materna": "Gestação chamada de 'pós-termo tardia'. É esperado acompanhamento mais próximo, com monitorização fetal e avaliação de indução do parto conforme protocolo institucional."
+    },
+    "42": {
+      "comparacao": "uma abóbora grande",
+      "comprimento": "cerca de 51,5 cm",
+      "peso": "cerca de 3685 g",
+      "desenvolvimento": "Gestação pós-termo (≥42 semanas) — requer avaliação obstétrica prioritária, pela associação com maior risco de insuficiência placentária e complicações no parto.",
+      "materna": "A maioria dos serviços indica indução do trabalho de parto antes de completar 42 semanas, exatamente para reduzir esses riscos."
+    }
+  };
+  
   "use strict";
 
   // ==========================================================
@@ -1819,7 +2561,7 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     if (!term) {
       elCount.textContent = "";
       elCards.innerHTML =
-        '<div class="empty">Digite o nome de um medicamento na busca acima, ou toque em um dos botões de sintoma (Dor, Febre, Alergia...) para ver a lista.</div>';
+        '<div class="empty-hint">Digite o nome de um medicamento na busca acima, ou toque em um dos botões de sintoma (Dor, Febre, Alergia...) para ver a lista.</div>';
       return;
     }
 
@@ -2062,6 +2804,73 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
   const elGaModal = document.getElementById("gaModal");
   const elGaResult = document.getElementById("gaResult");
   let gaActiveTab = "dum";
+  let lastGaWeeksToday = null;
+  let lastGaDaysToday = null;
+  let lastTotalDaysToday = null;
+  let lastDppDate = null;
+  let gaImcPesoVal = null;
+  let gaImcAlturaVal = null;
+
+  // Peso fetal estimado por percentil — referência Hadlock et al., Radiology, 1991
+  // (mesma referência usada pelos principais apps/serviços de medicina fetal do Brasil).
+  // Valores em gramas, por semana gestacional completa (10 a 40 semanas).
+  const HADLOCK_PESO_FETAL = {
+    10: [26, 29, 35, 41, 44], 11: [34, 37, 45, 53, 56], 12: [43, 48, 58, 68, 73],
+    13: [55, 61, 73, 85, 91], 14: [70, 77, 93, 109, 116], 15: [88, 97, 117, 137, 146],
+    16: [110, 121, 146, 171, 183], 17: [136, 150, 181, 212, 226], 18: [167, 185, 223, 261, 279],
+    19: [205, 227, 273, 319, 341], 20: [248, 275, 331, 387, 414], 21: [299, 331, 399, 467, 499],
+    22: [359, 398, 478, 559, 598], 23: [426, 471, 568, 665, 710], 24: [503, 556, 670, 784, 838],
+    25: [589, 652, 785, 918, 981], 26: [685, 758, 913, 1068, 1141], 27: [791, 876, 1055, 1234, 1319],
+    28: [908, 1004, 1210, 1416, 1513], 29: [1034, 1145, 1379, 1613, 1724], 30: [1169, 1294, 1559, 1824, 1949],
+    31: [1313, 1453, 1751, 2049, 2189], 32: [1465, 1621, 1953, 2285, 2441], 33: [1622, 1794, 2162, 2530, 2703],
+    34: [1783, 1973, 2377, 2781, 2971], 35: [1946, 2154, 2595, 3036, 3244], 36: [2110, 2335, 2813, 3291, 3516],
+    37: [2271, 2513, 3028, 3543, 3785], 38: [2427, 2686, 3236, 3786, 4045], 39: [2576, 2851, 3435, 4019, 4294],
+    40: [2714, 3004, 3619, 4234, 4524],
+  };
+
+  // Ganho de peso gestacional recomendado por categoria de IMC pré-gestacional —
+  // Institute of Medicine (IOM, 2009), adotado pelo Ministério da Saúde do Brasil.
+  // ganhoTotal em kg [mínimo, máximo]; ganho1Tri em kg (aproximado, até 13 semanas);
+  // semanal2e3Tri em kg/semana (taxa média esperada do 2º/3º trimestre).
+  const IOM_GANHO_PESO = {
+    baixo: { label: "Baixo peso (IMC < 18,5)", ganhoTotal: [12.5, 18], ganho1Tri: 2, semanal2e3Tri: 0.51 },
+    normal: { label: "Peso adequado (IMC 18,5–24,9)", ganhoTotal: [11.5, 16], ganho1Tri: 1.6, semanal2e3Tri: 0.42 },
+    sobrepeso: { label: "Sobrepeso (IMC 25–29,9)", ganhoTotal: [7, 11.5], ganho1Tri: 0.9, semanal2e3Tri: 0.28 },
+    obesidade: { label: "Obesidade (IMC ≥ 30)", ganhoTotal: [5, 9], ganho1Tri: 0.6, semanal2e3Tri: 0.22 },
+  };
+
+  // Resumo dos exames de rotina por trimestre (mesmo conteúdo do Painel de
+  // Exames completo, em versão condensada para exibição automática no
+  // resultado da calculadora de idade gestacional).
+  const EXAMES_POR_TRIMESTRE = {
+    1: {
+      titulo: "1º Trimestre — até 13s6d",
+      itens: [
+        "Hemograma completo", "Tipagem sanguínea + Fator Rh", "Glicemia de jejum",
+        "EAS + Urocultura", "VDRL/teste rápido sífilis", "Anti-HIV", "HBsAg", "Anti-HCV",
+        "Toxoplasmose (IgG/IgM)", "Rubéola", "TSH", "USG inicial (7-9s)",
+        "USG morfológica 1º tri + Doppler (11-14s)",
+      ],
+    },
+    2: {
+      titulo: "2º Trimestre — 14 a 27s",
+      itens: [
+        "USG morfológica 2º tri + Doppler (20-24s)", "TOTG 75g (24-28s)",
+        "Ecocardiograma fetal (se indicado)", "Coombs indireto mensal (se Rh-)",
+        "Repetir sorologias conforme risco",
+      ],
+    },
+    3: {
+      titulo: "3º Trimestre — 28s até o parto",
+      itens: [
+        "Hemograma (repetição)", "VDRL/sífilis (repetição)", "Anti-HIV (repetição)",
+        "EAS + urocultura (~30s)", "Imunoglobulina anti-D (28s, se Rh-)",
+        "Coombs seriado (28/32/36/40s)", "Estreptococo grupo B (35-37s)",
+        "USG de crescimento (se indicado)",
+      ],
+    },
+  };
+
 
   function openGaCalculator() {
     elGaModal.classList.add("open");
@@ -2071,10 +2880,46 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
   function closeGaCalculator() {
     elGaModal.classList.remove("open");
     document.body.style.overflow = "";
+    clearGaCalculator();
   }
 
   function fecharGaModalAoClicarFora(event) {
     if (event.target === elGaModal) closeGaCalculator();
+  }
+
+  function clearGaCalculator() {
+    // Limpa todos os campos e resultados da calculadora de idade gestacional,
+    // para começar do zero com a próxima paciente sem precisar fechar a tela.
+    document.getElementById("gaDumDate").value = "";
+    document.getElementById("gaUsExamDate").value = "";
+    document.getElementById("gaUsWeeks").value = "";
+    document.getElementById("gaUsDays").value = "";
+    document.getElementById("gaImcPeso").value = "";
+    document.getElementById("gaImcAltura").value = "";
+
+    lastGaWeeksToday = null;
+    lastGaDaysToday = null;
+    lastTotalDaysToday = null;
+    lastDppDate = null;
+    gaImcPesoVal = null;
+    gaImcAlturaVal = null;
+
+    elGaResult.style.display = "none";
+    elGaResult.innerHTML = "";
+
+    switchGaTab("dum");
+  }
+
+  function onGaImcInputsChange() {
+    const pesoVal = document.getElementById("gaImcPeso").value;
+    const alturaVal = document.getElementById("gaImcAltura").value;
+    gaImcPesoVal = pesoVal === "" ? null : Number(pesoVal);
+    gaImcAlturaVal = alturaVal === "" ? null : Number(alturaVal);
+    // Se já existe um resultado de idade gestacional na tela, recalcula para
+    // incluir (ou remover) o velocímetro de IMC imediatamente.
+    if (lastTotalDaysToday !== null && lastDppDate !== null) {
+      renderGaResult(lastTotalDaysToday, lastDppDate);
+    }
   }
 
   function switchGaTab(tab) {
@@ -2086,6 +2931,7 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     elGaResult.style.display = "none";
 
     const note = document.getElementById("gaMethodNote");
+    note.classList.remove("show");
     if (tab === "dum") {
       note.textContent =
         "Calculado a partir da data da última menstruação. Se também houver um ultrassom do 1º trimestre, ele costuma ser mais preciso — é normal os métodos darem datas um pouco diferentes.";
@@ -2128,6 +2974,108 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     return "3º trimestre";
   }
 
+  function trimesterNumberFromWeeks(weeks) {
+    if (weeks < 14) return 1;
+    if (weeks < 28) return 2;
+    return 3;
+  }
+
+  function examesTrimestreCardHtml(weeks) {
+    if (weeks < 0 || weeks > 42) return "";
+    const num = trimesterNumberFromWeeks(weeks);
+    const dados = EXAMES_POR_TRIMESTRE[num];
+    if (!dados) return "";
+
+    const itensHtml = dados.itens.map((item) => `<span>${escapeHtml(item)}</span>`).join("");
+
+    return `
+      <div class="ga-exames-inline-card">
+        <div class="ga-exames-inline-title">📋 Exames deste trimestre</div>
+        <div class="ga-exames-inline-sub">${escapeHtml(dados.titulo)} — rotina de baixo risco</div>
+        <div class="ga-exames-inline-lista">${itensHtml}</div>
+        <div class="ga-exames-inline-hint">Ver o painel completo de exames para detalhes de cada um e as demais semanas.</div>
+      </div>
+    `;
+  }
+
+  function fetalWeightCardHtml(weeks) {
+    const row = HADLOCK_PESO_FETAL[weeks];
+    if (!row) return "";
+    const [p3, p10, p50, p90, p97] = row;
+    const fmt = (g) => g.toLocaleString("pt-BR") + " g";
+    return `
+      <div class="ga-fetal-weight-card">
+        <div class="ga-fetal-weight-title">⚖️ Peso fetal estimado para ${weeks} semanas</div>
+        <table class="ga-fetal-weight-table">
+          <tr><th>Percentil</th><td>3</td><td>10</td><td class="p50">50</td><td>90</td><td>97</td></tr>
+          <tr><th>Peso</th><td>${fmt(p3)}</td><td>${fmt(p10)}</td><td class="p50">${fmt(p50)}</td><td>${fmt(p90)}</td><td>${fmt(p97)}</td></tr>
+        </table>
+        <p class="ga-fetal-weight-note">
+          Referência Hadlock et al. (1991). Faixa esperada: entre os percentis 10 e 90. Abaixo do
+          P10 = pequeno para a idade gestacional (PIG); acima do P90 = grande para a idade
+          gestacional (GIG) — sempre correlacionar com Doppler/vitalidade, não isoladamente.
+        </p>
+      </div>
+    `;
+  }
+
+  function imcGaugeCardHtml(weeks) {
+    if (!gaImcPesoVal || !gaImcAlturaVal || weeks < 0 || weeks > 42) return "";
+
+    const alturaM = gaImcAlturaVal / 100;
+    const imcPre = gaImcPesoVal / (alturaM * alturaM);
+    const categoria = classificarImc(imcPre);
+    const dados = IOM_GANHO_PESO[categoria];
+    const weeksClamped = Math.min(Math.max(weeks, 0), 40);
+
+    const pontoEstimado =
+      weeksClamped <= 13
+        ? dados.ganho1Tri * (weeksClamped / 13)
+        : dados.ganho1Tri + dados.semanal2e3Tri * (weeksClamped - 13);
+    const pontoTotalReferencia = dados.ganho1Tri + dados.semanal2e3Tri * (40 - 13);
+    const scaleMin = dados.ganhoTotal[0] / pontoTotalReferencia;
+    const scaleMax = dados.ganhoTotal[1] / pontoTotalReferencia;
+    const ganhoEsperadoMin = Math.max(0, pontoEstimado * scaleMin);
+    const ganhoEsperadoMax = Math.max(0, pontoEstimado * scaleMax);
+    const imcEsperadoMin = (gaImcPesoVal + ganhoEsperadoMin) / (alturaM * alturaM);
+    const imcEsperadoMax = (gaImcPesoVal + ganhoEsperadoMax) / (alturaM * alturaM);
+    const imcMeio = (imcEsperadoMin + imcEsperadoMax) / 2;
+    const pesoEsperadoMin = gaImcPesoVal + ganhoEsperadoMin;
+    const pesoEsperadoMax = gaImcPesoVal + ganhoEsperadoMax;
+
+    // Posição da agulha no velocímetro (faixa visual de 15 a 40 kg/m² cobre da
+    // categoria "baixo peso" até bem dentro de "obesidade").
+    const GAUGE_MIN = 15;
+    const GAUGE_MAX = 40;
+    const pct = Math.min(100, Math.max(0, ((imcMeio - GAUGE_MIN) / (GAUGE_MAX - GAUGE_MIN)) * 100));
+    const fmt1 = (n) => n.toFixed(1).replace(".", ",");
+
+    return `
+      <div class="ga-imc-gauge-card">
+        <div class="ga-imc-gauge-title">⚖️ Peso e IMC esperados para a idade gestacional atual</div>
+        <div class="ga-imc-peso-esperado">
+          <div class="ga-imc-peso-esperado-label">Peso esperado em ${weeks} semanas</div>
+          <div class="ga-imc-peso-esperado-valor">Entre ${fmt1(pesoEsperadoMin)} kg e ${fmt1(pesoEsperadoMax)} kg</div>
+        </div>
+        <div class="ga-imc-gauge-bar">
+          <div class="seg seg-baixo"></div>
+          <div class="seg seg-normal"></div>
+          <div class="seg seg-sobrepeso"></div>
+          <div class="seg seg-obesidade"></div>
+          <div class="ga-imc-gauge-needle-label" style="left:${pct}%;">${fmt1(imcMeio)}</div>
+          <div class="ga-imc-gauge-needle" style="left:${pct}%;"></div>
+        </div>
+        <div class="ga-imc-gauge-range">
+          IMC esperado nesta idade gestacional<br>
+          Entre <strong>${fmt1(imcEsperadoMin)} e ${fmt1(imcEsperadoMax)} kg/m²</strong>
+        </div>
+        <div class="ga-imc-gauge-hint">
+          IMC pré-gestacional: ${fmt1(imcPre)} kg/m² (${dados.label}). Referência IOM/Ministério da Saúde.
+        </div>
+      </div>
+    `;
+  }
+
   function renderGaResult(totalDaysToday, dppDate) {
     if (totalDaysToday < 0) {
       elGaResult.style.display = "block";
@@ -2137,23 +3085,58 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     }
     const weeks = Math.floor(totalDaysToday / 7);
     const days = totalDaysToday % 7;
+    lastGaWeeksToday = weeks;
+    lastGaDaysToday = days;
+    lastTotalDaysToday = totalDaysToday;
+    lastDppDate = dppDate;
 
     let alertaTermo = "";
     if (weeks >= 42) {
       alertaTermo =
-        '<div class="ga-dpp" style="color:#fecaca;">⚠ Idade gestacional igual ou acima de 42 semanas — gestação pós-termo, requer avaliação obstétrica prioritária.</div>';
+        '<div class="ga-alerta-termo">⚠ Idade gestacional igual ou acima de 42 semanas — gestação pós-termo, requer avaliação obstétrica prioritária.</div>';
     } else if (weeks >= 37) {
-      alertaTermo = '<div class="ga-dpp">Gestação a termo.</div>';
+      alertaTermo = '<div class="ga-alerta-termo">Gestação a termo.</div>';
     }
 
     elGaResult.style.display = "block";
     elGaResult.innerHTML = `
-      <div class="ga-label-result">Idade gestacional hoje</div>
-      <div class="ga-weeks">${weeks} semanas e ${days} dia${days === 1 ? "" : "s"}</div>
-      <div class="ga-trimester">${trimesterFromWeeks(weeks)} · hoje (${formatDateBr(new Date())})</div>
-      <div class="ga-dpp">Data provável do parto (DPP): <strong>${formatDateBr(dppDate)}</strong></div>
-      ${alertaTermo}
+      <div class="ga-hero-card">
+        <div class="ga-label-result">Idade gestacional hoje</div>
+        <div class="ga-weeks">${weeks} semanas e ${days} dia${days === 1 ? "" : "s"}</div>
+        <div class="ga-trimester">${trimesterFromWeeks(weeks)} · hoje (${formatDateBr(new Date())})</div>
+        ${alertaTermo}
+      </div>
+      <div class="ga-dpp-card">
+        <div class="ga-color-card-title">📅 Data provável do parto (DPP)</div>
+        <div class="ga-dpp-valor">${formatDateBr(dppDate)}</div>
+      </div>
+      ${fetalWeightCardHtml(weeks)}
+      ${imcGaugeCardHtml(weeks)}
+      ${examesTrimestreCardHtml(weeks)}
     `;
+
+    if (weeks >= CRESCIMENTO_MIN_SEMANA && weeks <= CRESCIMENTO_MAX_SEMANA) {
+      crescimentoSemanaAtual = weeks;
+      const crescimentoWrap = document.createElement("div");
+      crescimentoWrap.className = "crescimento-inline-wrap";
+      crescimentoWrap.innerHTML = `
+        <div class="crescimento-inline-title">👶 Crescimento do bebê</div>
+        <div class="crescimento-week-tabs" id="crescimentoWeekTabs"></div>
+        <div id="crescimentoContent"></div>
+        <div class="crescimento-nav-arrows">
+          <button class="crescimento-nav-arrow" id="crescimentoPrevBtn" onclick="GestMedApp.crescimentoNav(-1)">← Semana anterior</button>
+          <button class="crescimento-nav-arrow" id="crescimentoNextBtn" onclick="GestMedApp.crescimentoNav(1)">Próxima semana →</button>
+        </div>
+      `;
+      elGaResult.appendChild(crescimentoWrap);
+      renderCrescimentoWeekTabs();
+      renderCrescimentoContent();
+      // Não chama scrollCrescimentoTabIntoView aqui: isso "puxava" a tela pra
+      // baixo automaticamente toda vez que o usuário terminava de digitar
+      // data/semanas, interrompendo o preenchimento. O scroll automático fica
+      // reservado só para quando o usuário navega manualmente pelas semanas
+      // (crescimentoIrPara/crescimentoNav), não para o cálculo inicial.
+    }
   }
 
   function calcGaDum() {
@@ -2217,6 +3200,167 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     renderGaResult(totalDaysToday, dpp);
   }
 
+  function classificarImc(imc) {
+    if (imc < 18.5) return "baixo";
+    if (imc < 25) return "normal";
+    if (imc < 30) return "sobrepeso";
+    return "obesidade";
+  }
+
+  function classificarImcGeral(imc) {
+    if (imc < 18.5) return { key: "baixo", label: "Baixo peso", color: "#fbbf24" };
+    if (imc < 25) return { key: "normal", label: "Saudável", color: "#34d399" };
+    if (imc < 30) return { key: "sobrepeso", label: "Sobrepeso", color: "#fb923c" };
+    return { key: "obesidade", label: "Obesidade", color: "#f87171" };
+  }
+
+  function imcSpeedometerHtml(imcValue) {
+    const GAUGE_MIN = 15;
+    const GAUGE_MAX = 40;
+    const clamped = Math.min(GAUGE_MAX, Math.max(GAUGE_MIN, imcValue));
+    const pct = (clamped - GAUGE_MIN) / (GAUGE_MAX - GAUGE_MIN);
+    const needleDeg = -90 + pct * 180;
+    const cat = classificarImcGeral(imcValue);
+    const fmt1 = (n) => n.toFixed(1).replace(".", ",");
+
+    return `
+      <div class="imc-speedo-wrap">
+        <div class="imc-speedo-container">
+          <div class="imc-speedo-arc"></div>
+          <span class="imc-speedo-label-min">${GAUGE_MIN}</span>
+          <span class="imc-speedo-label-max">${GAUGE_MAX}</span>
+          <div class="imc-speedo-needle" style="transform: rotate(${needleDeg}deg);"></div>
+          <div class="imc-speedo-hub"></div>
+        </div>
+        <div class="imc-speedo-readout" style="color:${cat.color};">${fmt1(imcValue)}<span class="imc-speedo-readout-unit"> kg/m²</span></div>
+        <div class="imc-speedo-categoria" style="background:${cat.color}22; color:${cat.color};">${cat.label}</div>
+        <div class="imc-speedo-legend">
+          <div class="imc-speedo-legend-item"><span class="imc-speedo-legend-dot" style="background:#fbbf24;"></span>Baixo peso</div>
+          <div class="imc-speedo-legend-item"><span class="imc-speedo-legend-dot" style="background:#34d399;"></span>Saudável</div>
+          <div class="imc-speedo-legend-item"><span class="imc-speedo-legend-dot" style="background:#fb923c;"></span>Sobrepeso</div>
+          <div class="imc-speedo-legend-item"><span class="imc-speedo-legend-dot" style="background:#f87171;"></span>Obesidade</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function calcGanhoPeso() {
+    const elResult = document.getElementById("ganhoPesoResult");
+    if (!elResult) return;
+
+    const pesoPre = Number(document.getElementById("pesoPreGestacional").value);
+    const alturaCm = Number(document.getElementById("pesoAltura").value);
+    const pesoAtualVal = document.getElementById("pesoAtual").value;
+    const pesoAtual = pesoAtualVal === "" ? null : Number(pesoAtualVal);
+
+    if (!pesoPre || !alturaCm) {
+      elResult.style.display = "none";
+      return;
+    }
+
+    const alturaM = alturaCm / 100;
+    const imcPre = pesoPre / (alturaM * alturaM);
+    const categoria = classificarImc(imcPre);
+    const dados = IOM_GANHO_PESO[categoria];
+    const fmt1 = (n) => n.toFixed(1).replace(".", ",");
+
+    // ===== Bloco do velocímetro com o PESO ATUAL (corrige o bug em que o
+    // campo "peso atual" era preenchido mas nunca aparecia em lugar nenhum
+    // do resultado quando a idade gestacional ainda não tinha sido calculada). =====
+    let speedoHtml = "";
+    let ganhoAtualHtml = "";
+    if (pesoAtual !== null && pesoAtual > 0) {
+      const imcAtual = pesoAtual / (alturaM * alturaM);
+      const ganhoReal = pesoAtual - pesoPre;
+      speedoHtml = imcSpeedometerHtml(imcAtual);
+      ganhoAtualHtml = `
+        <div class="ganho-peso-faixa">
+          <div class="ganho-peso-faixa-label">Ganho de peso até agora</div>
+          <div class="ganho-peso-faixa-valor">${ganhoReal >= 0 ? "+" : ""}${fmt1(ganhoReal)} kg (de ${fmt1(pesoPre)} kg para ${fmt1(pesoAtual)} kg)</div>
+        </div>
+      `;
+    } else {
+      speedoHtml =
+        '<p class="ga-hint" style="margin-top:4px;">Preencha também o <strong>peso atual</strong> para ver o velocímetro do IMC de agora.</p>';
+    }
+
+    let semanaHtml = "";
+    let semanaEsperadaHtml = "";
+
+    if (lastGaWeeksToday !== null && lastGaWeeksToday >= 0 && lastGaWeeksToday <= 42) {
+      const weeks = Math.min(lastGaWeeksToday, 40);
+      // Estimativa de ganho esperado até a semana atual, distribuída proporcionalmente
+      // entre o mínimo e o máximo recomendados pelo IOM para a categoria de IMC.
+      const pontoEstimado =
+        weeks <= 13
+          ? dados.ganho1Tri * (weeks / 13)
+          : dados.ganho1Tri + dados.semanal2e3Tri * (weeks - 13);
+      const pontoTotalReferencia = dados.ganho1Tri + dados.semanal2e3Tri * (40 - 13);
+      const scaleMin = dados.ganhoTotal[0] / pontoTotalReferencia;
+      const scaleMax = dados.ganhoTotal[1] / pontoTotalReferencia;
+      const ganhoEsperadoMin = Math.max(0, pontoEstimado * scaleMin);
+      const ganhoEsperadoMax = Math.max(0, pontoEstimado * scaleMax);
+      const pesoEsperadoMin = pesoPre + ganhoEsperadoMin;
+      const pesoEsperadoMax = pesoPre + ganhoEsperadoMax;
+      const imcEsperadoMin = pesoEsperadoMin / (alturaM * alturaM);
+      const imcEsperadoMax = pesoEsperadoMax / (alturaM * alturaM);
+
+      let statusAtual = "";
+      if (pesoAtual !== null) {
+        let statusTexto, statusCor;
+        if (pesoAtual < pesoEsperadoMin) {
+          statusTexto = "abaixo da faixa esperada para essa idade gestacional";
+          statusCor = "#0891b2";
+        } else if (pesoAtual > pesoEsperadoMax) {
+          statusTexto = "acima da faixa esperada para essa idade gestacional";
+          statusCor = "#dc2626";
+        } else {
+          statusTexto = "dentro da faixa esperada para essa idade gestacional";
+          statusCor = "#059669";
+        }
+        statusAtual = `
+          <div class="ganho-peso-status" style="border-color:${statusCor};">
+            <strong style="color:${statusCor};">Comparando com a semana ${lastGaWeeksToday}:</strong> peso atual está ${statusTexto}.
+          </div>
+        `;
+      }
+
+      semanaHtml = `
+        <div class="ganho-peso-faixa">
+          <div class="ganho-peso-faixa-label">Peso esperado em ${lastGaWeeksToday} semanas</div>
+          <div class="ganho-peso-faixa-valor">Entre ${fmt1(pesoEsperadoMin)} kg e ${fmt1(pesoEsperadoMax)} kg</div>
+        </div>
+        <div class="ganho-peso-faixa">
+          <div class="ganho-peso-faixa-label">IMC saudável para a idade gestacional atual</div>
+          <div class="ganho-peso-faixa-valor">Entre ${fmt1(imcEsperadoMin)} e ${fmt1(imcEsperadoMax)} kg/m²</div>
+        </div>
+      `;
+      semanaEsperadaHtml = statusAtual;
+    } else {
+      semanaHtml =
+        '<p class="ga-hint" style="margin-top:10px;">Preencha a aba "Por DUM" ou "Por Ultrassom" para ver a faixa de peso esperada especificamente para a semana atual.</p>';
+    }
+
+    elResult.style.display = "block";
+    elResult.innerHTML = `
+      <div class="ganho-peso-imc-badge">
+        IMC pré-gestacional: <strong>${fmt1(imcPre)} kg/m²</strong> — ${dados.label}
+      </div>
+      ${speedoHtml}
+      ${ganhoAtualHtml}
+      <div class="ganho-peso-faixa">
+        <div class="ganho-peso-faixa-label">Ganho de peso total recomendado (gestação única)</div>
+        <div class="ganho-peso-faixa-valor">${dados.ganhoTotal[0].toString().replace(".", ",")} a ${dados.ganhoTotal[1].toString().replace(".", ",")} kg</div>
+      </div>
+      ${semanaHtml}
+      ${semanaEsperadaHtml}
+      <p class="ga-fetal-weight-note" style="margin-top:10px;">
+        Referência: Institute of Medicine (IOM, 2009), adotada pelo Ministério da Saúde. Gestação
+        gemelar tem faixas diferentes e maiores — consulte protocolo específico.
+      </p>
+    `;
+  }
+
   // ==========================================================
   // MÓDULO DMG (DIABETES MELLITUS GESTACIONAL)
   // ==========================================================
@@ -2230,10 +3374,18 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
   function closeDmgModule() {
     elDmgModal.classList.remove("open");
     document.body.style.overflow = "";
+    clearDmgModule();
   }
 
   function fecharDmgModalAoClicarFora(event) {
     if (event.target === elDmgModal) closeDmgModule();
+  }
+
+  function clearDmgModule() {
+    document.getElementById("dmgPeso").value = "";
+    // Se o resultado (janela seguinte) estiver aberto, fecha também, já que
+    // ele foi calculado com base no peso que acabou de ser apagado.
+    closeDmgResultModal();
   }
 
   const elDmgResultModal = document.getElementById("dmgResultModal");
@@ -2475,6 +3627,135 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     if (event.target === elExamesModal) closeExamesModule();
   }
 
+  // ==========================================================
+  // CRESCIMENTO DO BEBÊ — GUIA SEMANA A SEMANA (renderizado dentro do
+  // resultado da calculadora de idade gestacional, não é mais um modal à parte)
+  // ==========================================================
+  const CRESCIMENTO_MIN_SEMANA = 4;
+  const CRESCIMENTO_MAX_SEMANA = 42;
+  let crescimentoSemanaAtual = 20;
+
+  function renderCrescimentoWeekTabs() {
+    const el = document.getElementById("crescimentoWeekTabs");
+    if (!el) return;
+    let html = "";
+    for (let w = CRESCIMENTO_MIN_SEMANA; w <= CRESCIMENTO_MAX_SEMANA; w++) {
+      html += `<button class="crescimento-week-tab${
+        w === crescimentoSemanaAtual ? " active" : ""
+      }" onclick="GestMedApp.crescimentoIrPara(${w})">Semana ${w}</button>`;
+    }
+    el.innerHTML = html;
+  }
+
+  function scrollCrescimentoTabIntoView() {
+    const el = document.getElementById("crescimentoWeekTabs");
+    if (!el) return;
+    const activeBtn = el.querySelector(".crescimento-week-tab.active");
+    if (activeBtn && typeof activeBtn.scrollIntoView === "function") {
+      try {
+        activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      } catch (e) {
+        /* navegadores muito antigos podem não suportar as opções; ignora silenciosamente */
+      }
+    }
+  }
+
+  function renderCrescimentoContent() {
+    const el = document.getElementById("crescimentoContent");
+    if (!el) return;
+    const dados = CRESCIMENTO_SEMANAS[String(crescimentoSemanaAtual)];
+    if (!dados) return;
+
+    el.innerHTML = `
+      <div class="crescimento-hero">
+        <div class="crescimento-hero-week">Semana ${crescimentoSemanaAtual} de gestação</div>
+        <div class="crescimento-hero-comparacao">📏 Do tamanho de ${escapeHtml(dados.comparacao)}</div>
+        <div class="crescimento-hero-medidas">
+          <div class="crescimento-hero-medida">
+            <div class="crescimento-hero-medida-label">Comprimento</div>
+            <div class="crescimento-hero-medida-valor">${escapeHtml(dados.comprimento)}</div>
+          </div>
+          <div class="crescimento-hero-medida">
+            <div class="crescimento-hero-medida-label">Peso</div>
+            <div class="crescimento-hero-medida-valor">${escapeHtml(dados.peso)}</div>
+          </div>
+        </div>
+      </div>
+      <div class="crescimento-section">
+        <div class="crescimento-section-title">👶 Desenvolvimento do bebê</div>
+        <div class="crescimento-section-text">${escapeHtml(dados.desenvolvimento)}</div>
+      </div>
+      <div class="crescimento-section">
+        <div class="crescimento-section-title">🤰 O que acontece com você</div>
+        <div class="crescimento-section-text">${escapeHtml(dados.materna)}</div>
+      </div>
+    `;
+
+    document.getElementById("crescimentoPrevBtn").disabled = crescimentoSemanaAtual <= CRESCIMENTO_MIN_SEMANA;
+    document.getElementById("crescimentoNextBtn").disabled = crescimentoSemanaAtual >= CRESCIMENTO_MAX_SEMANA;
+  }
+
+  function crescimentoIrPara(semana) {
+    if (semana < CRESCIMENTO_MIN_SEMANA || semana > CRESCIMENTO_MAX_SEMANA) return;
+    crescimentoSemanaAtual = semana;
+    renderCrescimentoWeekTabs();
+    renderCrescimentoContent();
+    scrollCrescimentoTabIntoView();
+  }
+
+  function crescimentoNav(delta) {
+    crescimentoIrPara(crescimentoSemanaAtual + delta);
+  }
+
+  // ==========================================================
+  // GANHO DE PESO GESTACIONAL (módulo próprio, botão na tela inicial)
+  // ==========================================================
+  const elGanhoPesoModal = document.getElementById("ganhoPesoModal");
+
+  function openGanhoPesoModule() {
+    if (!elGanhoPesoModal) return;
+    // Reaproveita peso/altura já preenchidos na calculadora de IG, se houver.
+    if (gaImcPesoVal !== null) {
+      document.getElementById("pesoPreGestacional").value = gaImcPesoVal;
+    }
+    if (gaImcAlturaVal !== null) {
+      document.getElementById("pesoAltura").value = gaImcAlturaVal;
+    }
+    elGanhoPesoModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    calcGanhoPeso();
+  }
+
+  function closeGanhoPesoModule() {
+    if (!elGanhoPesoModal) return;
+    elGanhoPesoModal.classList.remove("open");
+    document.body.style.overflow = "";
+    clearGanhoPesoModule();
+  }
+
+  function fecharGanhoPesoModalAoClicarFora(event) {
+    if (event.target === elGanhoPesoModal) closeGanhoPesoModule();
+  }
+
+  function clearGanhoPesoModule() {
+    document.getElementById("pesoPreGestacional").value = "";
+    document.getElementById("pesoAltura").value = "";
+    document.getElementById("pesoAtual").value = "";
+    const elResult = document.getElementById("ganhoPesoResult");
+    if (elResult) {
+      elResult.style.display = "none";
+      elResult.innerHTML = "";
+    }
+    // Também limpa os campos compartilhados de peso/altura da calculadora de
+    // IG, já que os dois módulos usam a mesma base de dados da paciente.
+    gaImcPesoVal = null;
+    gaImcAlturaVal = null;
+    const elGaImcPeso = document.getElementById("gaImcPeso");
+    const elGaImcAltura = document.getElementById("gaImcAltura");
+    if (elGaImcPeso) elGaImcPeso.value = "";
+    if (elGaImcAltura) elGaImcAltura.value = "";
+  }
+
   function init() {
     if (RAW_DATA && elTotalBadge) {
       elTotalBadge.textContent = RAW_DATA.length + " registros pesquisáveis";
@@ -2564,18 +3845,28 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     selectSuggestion: selectSuggestion,
     openGaCalculator: openGaCalculator,
     closeGaCalculator: closeGaCalculator,
+    clearGaCalculator: clearGaCalculator,
     fecharGaModalAoClicarFora: fecharGaModalAoClicarFora,
     switchGaTab: switchGaTab,
+    onGaImcInputsChange: onGaImcInputsChange,
     calcGaDum: calcGaDum,
     calcGaUs: calcGaUs,
+    calcGanhoPeso: calcGanhoPeso,
     openCategoryModal: openCategoryModal,
     closeCategoryModal: closeCategoryModal,
     fecharCategoryModalAoClicarFora: fecharCategoryModalAoClicarFora,
     openExamesModule: openExamesModule,
     closeExamesModule: closeExamesModule,
     fecharExamesModalAoClicarFora: fecharExamesModalAoClicarFora,
+    crescimentoIrPara: crescimentoIrPara,
+    crescimentoNav: crescimentoNav,
+    openGanhoPesoModule: openGanhoPesoModule,
+    closeGanhoPesoModule: closeGanhoPesoModule,
+    clearGanhoPesoModule: clearGanhoPesoModule,
+    fecharGanhoPesoModalAoClicarFora: fecharGanhoPesoModalAoClicarFora,
     openDmgModule: openDmgModule,
     closeDmgModule: closeDmgModule,
+    clearDmgModule: clearDmgModule,
     fecharDmgModalAoClicarFora: fecharDmgModalAoClicarFora,
     abrirDmgResultado: abrirDmgResultado,
     closeDmgResultModal: closeDmgResultModal,
