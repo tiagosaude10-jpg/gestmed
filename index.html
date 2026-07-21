@@ -409,31 +409,34 @@
     }
     .quick-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1fr;
+      gap: 12px;
       margin-bottom: 4px;
     }
     .quick-card {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      padding: 14px 12px;
-      border-radius: 16px;
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 14px;
       border: none;
-      text-align: left;
+      text-align: center;
       cursor: pointer;
     }
     .quick-card-icon {
       display: grid;
       place-items: center;
-      width: 42px;
-      height: 42px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      font-size: 19px;
+      font-size: 16px;
       flex-shrink: 0;
       color: #ffffff;
     }
-    .quick-card-label { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.25; }
+    .quick-card-label { font-size: 13.5px; font-weight: 800; color: var(--text); line-height: 1.2; text-align: center; }
+    .quick-card-sub { font-size: 11.5px; font-weight: 600; color: var(--muted); opacity: 0.9; margin-top: 3px; line-height: 1.4; text-align: center; }
     .quick-card.qc-blue { background: #dbeefc; }
     .quick-card.qc-blue .quick-card-icon { background: #0891b2; }
     .quick-card.qc-red { background: #fde3e3; }
@@ -442,6 +445,8 @@
     .quick-card.qc-green .quick-card-icon { background: #16a06b; }
     .quick-card.qc-purple { background: #e7e0f7; }
     .quick-card.qc-purple .quick-card-icon { background: #8b5cf6; }
+    .quick-card.qc-amber { background: #fdecd2; }
+    .quick-card.qc-amber .quick-card-icon { background: #d97706; }
 
     .base-med-card {
       border: 1px solid var(--border);
@@ -669,6 +674,125 @@
       color: #78350f;
       line-height: 1.6;
     }
+    .prescricao-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+      background: var(--white);
+    }
+    .prescricao-item .prescricao-nome {
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .prescricao-item .prescricao-indicacao {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .prescricao-dose-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .prescricao-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    .prescricao-badge.dose { background: #ede9fe; color: #6d28d9; }
+    .prescricao-badge.via { background: #dbeafe; color: #1d4ed8; }
+    .prescricao-item .prescricao-posologia {
+      font-size: 12.5px;
+      color: var(--text);
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px dashed var(--border);
+      line-height: 1.5;
+    }
+    .prescricao-item .prescricao-posologia strong { color: #6d28d9; }
+    .rotina-obrigatoria-box {
+      border-radius: 14px;
+      border: 1.5px solid #fbcfe8;
+      background: #fdf2f8;
+      padding: 12px 13px;
+      margin: 4px 0 18px;
+    }
+    .rotina-obrigatoria-titulo {
+      font-weight: 800;
+      font-size: 13px;
+      color: #831843;
+      margin-bottom: 8px;
+    }
+    .rotina-obrigatoria-box .prescricao-item { border-color: #fbcfe8; }
+    .prescricoes-trimestre-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 18px 0 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 13.5px;
+      color: #ffffff;
+    }
+    .prescricoes-trimestre-header.t1 { background: linear-gradient(135deg, #0891b2, #06b6d4); }
+    .prescricoes-trimestre-header.t2 { background: linear-gradient(135deg, #047857, #10b981); }
+    .prescricoes-trimestre-header.t3 { background: linear-gradient(135deg, #b45309, #f59e0b); }
+    .prescricoes-button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd6fe;
+      border-radius: 14px;
+      background: #f5f3ff;
+      color: #6d28d9;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .prescricoes-button:active { background: #ede9fe; }
+    .long-button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+    .long-button-sub {
+      font-size: 10.5px;
+      font-weight: 600;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+    .long-button.lb-blue { border-color: #a5f3fc; background: #ecfeff; color: #0e7490; }
+    .long-button.lb-blue:active { background: #cffafe; }
+    .long-button.lb-red { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
+    .long-button.lb-red:active { background: #fee2e2; }
+    .long-button.lb-green { border-color: #a7f3d0; background: #ecfdf5; color: #047857; }
+    .long-button.lb-green:active { background: #d1fae5; }
+    .long-button.lb-purple { border-color: #ddd6fe; background: #f5f3ff; color: #6d28d9; }
+    .long-button.lb-purple:active { background: #ede9fe; }
+    .ga-prescricoes-inline-card {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1.5px solid #ddd6fe;
+      background: #f5f3ff;
+      color: #5b21b6;
+    }
+    .ga-prescricoes-inline-title { font-size: 13px; font-weight: 800; margin-bottom: 2px; color: #5b21b6; }
+    .ga-prescricoes-inline-sub { font-size: 11px; opacity: 0.85; margin-bottom: 10px; }
+    .ga-prescricoes-inline-card .prescricao-item { border-color: #ddd6fe; }
+    .ga-prescricoes-inline-card .prescricao-item .prescricao-posologia { border-top-color: #ddd6fe; }
     .exames-resumo-box {
       border-radius: 14px;
       border: 1.5px solid #cbd5e1;
@@ -1692,19 +1816,27 @@
       <div class="quick-grid">
         <button class="quick-card qc-blue" id="gaButton" onclick="GestMedApp.openGaCalculator()">
           <span class="quick-card-icon">📅</span>
-          <span class="quick-card-label">Idade<br>gestacional</span>
+          <span class="quick-card-label">Idade gestacional</span>
         </button>
         <button class="quick-card qc-red" id="dmgButton" onclick="GestMedApp.openDmgModule()">
           <span class="quick-card-icon">🩸</span>
-          <span class="quick-card-label">Cálculo<br>de insulina</span>
+          <span class="quick-card-label">Cálculo de insulina (DMG)</span>
         </button>
         <button class="quick-card qc-green" id="examesButton" onclick="GestMedApp.openExamesModule()">
           <span class="quick-card-icon">📋</span>
-          <span class="quick-card-label">Painel de<br>exames</span>
+          <span class="quick-card-label">Painel de Exames
+            <div class="quick-card-sub">(Pré-natal Habitual, Baixo Risco)</div>
+          </span>
         </button>
         <button class="quick-card qc-purple" id="ganhoPesoButton" onclick="GestMedApp.openGanhoPesoModule()">
           <span class="quick-card-icon">⚖️</span>
-          <span class="quick-card-label">Ganho<br>de peso</span>
+          <span class="quick-card-label">Ganho de peso gestacional</span>
+        </button>
+        <button class="quick-card qc-amber" id="prescricoesButton" onclick="GestMedApp.openPrescricoesModule()">
+          <span class="quick-card-icon">💊</span>
+          <span class="quick-card-label">Prescrições por Trimestre
+            <div class="quick-card-sub">(Dose e Posologia)</div>
+          </span>
         </button>
       </div>
 
@@ -2330,6 +2462,39 @@
         Fontes: Ministério da Saúde (Caderno de Atenção Básica nº32 — Pré-natal e Guia Rápido de Pré-natal
         AB 2025), FEBRASGO, TelessaúdeRS-UFRGS/BVS Atenção Primária. Protocolos institucionais podem variar
         ligeiramente; siga sempre a diretriz do seu serviço.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: PRESCRIÇÕES POR TRIMESTRE ===================== -->
+  <div class="modal" id="prescricoesModal" onclick="GestMedApp.fecharPrescricoesModalAoClicarFora(event)">
+    <div class="sheet">
+      <div class="handle"></div>
+      <div class="sheet-nav">
+        <button class="back-btn" onclick="GestMedApp.closePrescricoesModule()">← Voltar</button>
+        <button class="close" onclick="GestMedApp.closePrescricoesModule()">×</button>
+      </div>
+      <h2 style="margin:4px 0 4px;">💊 Prescrições por Trimestre</h2>
+      <div class="category-subtitle">Medicamentos habitualmente prescritos na gestação de baixo risco, com dose, via e posologia — conforme protocolos do Ministério da Saúde e condutas obstétricas usuais.</div>
+
+      <div class="exames-nota">
+        ⚠️ <strong>Uso educacional/referência.</strong> Não substitui a avaliação clínica individual —
+        a decisão de prescrever (o quê, quando e em que dose) é sempre do profissional assistente,
+        considerando o quadro clínico, alergias, comorbidades e histórico de cada paciente.
+      </div>
+
+      <div class="rotina-obrigatoria-box">
+        <div class="rotina-obrigatoria-titulo">✅ Rotina obrigatória — desde a 1ª consulta</div>
+        <div id="rotinaObrigatoriaItens"></div>
+      </div>
+
+      <div id="prescricoesTrimestresContainer"></div>
+
+      <p style="font-size:10.5px; color:#94a3b8; margin:14px 0 0;">
+        Fontes: Ministério da Saúde (Guia Rápido de Pré-natal AB 2025, Protocolos da Atenção Básica —
+        Saúde das Mulheres, Caderno dos Programas Nacionais de Suplementação de Micronutrientes),
+        TelessaúdeRS-UFRGS. Doses de referência para gestante adulta sem comorbidades — ajustar
+        conforme protocolo institucional e avaliação individual.
       </p>
     </div>
   </div>
@@ -3270,6 +3435,144 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     },
   };
 
+  // Prescrições habitualmente utilizadas na gestação de baixo risco, por
+  // trimestre — com dose, via e posologia, conforme protocolos do Ministério
+  // da Saúde (Guia Rápido Pré-natal / Protocolos da Atenção Básica) e
+  // condutas obstétricas usuais. Conteúdo educacional/referência: a decisão
+  // de prescrever é sempre do profissional assistente, conforme avaliação
+  // clínica individual.
+  const ROTINA_OBRIGATORIA = [
+    {
+      nome: "Ácido fólico",
+      dose: "5 mg",
+      via: "Via oral",
+      posologia: "1 comprimido, 1x ao dia",
+      periodo: "Do diagnóstico da gravidez até 12–14 semanas (alguns serviços mantêm até o final)",
+    },
+    {
+      nome: "Sulfato ferroso",
+      dose: "40 mg de ferro elementar",
+      via: "Via oral",
+      posologia: "1 comprimido, 1x ao dia, 1h antes do almoço",
+      periodo: "Do diagnóstico da gravidez até o 3º mês pós-parto",
+    },
+  ];
+
+  const PRESCRICOES_POR_TRIMESTRE = {
+    1: {
+      titulo: "1º Trimestre — até 13s6d",
+      itens: [
+        {
+          nome: "Piridoxina (Vitamina B6)",
+          indicacao: "Náuseas/vômitos leves — 1ª linha",
+          dose: "10–25 mg",
+          via: "Via oral",
+          posologia: "1 comprimido, 8/8h (até 3x ao dia)",
+        },
+        {
+          nome: "Doxilamina + Piridoxina",
+          indicacao: "Náuseas/vômitos — alternativa combinada",
+          dose: "10 mg + 10 mg",
+          via: "Via oral",
+          posologia: "2 a 4 comprimidos ao dia, conforme sintomas",
+        },
+        {
+          nome: "Metoclopramida",
+          indicacao: "Náuseas/vômitos refratários — 2ª linha",
+          dose: "10 mg",
+          via: "Via oral ou EV",
+          posologia: "8/8h, se necessário",
+        },
+        {
+          nome: "Ondansetrona",
+          indicacao: "Náuseas/vômitos refratários — 3ª linha, uso criterioso",
+          dose: "4–8 mg",
+          via: "Via oral ou EV",
+          posologia: "8/8h, se necessário",
+        },
+        {
+          nome: "Paracetamol",
+          indicacao: "Dor leve/febre",
+          dose: "500–750 mg",
+          via: "Via oral",
+          posologia: "6/6h se necessário (máx. 4 g/dia)",
+        },
+      ],
+    },
+    2: {
+      titulo: "2º Trimestre — 14 a 27s",
+      itens: [
+        {
+          nome: "Hidróxido de alumínio/magnésio",
+          indicacao: "Pirose/azia — 1ª linha, após medidas comportamentais",
+          dose: "conforme apresentação",
+          via: "Via oral",
+          posologia: "1 dose após as refeições e ao deitar, se necessário",
+        },
+        {
+          nome: "Omeprazol",
+          indicacao: "Pirose/DRGE refratária — 2ª linha",
+          dose: "20 mg",
+          via: "Via oral",
+          posologia: "1 comprimido, 1x ao dia, pela manhã",
+        },
+        {
+          nome: "Carbonato de cálcio",
+          indicacao: "Suplementação (protocolo Guia Rápido Pré-natal)",
+          dose: "1 g",
+          via: "Via oral",
+          posologia: "1 comprimido, 2x ao dia, até o final da gestação",
+        },
+        {
+          nome: "Polietilenoglicol ou Lactulose",
+          indicacao: "Constipação, após medidas dietéticas",
+          dose: "17 g (PEG) ou 15–30 mL (lactulose)",
+          via: "Via oral",
+          posologia: "1x ao dia",
+        },
+        {
+          nome: "Paracetamol",
+          indicacao: "Dor leve/febre",
+          dose: "500–750 mg",
+          via: "Via oral",
+          posologia: "6/6h se necessário (máx. 4 g/dia)",
+        },
+      ],
+    },
+    3: {
+      titulo: "3º Trimestre — 28s até o parto",
+      itens: [
+        {
+          nome: "Carbonato de cálcio",
+          indicacao: "Manutenção da suplementação",
+          dose: "1 g",
+          via: "Via oral",
+          posologia: "1 comprimido, 2x ao dia, até o final da gestação",
+        },
+        {
+          nome: "Imunoglobulina anti-D",
+          indicacao: "Profilaxia isoimunização Rh (se mãe Rh-, não sensibilizada)",
+          dose: "300 mcg",
+          via: "Intramuscular",
+          posologia: "Dose única, por volta de 28 semanas",
+        },
+        {
+          nome: "Omeprazol",
+          indicacao: "Pirose/DRGE, se persistente",
+          dose: "20 mg",
+          via: "Via oral",
+          posologia: "1 comprimido, 1x ao dia, pela manhã",
+        },
+        {
+          nome: "Paracetamol",
+          indicacao: "Dor leve/febre",
+          dose: "500–750 mg",
+          via: "Via oral",
+          posologia: "6/6h se necessário (máx. 4 g/dia)",
+        },
+      ],
+    },
+  };
 
   function openGaCalculator() {
     elGaModal.classList.add("open");
@@ -3512,6 +3815,7 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
       ${fetalWeightCardHtml(weeks)}
       ${imcGaugeCardHtml(weeks)}
       ${examesTrimestreCardHtml(weeks)}
+      ${prescricoesTrimestreCardHtml(weeks)}
     `;
 
     if (weeks >= CRESCIMENTO_MIN_SEMANA && weeks <= CRESCIMENTO_MAX_SEMANA) {
@@ -4027,6 +4331,89 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
   }
 
   // ==========================================================
+  // PRESCRIÇÕES POR TRIMESTRE — DOSE E POSOLOGIA
+  // ==========================================================
+  const elPrescricoesModal = document.getElementById("prescricoesModal");
+
+  function prescricaoItemHtml(item) {
+    return `
+      <div class="prescricao-item">
+        <div class="prescricao-nome">${escapeHtml(item.nome)}</div>
+        <div class="prescricao-indicacao">${escapeHtml(item.indicacao || item.periodo || "")}</div>
+        <div class="prescricao-dose-row">
+          <span class="prescricao-badge dose">${escapeHtml(item.dose)}</span>
+          <span class="prescricao-badge via">${escapeHtml(item.via)}</span>
+        </div>
+        <div class="prescricao-posologia"><strong>Posologia:</strong> ${escapeHtml(item.posologia)}</div>
+      </div>
+    `;
+  }
+
+  function renderRotinaObrigatoria() {
+    const el = document.getElementById("rotinaObrigatoriaItens");
+    if (!el) return;
+    el.innerHTML = ROTINA_OBRIGATORIA.map(prescricaoItemHtml).join("");
+  }
+
+  function renderPrescricoesTrimestres() {
+    const el = document.getElementById("prescricoesTrimestresContainer");
+    if (!el) return;
+    let html = "";
+    [1, 2, 3].forEach(function (num) {
+      const dados = PRESCRICOES_POR_TRIMESTRE[num];
+      if (!dados) return;
+      html += `<div class="prescricoes-trimestre-header t${num}"><span>${num === 1 ? "1️⃣" : num === 2 ? "2️⃣" : "3️⃣"} ${escapeHtml(dados.titulo)}</span></div>`;
+      html += dados.itens.map(prescricaoItemHtml).join("");
+    });
+    el.innerHTML = html;
+  }
+
+  function openPrescricoesModule() {
+    if (!elPrescricoesModal) return;
+    renderRotinaObrigatoria();
+    renderPrescricoesTrimestres();
+    elPrescricoesModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePrescricoesModule() {
+    if (!elPrescricoesModal) return;
+    elPrescricoesModal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function fecharPrescricoesModalAoClicarFora(event) {
+    if (event.target === elPrescricoesModal) closePrescricoesModule();
+  }
+
+  function prescricoesTrimestreCardHtml(weeks) {
+    if (weeks < 0 || weeks > 42) return "";
+    const num = trimesterNumberFromWeeks(weeks);
+    const dados = PRESCRICOES_POR_TRIMESTRE[num];
+    if (!dados) return "";
+
+    // Versão condensada: só nome + dose, sem posologia completa (o card
+    // dentro do resultado da calculadora é resumido; o painel completo,
+    // aberto pelo botão da tela inicial, tem todos os detalhes).
+    const itensHtml = dados.itens
+      .slice(0, 4)
+      .map(
+        (item) =>
+          `<span>${escapeHtml(item.nome)} <strong>${escapeHtml(item.dose)}</strong></span>`
+      )
+      .join("");
+
+    return `
+      <div class="ga-prescricoes-inline-card">
+        <div class="ga-prescricoes-inline-title">💊 Prescrições habituais deste trimestre</div>
+        <div class="ga-prescricoes-inline-sub">${escapeHtml(dados.titulo)} — mais ácido fólico/sulfato ferroso da rotina obrigatória</div>
+        <div class="ga-exames-inline-lista">${itensHtml}</div>
+        <div class="ga-exames-inline-hint">Ver o painel completo de prescrições para posologia detalhada de cada item.</div>
+      </div>
+    `;
+  }
+
+  // ==========================================================
   // CRESCIMENTO DO BEBÊ — GUIA SEMANA A SEMANA (renderizado dentro do
   // resultado da calculadora de idade gestacional, não é mais um modal à parte)
   // ==========================================================
@@ -4257,6 +4644,9 @@ const GESTMED_DATA = GESTMED_COMPACT.map(function(r) {
     openExamesModule: openExamesModule,
     closeExamesModule: closeExamesModule,
     fecharExamesModalAoClicarFora: fecharExamesModalAoClicarFora,
+    openPrescricoesModule: openPrescricoesModule,
+    closePrescricoesModule: closePrescricoesModule,
+    fecharPrescricoesModalAoClicarFora: fecharPrescricoesModalAoClicarFora,
     crescimentoIrPara: crescimentoIrPara,
     crescimentoNav: crescimentoNav,
     openGanhoPesoModule: openGanhoPesoModule,
