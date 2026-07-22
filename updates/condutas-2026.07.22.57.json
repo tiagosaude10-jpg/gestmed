@@ -1,0 +1,313 @@
+{
+  "version": "2026.07.22.57",
+  "category": "Trabalho de parto e indução",
+  "protocols": [
+    {
+      "id": "maturacao_cervical_inducao",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Maturação cervical e indução do parto",
+      "subtitulo": "Escolha do método conforme Bishop, cicatriz uterina, indicação e vitalidade fetal.",
+      "gravidade": "Atenção especializada",
+      "classe": "sev-blue",
+      "resumo": [
+        "Indução é o início artificial do trabalho de parto quando o benefício da resolução supera o da continuidade da gestação.",
+        "Avaliar indicação, idade gestacional, apresentação, Bishop, integridade das membranas, cicatriz uterina, pelvimetria clínica e condições materno-fetais.",
+        "Misoprostol é contraindicado para maturação cervical em gestante com cesariana prévia ou outra cicatriz uterina corporal; preferir método mecânico quando apropriado."
+      ],
+      "avaliacao": [
+        "Confirmar indicação e ausência de contraindicação ao parto vaginal.",
+        "Registrar Bishop, apresentação e altura da apresentação; avaliar BCF/CTG antes do método.",
+        "Explicar duração, possibilidade de falha, taquissistolia, sofrimento fetal e eventual cesariana."
+      ],
+      "exames": [
+        "Cardiotocografia basal quando disponível e indicada.",
+        "Hemograma, tipagem/prova de compatibilidade e outros exames conforme comorbidade/indicação.",
+        "Ultrassonografia se dúvida de apresentação, placenta, líquido ou peso fetal."
+      ],
+      "conduta": [
+        "Bishop desfavorável e útero sem cicatriz: maturação farmacológica ou mecânica conforme protocolo.",
+        "Cicatriz uterina: evitar misoprostol; considerar balão transcervical e/ou ocitocina em ambiente apto a cesariana de emergência.",
+        "Não associar misoprostol e ocitocina simultaneamente; respeitar intervalo mínimo definido pelo protocolo após a última dose."
+      ],
+      "prescricao": [
+        "DIETA — Dieta leve ou geral enquanto estável e sem procedimento iminente; mudar para dieta zero diante de alteração fetal, sangramento, taquissistolia persistente ou possibilidade de cesariana/anestesia.",
+        "ACESSO VENOSO E SOROTERAPIA — Manter acesso venoso periférico. SF 0,9% ou Ringer lactato em manutenção apenas quando necessário; evitar sobrecarga e ajustar às comorbidades.",
+        "MEDICAÇÕES — Útero sem cicatriz e Bishop desfavorável: misoprostol 25 microgramas via vaginal, repetir a cada 6 horas conforme dinâmica uterina, BCF e protocolo institucional; não administrar nova dose se trabalho de parto ativo, taquissistolia ou alteração fetal. Não usar em cicatriz uterina. Método mecânico com balão é alternativa. Iniciar ocitocina somente após o intervalo de segurança do último misoprostol, habitualmente pelo menos 4 horas, conforme protocolo.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Incentivar hidratação oral quando permitida; registrar entradas e saídas por turno. Evitar infusão venosa liberal.",
+        "BCF / CARDIOTOCOGRAFIA — Avaliar BCF antes de cada intervenção. Após misoprostol, monitorizar conforme protocolo; CTG contínua quando houver ocitocina, taquissistolia, alteração fetal ou alto risco.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — PA, pulso, FR, temperatura e dor a cada 4 horas na estabilidade; aumentar frequência se intercorrência.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Reavaliar Bishop e evolução sem exames vaginais excessivos; documentar dinâmica, dilatação, descida, membranas e resposta ao método.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Suspender o método diante de taquissistolia ou alteração fetal; manter capacidade imediata de intervenção obstétrica."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "ocitocina_inducao_conducao",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Ocitocina na indução ou condução do trabalho de parto",
+      "subtitulo": "Infusão titulada com bomba, vigilância da dinâmica uterina e do bem-estar fetal.",
+      "gravidade": "Alto risco medicamentoso",
+      "classe": "sev-orange",
+      "resumo": [
+        "Ocitocina deve ser administrada por bomba de infusão, com protocolo de concentração e incremento padronizados.",
+        "O objetivo é obter dinâmica adequada sem taquissistolia, hiperstimulação ou comprometimento fetal.",
+        "Reavaliar indicação se houver desproporção, apresentação anômala, cicatriz uterina ou padrão fetal não tranquilizador."
+      ],
+      "avaliacao": [
+        "Confirmar apresentação cefálica, ausência de contraindicação ao parto vaginal e disponibilidade de monitorização.",
+        "Registrar dinâmica basal e CTG antes da infusão.",
+        "Avaliar bolsa, dilatação, descida e possibilidade de amniotomia quando indicada."
+      ],
+      "exames": [
+        "CTG basal.",
+        "Exames conforme indicação clínica; não há painel laboratorial obrigatório apenas pelo uso de ocitocina."
+      ],
+      "conduta": [
+        "Usar regime institucional de baixa dose e titular gradualmente.",
+        "Suspender imediatamente diante de taquissistolia com alteração fetal, bradicardia, sangramento, dor contínua ou suspeita de rotura uterina.",
+        "Não aumentar dose sem reavaliar dinâmica e BCF."
+      ],
+      "prescricao": [
+        "DIETA — Dieta líquida clara ou leve conforme protocolo e risco anestésico; dieta zero se houver possibilidade elevada de cesariana urgente.",
+        "ACESSO VENOSO E SOROTERAPIA — Um acesso venoso pérvio. Preparar solução em via exclusiva sempre que possível. Exemplo de padronização: ocitocina 5 UI em 500 mL de SF 0,9% ou Ringer lactato, concentração de 10 mUI/mL.",
+        "MEDICAÇÕES — Iniciar ocitocina em baixa dose, por exemplo 1–2 mUI/min (6–12 mL/h na concentração de 10 mUI/mL), aumentando 1–2 mUI/min a cada 30–40 minutos até dinâmica adequada, conforme protocolo institucional. Não ultrapassar o limite local. Suspender em taquissistolia ou alteração fetal. Não fazer bolus EV para indução.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Controlar volume total, especialmente em infusão prolongada, pré-eclâmpsia, cardiopatia ou doença renal; evitar intoxicação hídrica.",
+        "BCF / CARDIOTOCOGRAFIA — Cardiotocografia contínua durante a infusão; registrar padrão fetal e dinâmica antes de cada incremento.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Sinais vitais pelo menos a cada 2–4 horas na estabilidade; reavaliação imediata diante de dor contínua, sangramento, dispneia ou alteração fetal.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliar progressão e descida em intervalos clinicamente apropriados; revisar necessidade da infusão se não houver progresso.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Manter protocolo de resposta à taquissistolia: suspender ocitocina, decúbito lateral, corrigir hipotensão e considerar uterolítico conforme equipe obstétrica."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "falha_inducao",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Falha de indução do parto",
+      "subtitulo": "Ausência de trabalho de parto ativo após tentativa adequada, com reavaliação da indicação e do método.",
+      "gravidade": "Decisão obstétrica",
+      "classe": "sev-orange",
+      "resumo": [
+        "Falha não deve ser declarada precocemente; depende de método adequado, tempo suficiente, condição cervical e uso apropriado de ocitocina/amniotomia.",
+        "Distinguir falha de maturação, falha de indução e parada na fase ativa.",
+        "A decisão deve considerar indicação original, estado materno-fetal e possibilidade de nova tentativa."
+      ],
+      "avaliacao": [
+        "Revisar Bishop inicial e atual, doses administradas, dinâmica, tempo de bolsa rota e resposta à ocitocina.",
+        "Excluir apresentação anômala, desproporção, alteração fetal e infecção.",
+        "Reavaliar urgência da resolução."
+      ],
+      "exames": [
+        "CTG e avaliação fetal.",
+        "Hemograma e marcadores infecciosos se bolsa rota prolongada, febre ou suspeita de infecção.",
+        "Outros exames conforme indicação de base."
+      ],
+      "conduta": [
+        "Se mãe e feto estáveis, considerar tempo adicional ou mudança de método conforme protocolo.",
+        "Quando tentativa adequada falhou e a resolução permanece indicada, discutir cesariana.",
+        "Não repetir prostaglandina indefinidamente nem aumentar ocitocina sem critério."
+      ],
+      "prescricao": [
+        "DIETA — Dieta zero se decisão de cesariana provável; caso seja planejada nova etapa e não haja urgência, definir dieta conforme avaliação anestésica.",
+        "ACESSO VENOSO E SOROTERAPIA — Manter acesso pérvio; SF 0,9% ou Ringer lactato conforme necessidade, evitando excesso.",
+        "MEDICAÇÕES — Não há medicamento específico para “falha”. Se houver indicação de continuar, usar somente o método definido pela obstetrícia. Ocitocina deve seguir protocolo titulado; não administrar novas doses de misoprostol em trabalho de parto, taquissistolia, alteração fetal ou cicatriz uterina.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Registrar balanço e diurese; corrigir jejum prolongado, cetose ou distúrbios hidroeletrolíticos conforme exames.",
+        "BCF / CARDIOTOCOGRAFIA — CTG contínua se em uso de ocitocina ou se alto risco; caso estável e sem fármaco, conforme protocolo.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Sinais vitais a cada 2–4 horas; temperatura mais frequente se bolsa rota.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Reavaliação pelo obstetra sênior para confirmar critérios antes de indicar cesariana; revisar partograma e documentação.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Registrar método, doses, tempos e motivo da decisão; oferecer explicação à paciente e acompanhante."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "parada_dilatacao",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Parada de dilatação na fase ativa",
+      "subtitulo": "Ausência de progressão cervical após critérios de fase ativa e tentativa adequada de correção.",
+      "gravidade": "Decisão obstétrica",
+      "classe": "sev-orange",
+      "resumo": [
+        "Aplicar critérios somente na fase ativa, habitualmente a partir de 6 cm, e após confirmar membranas, dinâmica e posição fetal.",
+        "Considerar parada após período adequado sem mudança cervical, com contrações adequadas ou após tentativa de correção de contrações inadequadas.",
+        "Excluir desproporção, apresentação defletida, assinclitismo e obstrução."
+      ],
+      "avaliacao": [
+        "Revisar partograma, frequência/intensidade das contrações, posição e descida.",
+        "Avaliar dor contínua, sangramento e sinais de rotura uterina, sobretudo em cicatriz.",
+        "Reavaliar BCF e condição materna."
+      ],
+      "exames": [
+        "CTG.",
+        "Exames apenas se suspeita de infecção, hemorragia ou outra complicação."
+      ],
+      "conduta": [
+        "Se contrações inadequadas e parto vaginal possível, considerar amniotomia e/ou ocitocina.",
+        "Se dinâmica adequada persiste sem progresso, ou houver obstrução/comprometimento, indicar resolução cirúrgica.",
+        "Evitar insistência prolongada com ocitocina diante de sinais de desproporção."
+      ],
+      "prescricao": [
+        "DIETA — Dieta zero durante avaliação de provável resolução operatória.",
+        "ACESSO VENOSO E SOROTERAPIA — Manter acesso periférico; solução cristaloide conforme estado volêmico e anestesia, evitando sobrecarga.",
+        "MEDICAÇÕES — Se dinâmica inadequada e sem contraindicação, ocitocina por bomba em regime institucional de baixa dose. Suspender diante de taquissistolia, alteração fetal, dor contínua ou suspeita de rotura. Analgesia conforme solicitação e avaliação anestésica.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Controle de diurese e líquidos por turno; corrigir desidratação sem infusão excessiva.",
+        "BCF / CARDIOTOCOGRAFIA — Cardiotocografia contínua durante ocitocina e até definição da conduta.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Sinais vitais a cada 1–2 horas; avaliação imediata se febre, sangramento ou dor anormal.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Obstetra sênior deve confirmar fase ativa, tempo sem progressão e adequação das contrações; revisar partograma.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Não realizar exames vaginais repetitivos sem indicação; planejar cesariana se critérios confirmados ou deterioração."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "parada_descida",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Parada de descida no segundo período",
+      "subtitulo": "Ausência de progressão da apresentação com dilatação completa, considerando paridade, analgesia e posição fetal.",
+      "gravidade": "Decisão obstétrica",
+      "classe": "sev-orange",
+      "resumo": [
+        "Avaliar duração do segundo período junto com descida, rotação, esforço materno, analgesia e condição fetal.",
+        "Distinguir demora com progresso lento de parada verdadeira.",
+        "Parto operatório vaginal exige critérios, operador experiente e possibilidade imediata de cesariana."
+      ],
+      "avaliacao": [
+        "Confirmar dilatação completa, variedade de posição e altura da apresentação.",
+        "Avaliar bexiga, analgesia, dinâmica e capacidade de puxo.",
+        "Excluir desproporção, posição transversa persistente e alteração fetal."
+      ],
+      "exames": [
+        "CTG contínua ou vigilância fetal intensiva.",
+        "Exames conforme condição materna e possibilidade cirúrgica."
+      ],
+      "conduta": [
+        "Esvaziar bexiga, otimizar posição materna, analgesia e puxos dirigidos apenas quando apropriado.",
+        "Ocitocina somente se contrações inadequadas e sem obstrução.",
+        "Definir parto vaginal operatório ou cesariana conforme estação, posição, experiência e vitalidade fetal."
+      ],
+      "prescricao": [
+        "DIETA — Dieta zero pela possibilidade de procedimento operatório.",
+        "ACESSO VENOSO E SOROTERAPIA — Acesso venoso pérvio; cristaloide conforme necessidade e avaliação anestésica.",
+        "MEDICAÇÕES — Não existe fármaco que corrija obstrução. Ocitocina por bomba apenas quando dinâmica inadequada e desproporção excluída. Analgesia neuroaxial conforme anestesiologia. Antibioticoprofilaxia conforme procedimento e protocolo.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Controlar volume e diurese; esvaziar bexiga, com cateterismo se necessário.",
+        "BCF / CARDIOTOCOGRAFIA — Monitorização fetal contínua até o nascimento.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Avaliação materna frequente, pelo menos a cada 30–60 minutos no segundo período prolongado.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Reavaliação pelo obstetra experiente; documentar estação, posição, caput, moldagem e progresso.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Acionar neonatologia se parto operatório ou alteração fetal; evitar tentativas sequenciais malsucedidas de instrumentos."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "apresentacao_pelvica_termo",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Apresentação pélvica a termo",
+      "subtitulo": "Planejamento da via de parto, possibilidade de versão cefálica externa e assistência por equipe experiente.",
+      "gravidade": "Alto risco obstétrico",
+      "classe": "sev-orange",
+      "resumo": [
+        "Confirmar tipo de apresentação pélvica, peso estimado, atitude da cabeça, placenta e malformações.",
+        "A versão cefálica externa pode ser considerada em gestação a termo selecionada, em ambiente com ultrassom e cesariana disponível.",
+        "Parto vaginal pélvico exige critérios rigorosos, consentimento e equipe treinada."
+      ],
+      "avaliacao": [
+        "Ultrassonografia para apresentação, peso, líquido, placenta e atitude cefálica.",
+        "CTG antes e após versão externa.",
+        "Avaliar contraindicações à versão e ao parto vaginal."
+      ],
+      "exames": [
+        "Ultrassonografia obstétrica.",
+        "CTG.",
+        "Hemograma e tipagem se internação para procedimento/parto, conforme protocolo."
+      ],
+      "conduta": [
+        "Discutir versão cefálica externa, cesariana programada ou parto vaginal selecionado.",
+        "Não realizar indução/parto vaginal pélvico sem protocolo e equipe habilitada.",
+        "Se trabalho de parto avançado, acionar imediatamente obstetra experiente e neonatologia."
+      ],
+      "prescricao": [
+        "DIETA — Conforme plano: dieta leve se avaliação eletiva; dieta zero para versão com risco de intervenção imediata, cesariana ou trabalho de parto avançado.",
+        "ACESSO VENOSO E SOROTERAPIA — Acesso venoso durante versão externa e parto; cristaloide conforme necessidade.",
+        "MEDICAÇÕES — Para versão cefálica externa, pode-se usar uterolítico conforme protocolo e contraindicações, por exemplo terbutalina 0,25 mg SC 15–30 minutos antes. Não usar rotineiramente sem monitorização e equipe. Analgesia/anestesia conforme avaliação. Profilaxia anti-D para gestante Rh negativo não sensibilizada após procedimento, conforme protocolo.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Manter hidratação habitual; controle conforme internação.",
+        "BCF / CARDIOTOCOGRAFIA — CTG antes e após versão; contínua durante trabalho de parto pélvico.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Sinais vitais antes, durante e após procedimento; no trabalho de parto, conforme fase e risco.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Confirmar critérios e plano com obstetra experiente; documentação do consentimento e disponibilidade de centro cirúrgico.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Neonatologia presente no nascimento; não realizar manobras sem indicação e treinamento."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "liquido_meconial_intraparto",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Líquido amniótico meconial no intraparto",
+      "subtitulo": "Vigilância fetal, avaliação do contexto e preparo da equipe neonatal.",
+      "gravidade": "Vigilância intensificada",
+      "classe": "sev-orange",
+      "resumo": [
+        "Mecônio isolado não significa necessariamente hipóxia, mas aumenta a necessidade de vigilância, sobretudo se espesso ou associado a alteração fetal.",
+        "Avaliar idade gestacional, aspecto do líquido, CTG, febre e evolução do parto.",
+        "Não realizar aspiração orofaríngea intraparto de rotina nem amnioinfusão rotineira apenas por mecônio."
+      ],
+      "avaliacao": [
+        "Classificar mecônio fino ou espesso.",
+        "Avaliar padrão fetal, dinâmica, temperatura materna e sinais de infecção.",
+        "Acionar neonatologia conforme protocolo."
+      ],
+      "exames": [
+        "CTG.",
+        "Exames maternos somente se suspeita de infecção ou outra indicação."
+      ],
+      "conduta": [
+        "Manter vigilância contínua e corrigir causas reversíveis de alteração fetal.",
+        "Definir resolução pela evolução e padrão fetal; mecônio isolado não é indicação automática de cesariana.",
+        "Preparar equipe e material de reanimação neonatal."
+      ],
+      "prescricao": [
+        "DIETA — Dieta líquida clara ou zero conforme fase do parto, risco e protocolo anestésico.",
+        "ACESSO VENOSO E SOROTERAPIA — Manter acesso venoso; cristaloide apenas conforme necessidade clínica.",
+        "MEDICAÇÕES — Não indicar antibiótico apenas pela presença de mecônio. Suspender ocitocina se taquissistolia ou alteração fetal. Tratar febre/corioamnionite conforme protocolo específico.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Hidratação oral quando permitida; evitar bolus sem indicação.",
+        "BCF / CARDIOTOCOGRAFIA — Cardiotocografia contínua, especialmente em mecônio espesso ou com fatores de risco.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Temperatura, PA, pulso e FR a cada 2–4 horas; mais frequente se febre ou alteração.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliar progressão e necessidade de resolução; exames se suspeita de infecção.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Comunicar neonatologia e assegurar material de reanimação. Não realizar aspiração traqueal rotineira em RN vigoroso."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    },
+    {
+      "id": "parto_precipitado",
+      "categoria": "Trabalho de parto e indução",
+      "nome": "Parto precipitado ou iminente",
+      "subtitulo": "Nascimento muito rápido, com prioridade para segurança materna, neonatal e prevenção de trauma.",
+      "gravidade": "Emergência assistencial",
+      "classe": "sev-red",
+      "resumo": [
+        "Parto precipitado ocorre com evolução muito rápida e pode aumentar risco de lacerações, hemorragia e complicações neonatais.",
+        "Não transferir a parturiente quando o nascimento é iminente e o transporte é inseguro.",
+        "Preparar atendimento neonatal e controle de hemorragia pós-parto."
+      ],
+      "avaliacao": [
+        "Confirmar dilatação, apresentação, BCF e iminência do nascimento.",
+        "Acionar obstetra, enfermagem obstétrica e neonatologia.",
+        "Pesquisar prolapso, sangramento e apresentação anômala."
+      ],
+      "exames": [
+        "Não atrasar o nascimento para exames.",
+        "Hemograma, tipagem e demais exames após estabilização, conforme perdas e risco."
+      ],
+      "conduta": [
+        "Assistir o nascimento com proteção perineal e sem tração fetal.",
+        "Suspender imediatamente ocitocina em infusão.",
+        "Após o nascimento, realizar manejo ativo do terceiro período e revisar o canal de parto."
+      ],
+      "prescricao": [
+        "DIETA — Dieta zero durante a emergência; liberar após estabilização e avaliação do risco hemorrágico/anestésico.",
+        "ACESSO VENOSO E SOROTERAPIA — Obter acesso venoso se possível sem atrasar o parto. SF 0,9% ou Ringer lactato conforme perdas e condição hemodinâmica.",
+        "MEDICAÇÕES — Suspender ocitocina de condução. Após o nascimento, profilaxia de hemorragia conforme protocolo: ocitocina 10 UI IM ou 5 UI EV lenta, seguida de infusão quando indicada. Analgesia e anestesia para revisão/sutura conforme necessidade.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Quantificar perdas; monitorar diurese se hemorragia ou instabilidade.",
+        "BCF / CARDIOTOCOGRAFIA — BCF/CTG até o nascimento se isso não atrasar a assistência; monitorização neonatal após o parto.",
+        "SINAIS VITAIS E FREQUÊNCIA DE VERIFICAÇÃO — Sinais vitais maternos a cada 15 minutos inicialmente após o nascimento, ajustando à estabilidade e perdas.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Revisar placenta, tônus uterino e canal de parto; hemograma/coagulograma se sangramento significativo.",
+        "CUIDADOS ESPECÍFICOS DA PATOLOGIA — Contato pele a pele se mãe e RN estáveis; acionar protocolo de HPP se sangramento excessivo."
+      ],
+      "fonte": "Base: Ministério da Saúde, Diretrizes Nacionais de Assistência ao Parto Normal e Manual de Gestação de Alto Risco; HC-UFMG/Ebserh, protocolos de Indução do Trabalho de Parto e Assistência ao Parto; planos terapêuticos obstétricos da MEAC/CH-UFC, atualizados em 2026. Adaptar ao protocolo institucional."
+    }
+  ]
+}
