@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="gestamed-build" content="2026.07.22.50">
+  <meta name="gestamed-build" content="2026.07.22.51">
 
   <!-- Instalação na tela inicial (iOS) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1631,7 +1631,7 @@
 
   <script>
   (function(){
-    const BUILD='2026.07.22.50';
+    const BUILD='2026.07.22.51';
     try {
       const previous=localStorage.getItem('gestamed_build');
       if(previous!==BUILD){
@@ -1649,7 +1649,7 @@
   })();
   </script>
 </head>
-<body data-gestamed-build="2026.07.22.50">
+<body data-gestamed-build="2026.07.22.51">
   <div class="app">
     <div id="fatalError" style="display:none; margin:12px 16px 0; padding:12px; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; border-radius:12px; font-size:12.5px; line-height:1.5; white-space:pre-wrap;"></div>
     <header>
@@ -5288,10 +5288,10 @@ function gestmedGetPosologiaAdulto(med) {
   let atual=null, aba='resumo';
   const esc=(v)=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   function renderList(filter=''){
-    const ordem=['Síndromes hipertensivas','Hemorragias obstétricas','Prematuridade e membranas','Emergências intraparto','Infecções na gestação','Doenças clínicas na gestação'];
-    const const categoryMeta={"Síndromes hipertensivas":{theme:"theme-hipertensivas",icon:"🩺",desc:"Distúrbios pressóricos da gestação e do puerpério, com foco em vigilância, anti-hipertensivos e prevenção de eclâmpsia."},"Hemorragias obstétricas":{theme:"theme-hemorragias",icon:"🩸",desc:"Sangramentos da gestação, parto e pós-parto, com condutas de estabilização, uterotônicos e controle da hemorragia."},"Prematuridade e membranas":{theme:"theme-prematuridade",icon:"👶",desc:"Ameaça de prematuridade, tocólise, corticoide antenatal, neuroproteção fetal e rotura de membranas."},"Emergências intraparto":{theme:"theme-emergencias",icon:"⚠️",desc:"Complicações agudas durante o parto que exigem resposta imediata, manobras e definição rápida da via de resolução."},"Infecções na gestação":{theme:"theme-infeccoes",icon:"🦠",desc:"ITU, IST e outras infecções maternas, com antibioticoterapia, controle de foco e vigilância materno-fetal."},"Doenças clínicas na gestação":{theme:"theme-clinicas",icon:"💊",desc:"Comorbidades maternas com impacto obstétrico, incluindo ajustes terapêuticos, monitorização e critérios de gravidade."},"Alterações fetais e placentárias":{theme:"theme-fetais",icon:"🫄",desc:"Situações de risco fetal e placentário, com vigilância de crescimento, líquido amniótico, doppler e timing de resolução."}};
+    const ordem=['Síndromes hipertensivas','Hemorragias obstétricas','Prematuridade e membranas','Emergências intraparto','Infecções na gestação','Doenças clínicas na gestação','Alterações fetais e placentárias'];
+    const categoryMeta={"Síndromes hipertensivas":{theme:"theme-hipertensivas",icon:"🩺",desc:"Distúrbios pressóricos da gestação e do puerpério, com foco em vigilância, anti-hipertensivos e prevenção de eclâmpsia."},"Hemorragias obstétricas":{theme:"theme-hemorragias",icon:"🩸",desc:"Sangramentos da gestação, parto e pós-parto, com condutas de estabilização, uterotônicos e controle da hemorragia."},"Prematuridade e membranas":{theme:"theme-prematuridade",icon:"👶",desc:"Ameaça de prematuridade, tocólise, corticoide antenatal, neuroproteção fetal e rotura de membranas."},"Emergências intraparto":{theme:"theme-emergencias",icon:"⚠️",desc:"Complicações agudas durante o parto que exigem resposta imediata, manobras e definição rápida da via de resolução."},"Infecções na gestação":{theme:"theme-infeccoes",icon:"🦠",desc:"ITU, IST e outras infecções maternas, com antibioticoterapia, controle de foco e vigilância materno-fetal."},"Doenças clínicas na gestação":{theme:"theme-clinicas",icon:"💊",desc:"Comorbidades maternas com impacto obstétrico, incluindo ajustes terapêuticos, monitorização e critérios de gravidade."},"Alterações fetais e placentárias":{theme:"theme-fetais",icon:"🫄",desc:"Situações de risco fetal e placentário, com vigilância de crescimento, líquido amniótico, doppler e timing de resolução."}};
     const metaCategoria=cat=>categoryMeta[cat]||{theme:"",icon:"📘",desc:"Protocolos clínicos organizados por categoria."};
-    buildBlocks=(items)=>{
+    const buildBlocks=(items)=>{
       const categorias=[...new Set(items.map(p=>p.categoria))].sort((a,b)=>{
         const ia=ordem.indexOf(a),ib=ordem.indexOf(b);
         return (ia<0?999:ia)-(ib<0?999:ib);
@@ -5302,7 +5302,7 @@ function gestmedGetPosologiaAdulto(med) {
         return `<section class="condutas-group ${info.theme}"><div class="condutas-group-head"><div class="condutas-group-main"><div class="condutas-group-label"><span class="condutas-group-icon">${info.icon}</span><span>${esc(cat)}</span></div><div class="condutas-group-desc">${esc(info.desc)}</div></div><div class="condutas-group-count">${lista.length}</div></div><div class="condutas-group-list">${lista.map(p=>`<button class="conduta-card" onclick="GestMedCondutas.detail('${p.id}')"><div class="conduta-card-title">${esc(p.nome)}</div><div class="conduta-card-sub">${esc(p.subtitulo)}</div><span class="conduta-severity ${p.classe}">${esc(p.gravidade)}</span></button>`).join('')}</div></section>`;
       }).join('');
     };
-    root.innerHTML=`<div class="condutas-header"><h2>🩺 Condutas Obstétricas</h2><p>Protocolos clínicos e prescrições hospitalares-modelo organizados por categoria.</p><div style="margin-top:8px;font-size:10.5px;font-weight:800;opacity:.9">Versão 2026.07.22.50 · ${PROTOCOLOS.length} patologias</div></div><div class="condutas-alert"><strong>Uso profissional e educacional.</strong> Antes de copiar qualquer item, confirme idade gestacional, peso, função renal, alergias, apresentação/concentração do medicamento, protocolo institucional e avaliação do obstetra responsável.</div><div class="condutas-search-panel"><label class="condutas-search-label" for="condutasSearch">Pesquisar e selecionar uma patologia</label><div class="condutas-search-wrap"><span class="condutas-search-icon">🔎</span><input class="condutas-search" id="condutasSearch" type="search" autocomplete="off" placeholder="Digite ou toque para escolher a patologia" value="${esc(filter)}"><button class="condutas-search-clear" id="condutasSearchClear" type="button" aria-label="Limpar pesquisa">×</button></div><div class="condutas-suggestions" id="condutasSuggestions"></div><div class="condutas-search-help">Toque no campo para visualizar as patologias disponíveis ou digite parte do nome.</div></div><div class="condutas-browse-title"><strong>Patologias disponíveis</strong><span class="condutas-browse-count" id="condutasBrowseCount">${PROTOCOLOS.length}</span></div><div id="condutasCardsArea">${buildBlocks(PROTOCOLOS)}</div>`;
+    root.innerHTML=`<div class="condutas-header"><h2>🩺 Condutas Obstétricas</h2><p>Protocolos clínicos e prescrições hospitalares-modelo organizados por categoria.</p><div style="margin-top:8px;font-size:10.5px;font-weight:800;opacity:.9">Versão 2026.07.22.51 · ${PROTOCOLOS.length} patologias</div></div><div class="condutas-alert"><strong>Uso profissional e educacional.</strong> Antes de copiar qualquer item, confirme idade gestacional, peso, função renal, alergias, apresentação/concentração do medicamento, protocolo institucional e avaliação do obstetra responsável.</div><div class="condutas-search-panel"><label class="condutas-search-label" for="condutasSearch">Pesquisar e selecionar uma patologia</label><div class="condutas-search-wrap"><span class="condutas-search-icon">🔎</span><input class="condutas-search" id="condutasSearch" type="search" autocomplete="off" placeholder="Digite ou toque para escolher a patologia" value="${esc(filter)}"><button class="condutas-search-clear" id="condutasSearchClear" type="button" aria-label="Limpar pesquisa">×</button></div><div class="condutas-suggestions" id="condutasSuggestions"></div><div class="condutas-search-help">Toque no campo para visualizar as patologias disponíveis ou digite parte do nome.</div></div><div class="condutas-browse-title"><strong>Patologias disponíveis</strong><span class="condutas-browse-count" id="condutasBrowseCount">${PROTOCOLOS.length}</span></div><div id="condutasCardsArea">${buildBlocks(PROTOCOLOS)}</div>`;
     const inp=document.getElementById('condutasSearch');
     const sug=document.getElementById('condutasSuggestions');
     const clear=document.getElementById('condutasSearchClear');
