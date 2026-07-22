@@ -1,0 +1,1 @@
+Corrigir declaração duplicada de const, declarar buildBlocks corretamente, incluir a categoria de alterações fetais na ordem e validar todos os blocos JavaScript antes da publicação.
