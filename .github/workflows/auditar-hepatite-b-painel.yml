@@ -1,0 +1,39 @@
+name: Auditar hepatite B no painel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/auditar-hepatite-b-painel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  auditar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extrair trechos sobre hepatite B
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('index.html').read_text(encoding='utf-8')
+          termos = ('HBsAg', 'Hepatite B', 'hepatite B')
+          linhas = text.splitlines()
+          achados = []
+          for i, linha in enumerate(linhas):
+              if any(t in linha for t in termos):
+                  ini = max(0, i-2)
+                  fim = min(len(linhas), i+4)
+                  achados.append(f'--- linhas {ini+1}-{fim} ---\n' + '\n'.join(linhas[ini:fim]))
+          Path('audit-hepatite-b-painel.txt').write_text('\n\n'.join(achados) or 'Nenhum trecho encontrado.', encoding='utf-8')
+          PY
+      - name: Publicar auditoria
+        run: |
+          git config user.name 'GestaMed Auditor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add audit-hepatite-b-painel.txt
+          git commit -m 'Audita conteúdo de hepatite B no painel [skip ci]' || exit 0
+          git push
