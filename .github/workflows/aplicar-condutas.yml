@@ -21,6 +21,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import ast
           import json
           import re
 
@@ -31,7 +32,7 @@ jobs:
           end = text.index('];\n\n  const modal', start) + 1
           protocolos = json.loads(text[start:end])
 
-          ordem = [p['id'] for p in protocolos]
+          ordem_ids = [p['id'] for p in protocolos]
           por_id = {p['id']: p for p in protocolos}
           versoes = []
 
@@ -41,16 +42,59 @@ jobs:
               for protocolo in pacote.get('protocols', []):
                   pid = protocolo['id']
                   if pid not in por_id:
-                      ordem.append(pid)
+                      ordem_ids.append(pid)
                   por_id[pid] = protocolo
 
-          protocolos_atualizados = [por_id[pid] for pid in ordem]
+          protocolos_atualizados = [por_id[pid] for pid in ordem_ids]
           bloco = json.dumps(protocolos_atualizados, ensure_ascii=False, separators=(',', ':'))
           text = text[:start] + bloco + text[end:]
 
+          category_defs = {
+              'Trabalho de parto e indução': {
+                  'theme': 'theme-trabalho', 'icon': '🤰',
+                  'desc': 'Indução, condução e distócias funcionais do trabalho de parto, com atenção à ocitocina, progressão e via de parto.'
+              },
+              'Puerpério': {
+                  'theme': 'theme-puerperio', 'icon': '🍼',
+                  'desc': 'Intercorrências clínicas e obstétricas do pós-parto, incluindo hipertensão, infecção, lactação e tromboembolismo.'
+              },
+              'Infecções específicas e transmissão vertical': {
+                  'theme': 'theme-transmissao', 'icon': '🧬',
+                  'desc': 'Infecções com repercussão materno-fetal e medidas para reduzir transmissão vertical durante pré-natal, parto e puerpério.'
+              }
+          }
+
+          ordem_match = re.search(r"const ordem=(\[[^;]+\]);", text)
+          if ordem_match:
+              categorias = ast.literal_eval(ordem_match.group(1))
+              for categoria in category_defs:
+                  if categoria not in categorias:
+                      categorias.append(categoria)
+              novo = 'const ordem=' + json.dumps(categorias, ensure_ascii=False, separators=(',', ':')) + ';'
+              text = text[:ordem_match.start()] + novo + text[ordem_match.end():]
+
+          meta_match = re.search(r'const categoryMeta=(\{.*?\});\n\s*const metaCategoria=', text, flags=re.S)
+          if meta_match:
+              metadata = json.loads(meta_match.group(1))
+              metadata.update(category_defs)
+              novo = 'const categoryMeta=' + json.dumps(metadata, ensure_ascii=False, separators=(',', ':')) + ';\n    const metaCategoria='
+              text = text[:meta_match.start()] + novo + text[meta_match.end():]
+
+          css_rules = {
+              'theme-trabalho': '.condutas-group.theme-trabalho .condutas-group-head{background:linear-gradient(135deg,#0f766e,#0ea5a4)}',
+              'theme-puerperio': '.condutas-group.theme-puerperio .condutas-group-head{background:linear-gradient(135deg,#be185d,#ec4899)}',
+              'theme-transmissao': '.condutas-group.theme-transmissao .condutas-group-head{background:linear-gradient(135deg,#4338ca,#7c3aed)}'
+          }
+          anchor = '.conduta-card{'
+          pos = text.find(anchor)
+          if pos >= 0:
+              additions = ''.join(rule for theme, rule in css_rules.items() if f'.condutas-group.{theme} ' not in text)
+              if additions:
+                  text = text[:pos] + additions + text[pos:]
+
           versoes = [v for v in versoes if v]
           if versoes:
-              versao = sorted(versoes)[-1]
+              versao = max(versoes, key=lambda value: int(value.rsplit('.', 1)[1]))
               text = re.sub(r'2026\.07\.22\.\d+', versao, text)
 
           index_path.write_text(text, encoding='utf-8')
