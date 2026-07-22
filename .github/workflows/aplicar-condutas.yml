@@ -57,6 +57,9 @@ jobs:
           print(f'Total de protocolos: {len(protocolos_atualizados)}')
           PY
 
+      - name: Auditar posologia da ocitocina
+        run: python scripts/auditar_ocitocina.py
+
       - name: Publicar index atualizado
         run: |
           if git diff --quiet -- index.html; then
