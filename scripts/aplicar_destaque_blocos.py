@@ -32,10 +32,14 @@ css = r'''
 if '</style>' not in text:
     raise RuntimeError('Tag </style> não encontrada.')
 text = text.replace('</style>', css + '\n</style>', 1)
+text = text.replace(
+    "const ordem=['Síndromes hipertensivas','Hemorragias obstétricas','Prematuridade e membranas','Emergências intraparto','Infecções na gestação','Doenças clínicas na gestação'];",
+    "const ordem=['Síndromes hipertensivas','Hemorragias obstétricas','Prematuridade e membranas','Emergências intraparto','Infecções na gestação','Doenças clínicas na gestação','Alterações fetais e placentárias'];"
+)
 
 novo_bloco = r'''const categoryMeta={"Síndromes hipertensivas":{theme:"theme-hipertensivas",icon:"🩺",desc:"Distúrbios pressóricos da gestação e do puerpério, com foco em vigilância, anti-hipertensivos e prevenção de eclâmpsia."},"Hemorragias obstétricas":{theme:"theme-hemorragias",icon:"🩸",desc:"Sangramentos da gestação, parto e pós-parto, com condutas de estabilização, uterotônicos e controle da hemorragia."},"Prematuridade e membranas":{theme:"theme-prematuridade",icon:"👶",desc:"Ameaça de prematuridade, tocólise, corticoide antenatal, neuroproteção fetal e rotura de membranas."},"Emergências intraparto":{theme:"theme-emergencias",icon:"⚠️",desc:"Complicações agudas durante o parto que exigem resposta imediata, manobras e definição rápida da via de resolução."},"Infecções na gestação":{theme:"theme-infeccoes",icon:"🦠",desc:"ITU, IST e outras infecções maternas, com antibioticoterapia, controle de foco e vigilância materno-fetal."},"Doenças clínicas na gestação":{theme:"theme-clinicas",icon:"💊",desc:"Comorbidades maternas com impacto obstétrico, incluindo ajustes terapêuticos, monitorização e critérios de gravidade."},"Alterações fetais e placentárias":{theme:"theme-fetais",icon:"🫄",desc:"Situações de risco fetal e placentário, com vigilância de crescimento, líquido amniótico, doppler e timing de resolução."}};
     const metaCategoria=cat=>categoryMeta[cat]||{theme:"",icon:"📘",desc:"Protocolos clínicos organizados por categoria."};
-    buildBlocks=(items)=>{
+    const buildBlocks=(items)=>{
       const categorias=[...new Set(items.map(p=>p.categoria))].sort((a,b)=>{
         const ia=ordem.indexOf(a),ib=ordem.indexOf(b);
         return (ia<0?999:ia)-(ib<0?999:ib);
@@ -47,7 +51,7 @@ novo_bloco = r'''const categoryMeta={"Síndromes hipertensivas":{theme:"theme-hi
       }).join('');
     };'''
 
-padrao = r'buildBlocks=\(items\)=>\{.*?\};(?=\n    root\.innerHTML=)'
+padrao = r'const buildBlocks=\(items\)=>\{.*?\};(?=\n    root\.innerHTML=)'
 text, total = re.subn(padrao, novo_bloco, text, count=1, flags=re.S)
 if total != 1:
     raise RuntimeError('Função buildBlocks não foi localizada para atualização.')
