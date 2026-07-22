@@ -1,0 +1,68 @@
+name: Esclarecer hepatite B no painel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/esclarecer-hepatite-b-painel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Tornar orientação sobre hepatite B explícita
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          old_initial = '''<span class="exame-nome">Hepatite B — HBsAg ou teste rápido</span><span class="exame-quando">1ª consulta · até 13s6d</span>
+        <div class="exame-desc">Se não realizado durante o pré-natal, repetir na admissão para parto; também repetir diante de nova exposição de risco.</div>'''
+          new_initial = '''<span class="exame-nome">Hepatite B — HBsAg ou teste rápido</span><span class="exame-quando">1ª consulta · até 13s6d</span>
+        <div class="exame-desc"><strong>Não repetir de rotina no 3º trimestre</strong> se o resultado inicial for não reagente, estiver documentado e não houver nova exposição. Repetir diante de exposição de risco ou violência sexual. Na admissão para o parto, testar se não houve rastreamento no pré-natal ou se o esquema vacinal contra hepatite B estiver incompleto.</div>'''
+
+          old_delivery = '''<span class="exame-nome">Hepatite B — HBsAg/teste rápido</span><span class="exame-quando">se não testada ou vacinação incompleta</span>
+        <div class="exame-desc">O resultado orienta a profilaxia do recém-nascido nas primeiras horas de vida.</div>'''
+          new_delivery = '''<span class="exame-nome">Hepatite B — HBsAg/teste rápido</span><span class="exame-quando">parto · somente se indicado</span>
+        <div class="exame-desc">Solicitar na admissão se não houve testagem no pré-natal ou se o esquema vacinal estiver incompleto. <strong>Não repetir apenas por estar no 3º trimestre.</strong> Resultado reagente exige organização da profilaxia neonatal com vacina e imunoglobulina.</div>'''
+
+          if old_initial not in text:
+              raise SystemExit('Bloco inicial da hepatite B não encontrado.')
+          if old_delivery not in text:
+              raise SystemExit('Bloco da admissão para parto não encontrado.')
+
+          text = text.replace(old_initial, new_initial, 1)
+          text = text.replace(old_delivery, new_delivery, 1)
+          text = text.replace('content="2026.07.22.89"', 'content="2026.07.22.90"', 1)
+          text = text.replace('Versão 2026.07.22.89', 'Versão 2026.07.22.90')
+
+          if text.count('Não repetir de rotina no 3º trimestre') != 1:
+              raise SystemExit('Validação da orientação principal falhou.')
+          if text.count('Não repetir apenas por estar no 3º trimestre.') != 1:
+              raise SystemExit('Validação da orientação no parto falhou.')
+
+          path.write_text(text, encoding='utf-8')
+          print('Orientação de hepatite B atualizada com sucesso.')
+          PY
+
+      - name: Publicar alteração
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Nenhuma alteração necessária.'
+            exit 0
+          fi
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Esclarece repetição do HBsAg no painel [skip ci]'
+          git push
