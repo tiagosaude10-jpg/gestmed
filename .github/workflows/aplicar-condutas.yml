@@ -61,6 +61,14 @@ jobs:
               'Infecções específicas e transmissão vertical': {
                   'theme': 'theme-transmissao', 'icon': '🧬',
                   'desc': 'Infecções com repercussão materno-fetal e medidas para reduzir transmissão vertical durante pré-natal, parto e puerpério.'
+              },
+              'Doenças clínicas especiais na gestação': {
+                  'theme': 'theme-especiais', 'icon': '🫀',
+                  'desc': 'Condições clínicas maternas de maior complexidade, exigindo seguimento multidisciplinar, ajustes terapêuticos e vigilância materno-fetal.'
+              },
+              'Saúde mental e complicações tardias do puerpério': {
+                  'theme': 'theme-mental', 'icon': '🧠',
+                  'desc': 'Transtornos emocionais e psiquiátricos do pós-parto, com rastreio, segurança materno-infantil e articulação com a RAPS.'
               }
           }
 
@@ -83,7 +91,9 @@ jobs:
           css_rules = {
               'theme-trabalho': '.condutas-group.theme-trabalho .condutas-group-head{background:linear-gradient(135deg,#0f766e,#0ea5a4)}',
               'theme-puerperio': '.condutas-group.theme-puerperio .condutas-group-head{background:linear-gradient(135deg,#be185d,#ec4899)}',
-              'theme-transmissao': '.condutas-group.theme-transmissao .condutas-group-head{background:linear-gradient(135deg,#4338ca,#7c3aed)}'
+              'theme-transmissao': '.condutas-group.theme-transmissao .condutas-group-head{background:linear-gradient(135deg,#4338ca,#7c3aed)}',
+              'theme-especiais': '.condutas-group.theme-especiais .condutas-group-head{background:linear-gradient(135deg,#7c2d12,#b45309)}',
+              'theme-mental': '.condutas-group.theme-mental .condutas-group-head{background:linear-gradient(135deg,#4c1d95,#7c3aed)}'
           }
           anchor = '.conduta-card{'
           pos = text.find(anchor)
