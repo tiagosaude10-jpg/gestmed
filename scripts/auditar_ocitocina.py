@@ -1,12 +1,10 @@
 from pathlib import Path
-import json
-import re
-import subprocess
-import tempfile
+import json, re
 
-VERSION = '2026.07.22.58'
 index_path = Path('index.html')
 text = index_path.read_text(encoding='utf-8')
+versions_found = re.findall(r'2026\.07\.22\.\d+', text)
+VERSION = max(versions_found, key=lambda value: int(value.rsplit('.', 1)[1])) if versions_found else '2026.07.22.58'
 marker = 'const PROTOCOLOS='
 start = text.index(marker) + len(marker)
 end = text.index('];\n\n  const modal', start) + 1
@@ -135,9 +133,6 @@ for pid in ['taquissistolia_uterina', 'alteracao_aguda_vitalidade_fetal', 'rotur
             p['fonte'] = p.get('fonte', '') + complemento
             updated.append(f'{pid}.fonte')
 
-# Auditoria direcionada: protocolos que realmente administram ocitocina devem
-# informar UI/mUI, diluição/rota e velocidade ou intervalo. Textos que apenas
-# mandam suspender a infusão são avaliados separadamente e não exigem dose.
 positive_ids = {
     'ocitocina_inducao_conducao', 'maturacao_cervical_inducao', 'falha_inducao',
     'parada_dilatacao', 'parada_descida', 'rotura_prematura_membranas_termo',
@@ -176,7 +171,8 @@ if 'const const' in text:
     raise RuntimeError('Erro de sintaxe detectado: const const')
 index_path.write_text(text, encoding='utf-8')
 
-# Validação sintática dos blocos JavaScript inline com o Node disponível no runner.
+import subprocess
+import tempfile
 scripts = []
 for match in re.finditer(r'<script([^>]*)>(.*?)</script>', text, flags=re.S | re.I):
     attrs, code = match.group(1), match.group(2)
