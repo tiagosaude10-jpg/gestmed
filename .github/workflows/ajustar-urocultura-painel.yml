@@ -1,0 +1,43 @@
+name: Ajustar seguimento da urocultura
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ajustar-urocultura-painel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  corrigir-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Completar orientação da urocultura
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          old = 'Se positiva, tratar e fazer cultura de controle cerca de 7 dias após o término. Se a primeira for negativa, repetir apenas conforme sintomas, história de ITU recorrente, nefropatia ou rotina local; não confundir com o EAS de 28–30 semanas.'
+          new = 'Se positiva, tratar e fazer cultura de controle cerca de 7 dias após o término. Se a bacteriúria assintomática permanecer/for positiva, repetir em todos os trimestres; após ITU sintomática, acompanhar mensalmente conforme protocolo. Se a primeira for negativa, repetir apenas diante de sintomas, história de ITU recorrente, nefropatia ou rotina local; não confundir com o EAS de 28–30 semanas.'
+          if old not in text:
+              raise RuntimeError('Texto da urocultura não localizado para atualização.')
+          p.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Validar e publicar
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('index.html').read_text(encoding='utf-8')
+          assert 'repetir em todos os trimestres' in text
+          assert 'acompanhar mensalmente' in text
+          assert '2026.07.22.89' in text
+          PY
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Completa seguimento da urocultura no painel [skip ci]'
+          git push
