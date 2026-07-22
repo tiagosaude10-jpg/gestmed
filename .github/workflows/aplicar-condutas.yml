@@ -1,0 +1,70 @@
+name: Aplicar atualizações das condutas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'updates/condutas-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Integrar protocolos ao index.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import re
+
+          index_path = Path('index.html')
+          text = index_path.read_text(encoding='utf-8')
+          marker = 'const PROTOCOLOS='
+          start = text.index(marker) + len(marker)
+          end = text.index('];\n\n  const modal', start) + 1
+          protocolos = json.loads(text[start:end])
+
+          ordem = [p['id'] for p in protocolos]
+          por_id = {p['id']: p for p in protocolos}
+          versoes = []
+
+          for arquivo in sorted(Path('updates').glob('condutas-*.json')):
+              pacote = json.loads(arquivo.read_text(encoding='utf-8'))
+              versoes.append(pacote.get('version', ''))
+              for protocolo in pacote.get('protocols', []):
+                  pid = protocolo['id']
+                  if pid not in por_id:
+                      ordem.append(pid)
+                  por_id[pid] = protocolo
+
+          protocolos_atualizados = [por_id[pid] for pid in ordem]
+          bloco = json.dumps(protocolos_atualizados, ensure_ascii=False, separators=(',', ':'))
+          text = text[:start] + bloco + text[end:]
+
+          versoes = [v for v in versoes if v]
+          if versoes:
+              versao = sorted(versoes)[-1]
+              text = re.sub(r'2026\.07\.22\.\d+', versao, text)
+
+          index_path.write_text(text, encoding='utf-8')
+          print(f'Total de protocolos: {len(protocolos_atualizados)}')
+          PY
+
+      - name: Publicar index atualizado
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Nenhuma alteração necessária.'
+            exit 0
+          fi
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Atualiza condutas obstétricas automaticamente [skip ci]'
+          git push
