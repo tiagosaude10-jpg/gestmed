@@ -1,0 +1,33 @@
+name: Aplicar destaque visual dos blocos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/aplicar_destaque_blocos.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-interface:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Aplicar destaque visual
+        run: python scripts/aplicar_destaque_blocos.py
+
+      - name: Publicar alteração
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Nenhuma alteração necessária.'
+            exit 0
+          fi
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Destaca visualmente os blocos de condutas [skip ci]'
+          git push
