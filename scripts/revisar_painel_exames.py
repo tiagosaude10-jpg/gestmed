@@ -11,3 +11,5 @@ if missing:
 payload = ''.join(part.read_text(encoding='utf-8').strip() for part in parts)
 source = zlib.decompress(base64.b64decode(payload)).decode('utf-8')
 exec(compile(source, 'painel_exames_payload.py', 'exec'))
+
+# Revisão acionada para explicitar que HBsAg não é repetição universal do 3º trimestre.
