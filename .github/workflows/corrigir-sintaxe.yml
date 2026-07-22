@@ -1,0 +1,49 @@
+name: Corrigir sintaxe do GestaMed
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'updates/fix-sintaxe-2026.07.22.51.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Corrigir JavaScript e validar
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('const const categoryMeta=', 'const categoryMeta=')
+          text = text.replace('\n    buildBlocks=(items)=>{', '\n    const buildBlocks=(items)=>{')
+          text = text.replace("const ordem=['Síndromes hipertensivas','Hemorragias obstétricas','Prematuridade e membranas','Emergências intraparto','Infecções na gestação','Doenças clínicas na gestação'];", "const ordem=['Síndromes hipertensivas','Hemorragias obstétricas','Prematuridade e membranas','Emergências intraparto','Infecções na gestação','Doenças clínicas na gestação','Alterações fetais e placentárias'];")
+          text = text.replace('2026.07.22.50', '2026.07.22.51')
+          p.write_text(text, encoding='utf-8')
+
+          scripts = re.findall(r'<script(?:\\s[^>]*)?>(.*?)</script>', text, flags=re.S|re.I)
+          for i, script in enumerate(scripts):
+              js = Path(f'/tmp/script_{i}.js')
+              js.write_text(script, encoding='utf-8')
+              subprocess.run(['node', '--check', str(js)], check=True)
+          print(f'{len(scripts)} blocos JavaScript validados com sucesso.')
+          PY
+
+      - name: Publicar correção
+        run: |
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Corrige erro de sintaxe e valida JavaScript [skip ci]'
+          git push
