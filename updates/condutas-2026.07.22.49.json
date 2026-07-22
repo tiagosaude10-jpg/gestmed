@@ -1,0 +1,320 @@
+{
+  "version": "2026.07.22.49",
+  "protocols": [
+    {
+      "id": "restricao_crescimento_fetal",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Restrição de crescimento fetal — RCF",
+      "subtitulo": "Feto que não alcançou seu potencial de crescimento, com risco de insuficiência placentária e deterioração da vitalidade.",
+      "gravidade": "Alto risco fetal",
+      "classe": "sev-orange",
+      "resumo": [
+        "RCF deve ser diferenciada de feto constitucionalmente pequeno. O protocolo considera RCF quando o peso fetal estimado está abaixo do percentil 3 ou entre os percentis 3 e 10 associado a alterações Doppler.",
+        "A classificação e a frequência do seguimento dependem do peso fetal, Doppler da artéria umbilical, artéria cerebral média, relação cerebroplacentária, ducto venoso e cardiotocografia.",
+        "Não existe medicamento que reverta a insuficiência placentária; o tratamento efetivo é vigilância adequada e resolução no momento oportuno."
+      ],
+      "avaliacao": [
+        "Confirmar idade gestacional por ultrassonografia precoce e revisar curva de crescimento.",
+        "Pesquisar hipertensão, pré-eclâmpsia, doença renal, diabetes pré-gestacional, lúpus, trombofilias, tabagismo, drogas, infecções e malformações.",
+        "Avaliar movimentos fetais, altura uterina, vitalidade e sinais maternos de pré-eclâmpsia."
+      ],
+      "exames": [
+        "Ultrassonografia com biometria, peso fetal estimado, líquido amniótico e anatomia fetal.",
+        "Doppler de artéria umbilical, artéria cerebral média, relação cerebroplacentária, artérias uterinas e ducto venoso conforme estágio.",
+        "Cardiotocografia e/ou perfil biofísico conforme idade gestacional e gravidade.",
+        "Hemograma, função renal, transaminases, proteinúria e investigação etiológica conforme quadro materno."
+      ],
+      "conduta": [
+        "PIG com Doppler normal: acompanhamento seriado; RCF estágio I: avaliação pelo menos semanal; estágio II: duas vezes por semana; estágio III: diária; estágio IV: a cada 12 horas, conforme protocolo de referência.",
+        "Internar quando houver indicação de resolução, pré-eclâmpsia/eclâmpsia ou RCF estágio II–IV.",
+        "Planejar resolução conforme idade gestacional, estágio, cardiotocografia, ducto venoso e capacidade neonatal."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral/normossódica se estável e sem resolução imediata. Dieta zero se houver deterioração fetal, indicação de cesariana ou procedimento anestésico iminente.",
+        "ACESSO VENOSO E SOROTERAPIA — Manter acesso venoso periférico durante internação de alto risco. Não realizar expansão volêmica rotineira para “melhorar o Doppler”. Usar solução fisiológica 0,9% ou Ringer lactato somente conforme estado volêmico, jejum e comorbidades.",
+        "MEDICAÇÕES — Não há fármaco que reverta a RCF. Se parto prematuro previsto em até 7 dias: betametasona 12 mg IM a cada 24 horas por 2 doses OU dexametasona 6 mg IM a cada 12 horas por 4 doses, conforme protocolo. Se nascimento iminente antes de 32 semanas: sulfato de magnésio para neuroproteção conforme protocolo institucional. Tratar hipertensão, infecção ou doença materna associada em protocolo próprio.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Manter hidratação habitual; balanço hídrico por turno se internada e rigoroso quando houver pré-eclâmpsia, doença renal, oligúria ou uso de sulfato de magnésio.",
+        "BCF OU CARDIOTOCOGRAFIA — BCF pelo menos a cada 4 horas na paciente internada estável. Cardiotocografia conforme estágio e protocolo: diária ou mais frequente nos estágios avançados; contínua durante trabalho de parto ou deterioração aguda.",
+        "SINAIS VITAIS E FREQUÊNCIA — PA, FC, FR, SpO₂ e temperatura a cada 4 horas se estável; reduzir o intervalo diante de hipertensão, sintomas maternos ou deterioração fetal.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliação diária se internada; ultrassonografia/Doppler conforme estágio. Hemograma, plaquetas, creatinina, AST/TGO, ALT/TGP e proteinúria quando houver suspeita de pré-eclâmpsia.",
+        "CUIDADOS ESPECÍFICOS — Registrar movimentos fetais, estágio da RCF, resultado de cada Doppler e plano de resolução. Não indicar repouso absoluto rotineiro. Garantir neonatologia e centro cirúrgico quando houver risco de parto prematuro."
+      ],
+      "fonte": "MEAC/CH-UFC/Ebserh. Restrição de Crescimento Fetal, PRO.MED-OBS.032, V2, página atualizada em 01/06/2026: https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-nordeste/ch-ufc/acesso-a-informacao/protocolos-e-pops/protocolos-meac/maternidade-escola-assis-chateaubriand/medicina-fetal/restricao-de-crescimento-fetal-v2-pro-med-obs.032/view"
+    },
+    {
+      "id": "feto_pequeno_idade_gestacional",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Feto pequeno para a idade gestacional — PIG",
+      "subtitulo": "Peso fetal estimado abaixo do percentil 10 com Doppler normal, exigindo diferenciação entre pequeno constitucional e doença fetal.",
+      "gravidade": "Vigilância especializada",
+      "classe": "sev-blue",
+      "resumo": [
+        "PIG é definido no protocolo como peso abaixo do percentil 10 com Doppler normal.",
+        "PIG normal apresenta morfologia e investigação infecciosa sem alterações; PIG anormal pode estar associado a malformação ou infecção.",
+        "O seguimento é necessário porque parte dos casos pode evoluir para RCF ou apresentar queda da velocidade de crescimento."
+      ],
+      "avaliacao": [
+        "Revisar datação, curvas de crescimento anteriores, estatura parental e fatores maternos.",
+        "Pesquisar malformações, infecções, hipertensão e redução de movimentos fetais.",
+        "Confirmar Doppler normal antes de classificar como PIG."
+      ],
+      "exames": [
+        "Ultrassonografia com biometria e peso estimado a cada duas semanas, conforme protocolo.",
+        "Doppler de artéria umbilical, cerebral média, relação cerebroplacentária e artérias uterinas.",
+        "Investigação de malformações e infecções quando houver achados associados."
+      ],
+      "conduta": [
+        "Acompanhamento ambulatorial especializado se Doppler e vitalidade normais.",
+        "Reclassificar como RCF se peso abaixo do percentil 3, Doppler alterado ou queda significativa da curva.",
+        "PIG normal pode ter resolução em torno de 40 semanas, conforme protocolo e avaliação obstétrica."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral equilibrada, sem suplementação hipercalórica empírica. Avaliação nutricional se baixo ganho ponderal, insegurança alimentar ou doença materna.",
+        "ACESSO VENOSO E SOROTERAPIA — Sem acesso venoso ou soroterapia de rotina em acompanhamento estável. Se internada por alteração associada, instalar acesso conforme indicação clínica.",
+        "MEDICAÇÕES — Não há medicação para aumentar diretamente o peso fetal. Manter apenas suplementos pré-natais indicados e tratar deficiência de ferro, infecção ou doença materna em protocolos específicos. Corticoide antenatal e neuroproteção somente se houver risco real de parto prematuro.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Hidratação oral habitual; balanço hídrico não é necessário se estável.",
+        "BCF OU CARDIOTOCOGRAFIA — Em internação, BCF a cada 4 horas; cardiotocografia conforme idade gestacional, sintomas e achados Doppler.",
+        "SINAIS VITAIS E FREQUÊNCIA — Sinais vitais a cada 6 horas se internada estável, ou conforme protocolo local.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Reavaliar crescimento e Doppler em intervalos definidos pela medicina fetal. Investigar pré-eclâmpsia se PA elevada ou sintomas.",
+        "CUIDADOS ESPECÍFICOS — Orientar percepção de movimentos fetais e retorno imediato se redução. Não rotular automaticamente todo PIG como RCF."
+      ],
+      "fonte": "MEAC/CH-UFC/Ebserh. Restrição de Crescimento Fetal, PRO.MED-OBS.032, V2, página atualizada em 01/06/2026: https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-nordeste/ch-ufc/acesso-a-informacao/protocolos-e-pops/protocolos-meac/maternidade-escola-assis-chateaubriand/medicina-fetal/restricao-de-crescimento-fetal-v2-pro-med-obs.032/view"
+    },
+    {
+      "id": "oligodramnio",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Oligodrâmnio",
+      "subtitulo": "Redução do volume de líquido amniótico, isolada ou associada a rotura de membranas, insuficiência placentária ou malformação.",
+      "gravidade": "Alto risco",
+      "classe": "sev-orange",
+      "resumo": [
+        "Confirmar o diagnóstico ultrassonográfico e investigar rotura de membranas, RCF, hipertensão, malformações urinárias fetais e uso de medicamentos.",
+        "Oligodrâmnio isolado fora do termo pode ser acompanhado com hidratação materna e vigilância fetal; a conduta muda na presença de RPPM, RCF ou alteração da vitalidade.",
+        "Não há medicamento específico que restaure de forma duradoura o líquido amniótico."
+      ],
+      "avaliacao": [
+        "Questionar perda de líquido, sangramento, contrações, febre e movimentos fetais.",
+        "Realizar exame especular quando houver suspeita de rotura; evitar toque vaginal digital sem indicação.",
+        "Avaliar crescimento fetal, anatomia renal/urinária e Doppler."
+      ],
+      "exames": [
+        "Ultrassonografia para bolsão vertical máximo ou índice de líquido amniótico, biometria e anatomia.",
+        "Cardiotocografia/perfil biofísico conforme idade gestacional e gravidade.",
+        "Exames para infecção e RPPM quando clinicamente indicados."
+      ],
+      "conduta": [
+        "Tratar a causa. Em oligoâmnio isolado fora do termo, o Manual do Ministério da Saúde orienta hidratação oral de pelo menos 2,5 L de água por dia e avaliação da vitalidade.",
+        "Resolver a gestação conforme idade gestacional, vitalidade, rotura de membranas, RCF e condições maternas.",
+        "Se houver RPPM, seguir o protocolo específico de latência, antibióticos e corticoterapia."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral se estável. Dieta zero se houver cardiotocografia não tranquilizadora, trabalho de parto avançado ou resolução iminente.",
+        "ACESSO VENOSO E SOROTERAPIA — Acesso venoso se internada. Se desidratação ou impossibilidade de hidratação oral, usar solução fisiológica 0,9% ou Ringer lactato em volume individualizado; evitar hiper-hidratação indiscriminada.",
+        "MEDICAÇÕES — Não há medicação específica para corrigir oligodrâmnio. Antibióticos somente se rotura de membranas ou infecção, conforme protocolo. Corticoide antenatal e sulfato de magnésio somente diante de risco de parto prematuro nas idades gestacionais indicadas.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Se oligoâmnio isolado e sem contraindicação, orientar pelo menos 2,5 L/dia por via oral. Registrar ingestão e diurese; balanço hídrico por turno se internada.",
+        "BCF OU CARDIOTOCOGRAFIA — BCF a cada 4 horas se internada estável. Cardiotocografia diária ou conforme protocolo; contínua durante trabalho de parto, desacelerações ou redução de movimentos.",
+        "SINAIS VITAIS E FREQUÊNCIA — Sinais vitais a cada 4–6 horas; temperatura mais frequente se houver rotura de membranas ou suspeita infecciosa.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliação obstétrica diária se internada; repetir líquido, crescimento e Doppler conforme gravidade. Hemograma e PCR apenas quando houver suspeita clínica de infecção, não como substitutos da avaliação clínica.",
+        "CUIDADOS ESPECÍFICOS — Vigiar compressão de cordão e desacelerações. Diferenciar oligodrâmnio isolado de RPPM, RCF e malformação fetal antes de definir o momento do parto."
+      ],
+      "fonte": "Ministério da Saúde. Manual de Gestação de Alto Risco (2022): https://bvsms.saude.gov.br/bvs/publicacoes/manual_gestacao_alto_risco.pdf"
+    },
+    {
+      "id": "polidramnio",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Polidrâmnio",
+      "subtitulo": "Aumento do líquido amniótico associado a diabetes, malformações, infecções, anemia fetal ou causa idiopática.",
+      "gravidade": "Alto risco",
+      "classe": "sev-orange",
+      "resumo": [
+        "Investigar diabetes materno, malformações digestivas ou neurológicas, infecções, aloimunização/anemia fetal e gestação múltipla.",
+        "Casos graves podem causar dispneia, dor, contrações, apresentação anômala, prolapso de cordão e hemorragia pós-parto.",
+        "O tratamento é direcionado à causa e aos sintomas; não se recomenda medicação fetalmente arriscada apenas para reduzir o líquido de forma rotineira."
+      ],
+      "avaliacao": [
+        "Avaliar dispneia, dor abdominal, contrações, perda de líquido e movimentos fetais.",
+        "Medir altura uterina, avaliar apresentação fetal e sinais de trabalho de parto.",
+        "Pesquisar diabetes e malformações fetais."
+      ],
+      "exames": [
+        "Ultrassonografia com quantificação do líquido, anatomia fetal, crescimento e Doppler.",
+        "Glicemia e investigação de diabetes conforme protocolo.",
+        "Rastreamento de infecções e anemia fetal conforme história e achados."
+      ],
+      "conduta": [
+        "Casos leves e assintomáticos: vigilância e tratamento da causa.",
+        "Polidrâmnio grave e sintomático: considerar amniodrenagem por equipe de medicina fetal.",
+        "Planejar parto em serviço com suporte para prolapso de cordão, atonia e hemorragia pós-parto."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral. Se diabetes associado, dieta para diabetes na gestação, fracionada e orientada pela nutrição. Dieta zero se procedimento ou resolução iminente.",
+        "ACESSO VENOSO E SOROTERAPIA — Acesso venoso em casos sintomáticos/internados. Evitar excesso de cristaloide. Usar SF 0,9% ou Ringer lactato apenas conforme necessidade clínica.",
+        "MEDICAÇÕES — Não há medicamento de rotina para “secar” o líquido. Tratar diabetes com insulina individualizada quando indicada. Não usar indometacina rotineiramente apenas para reduzir polidrâmnio devido aos riscos fetais; qualquer uso excepcional exige medicina fetal e limite gestacional. Corticoide e neuroproteção somente se parto prematuro iminente.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Hidratação habitual; balanço por turno se internada, com atenção a dispneia e edema pulmonar.",
+        "BCF OU CARDIOTOCOGRAFIA — BCF a cada 4 horas se internada estável; cardiotocografia conforme sintomas e idade gestacional. Monitorização contínua durante amniotomia/trabalho de parto quando indicado.",
+        "SINAIS VITAIS E FREQUÊNCIA — Sinais vitais a cada 4–6 horas; monitorar FR e SpO₂ se dispneia importante.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliação diária se internada; ultrassonografia seriada. Glicemia capilar conforme diabetes.",
+        "CUIDADOS ESPECÍFICOS — Evitar amniotomia descontrolada; confirmar apresentação e posição do cordão. Preparar prevenção e tratamento de atonia/hemorragia pós-parto."
+      ],
+      "fonte": "Ministério da Saúde. Manual de Gestação de Alto Risco (2022): https://bvsms.saude.gov.br/bvs/publicacoes/manual_gestacao_alto_risco.pdf"
+    },
+    {
+      "id": "macrossomia_fetal",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Suspeita de macrossomia fetal",
+      "subtitulo": "Peso fetal elevado, frequentemente associado a diabetes, obesidade e maior risco de distocia de ombro e trauma de parto.",
+      "gravidade": "Planejamento do parto",
+      "classe": "sev-blue",
+      "resumo": [
+        "A estimativa ultrassonográfica de peso tem margem de erro e não deve ser interpretada isoladamente.",
+        "Investigar diabetes e revisar controle glicêmico, ganho de peso materno e história de macrossomia/distocia.",
+        "A decisão sobre indução e via de parto depende do peso estimado, diabetes, pelve, história obstétrica e protocolo institucional."
+      ],
+      "avaliacao": [
+        "Revisar idade gestacional, curva de crescimento, diabetes, IMC e parto prévio.",
+        "Avaliar apresentação fetal, colo, pelve e fatores de risco para distocia de ombro.",
+        "Orientar sobre incerteza da estimativa de peso e riscos das vias de parto."
+      ],
+      "exames": [
+        "Ultrassonografia com biometria e peso estimado.",
+        "Perfil glicêmico/HbA1c quando diabetes ou suspeita de hiperglicemia.",
+        "Cardiotocografia conforme indicação obstétrica, não apenas pelo peso."
+      ],
+      "conduta": [
+        "Otimizar controle glicêmico; não há medicamento que reduza o peso fetal já adquirido.",
+        "Planejar via e momento do parto conforme limiares e protocolo institucional.",
+        "Garantir equipe treinada para distocia de ombro se parto vaginal."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral se não diabética. Se diabetes, dieta fracionada e individualizada, com controle de carboidratos pela nutrição.",
+        "ACESSO VENOSO E SOROTERAPIA — Sem indicação de soroterapia de rotina antes do trabalho de parto. Durante internação/parto, acesso venoso e cristaloide conforme protocolo e ingestão oral.",
+        "MEDICAÇÕES — Não há medicamento para reduzir macrossomia. Se diabetes com metas não atingidas, usar insulina NPH e/ou regular/análogo rápido em doses individualizadas pelo perfil glicêmico. Não iniciar insulina sem glicemias e plano de monitorização.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Hidratação habitual; balanço somente se diabetes descompensado, pré-eclâmpsia ou outra comorbidade.",
+        "BCF OU CARDIOTOCOGRAFIA — BCF a cada 4 horas se internada; monitorização fetal intraparto conforme risco e protocolo, contínua se diabetes medicada ou alterações associadas.",
+        "SINAIS VITAIS E FREQUÊNCIA — Sinais vitais a cada 6 horas se estável; glicemia capilar nos horários definidos se diabética.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliar via de parto e risco de distocia; revisar peso estimado e margem de erro. Controlar glicemias e cetonas se hiperglicemia/vômitos.",
+        "CUIDADOS ESPECÍFICOS — Preparar plano para distocia de ombro, evitar pressão fúndica e documentar aconselhamento sobre via de parto."
+      ],
+      "fonte": "Ministério da Saúde. Manual de Gestação de Alto Risco (2022): https://bvsms.saude.gov.br/bvs/publicacoes/manual_gestacao_alto_risco.pdf"
+    },
+    {
+      "id": "aloimunizacao_rh_anemia_fetal",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Aloimunização Rh e risco de anemia fetal",
+      "subtitulo": "Anticorpos maternos contra hemácias fetais, com risco de anemia, hidropisia e óbito fetal.",
+      "gravidade": "Medicina fetal",
+      "classe": "sev-red",
+      "resumo": [
+        "A imunoglobulina anti-D previne sensibilização em gestante RhD negativa não sensibilizada, mas não trata quem já apresenta anticorpo imune.",
+        "Coombs indireto positivo exige identificação do anticorpo, titulação e avaliação do risco de hemólise fetal.",
+        "Doppler da artéria cerebral média com pico sistólico ≥1,5 MoM sugere anemia fetal importante e pode indicar cordocentese/transfusão intrauterina."
+      ],
+      "avaliacao": [
+        "Revisar tipagem materna, Coombs indireto, títulos anteriores, transfusões e história de RN com anemia/icterícia/hidropisia.",
+        "Identificar eventos sensibilizantes: sangramento, trauma, abortamento, ectópica, procedimentos invasivos e parto.",
+        "Avaliar sinais ultrassonográficos de hidropisia."
+      ],
+      "exames": [
+        "ABO/Rh e Coombs indireto materno.",
+        "Identificação e titulação de anticorpos clinicamente significativos.",
+        "Doppler seriado do pico sistólico da artéria cerebral média.",
+        "Ultrassonografia para hidropisia, placenta e líquido."
+      ],
+      "conduta": [
+        "Gestante RhD negativa não sensibilizada: realizar profilaxia anti-D nas indicações e após nascimento de RN RhD positivo.",
+        "Gestante sensibilizada: encaminhar à medicina fetal; anti-D não é eficaz.",
+        "Suspeita de anemia moderada/grave: considerar cordocentese e transfusão intrauterina em centro especializado."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral se estável; dieta zero antes de cordocentese, transfusão intrauterina ou resolução, conforme anestesia.",
+        "ACESSO VENOSO E SOROTERAPIA — Sem soroterapia rotineira no acompanhamento. Para procedimento, instalar acesso venoso e usar cristaloide conforme protocolo anestésico.",
+        "MEDICAÇÕES — Para gestante RhD negativa, Coombs indireto negativo e evento sensibilizante: imunoglobulina anti-D 300 microgramas IM, idealmente o mais cedo possível. Após parto de RN RhD positivo: 300 microgramas IM idealmente até 72 horas; o protocolo admite benefício até 28 dias. NÃO administrar como tratamento se já houver isoimunização imune confirmada. Se parto/procedimento prematuro previsto, corticoterapia antenatal conforme idade gestacional.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Hidratação habitual; balanço apenas em procedimento ou comorbidade.",
+        "BCF OU CARDIOTOCOGRAFIA — BCF a cada 4 horas se internada; cardiotocografia antes/depois de procedimento e conforme idade gestacional.",
+        "SINAIS VITAIS E FREQUÊNCIA — Sinais vitais a cada 4–6 horas se internada e continuamente durante procedimento invasivo.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Medicina fetal; repetir títulos e Doppler da ACM conforme risco. Planejar hemocomponente fetal O negativo, irradiado, desleucocitado, lavado e CMV negativo quando transfusão intrauterina for indicada.",
+        "CUIDADOS ESPECÍFICOS — Registrar lote, dose, via e horário da anti-D. Quantificar hemorragia feto-materna quando indicado para ajustar dose. Garantir neonatologia preparada para anemia/hiperbilirrubinemia."
+      ],
+      "fonte": "MEAC/CH-UFC/Ebserh. Prevenção de Isoimunização/Anemia Fetal, PRO.MED-OBS.038: https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-nordeste/ch-ufc/acesso-a-informacao/protocolos-e-pops/protocolos-meac/maternidade-escola-assis-chateaubriand/medicina-fetal/prevencao-de-isoimunizacao-anemia-fetal-v1-pro-med-obs.038/view"
+    },
+    {
+      "id": "obito_fetal",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Óbito fetal confirmado",
+      "subtitulo": "Confirmação ultrassonográfica, investigação etiológica, indução segura e cuidado humanizado do luto.",
+      "gravidade": "Urgência obstétrica e acolhimento",
+      "classe": "sev-red",
+      "resumo": [
+        "Confirmar ausência de atividade cardíaca fetal por ultrassonografia antes de qualquer indução.",
+        "A via vaginal é preferencial na maioria dos casos; o método de indução depende da idade gestacional, colo e cicatriz uterina.",
+        "O cuidado deve incluir comunicação empática, privacidade, acompanhante, investigação da causa e apoio ao luto."
+      ],
+      "avaliacao": [
+        "Confirmar diagnóstico e idade gestacional; revisar sangramento, febre, hipertensão, trauma e movimentos fetais.",
+        "Avaliar cicatrizes uterinas, placenta prévia, coagulopatia e preferência informada da paciente.",
+        "Oferecer suporte psicológico e acompanhante."
+      ],
+      "exames": [
+        "Ultrassonografia confirmatória.",
+        "Hemograma, plaquetas, coagulograma e fibrinogênio conforme tempo de retenção e quadro clínico.",
+        "Investigação dirigida: sífilis, diabetes, hipertensão, trombofilias selecionadas, infecções e estudo placentário/fetal conforme protocolo.",
+        "Tipagem sanguínea e reserva de sangue quando houver risco hemorrágico."
+      ],
+      "conduta": [
+        "Definir indução conforme idade gestacional e cicatriz uterina; evitar esquema padronizado sem avaliação do obstetra.",
+        "Após o parto, examinar e pesar feto e placenta, oferecer anatomopatológico/necropsia e material genético conforme consentimento.",
+        "Garantir política de humanização do luto, privacidade e seguimento pós-alta."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral durante preparo se estável e sem procedimento imediato; dieta zero quando iniciar indução ativa, houver risco cirúrgico ou conforme anestesia.",
+        "ACESSO VENOSO E SOROTERAPIA — Acesso venoso periférico. SF 0,9% ou Ringer lactato em manutenção individualizada; evitar excesso de volume. Reservar hemocomponentes se sangramento, placenta prévia ou coagulopatia.",
+        "MEDICAÇÕES — Regime deve ser confirmado pelo obstetra e protocolo local. Referência do HC-UFMG: 13–24 semanas, misoprostol 400 microgramas SL/VO/VV a cada 3 horas; 25–26 semanas, 200 microgramas a cada 4 horas; 27–28 semanas, 100 microgramas a cada 4 horas; acima de 28 semanas, 25 microgramas vaginal a cada 6 horas OU 25 microgramas oral a cada 2 horas. Colo favorável após 26 semanas: ocitocina em esquema institucional. Cicatriz uterina prévia exige redução de dose ou método mecânico e avaliação sênior. Prescrever analgesia e antiemético conforme necessidade.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Balanço por turno durante indução; controlar diurese e perdas.",
+        "BCF OU CARDIOTOCOGRAFIA — Não se aplica após confirmação ultrassonográfica do óbito. Monitorizar dinâmica uterina e sinais maternos.",
+        "SINAIS VITAIS E FREQUÊNCIA — PA, FC, FR, SpO₂, temperatura e dor a cada 4 horas; a cada 30–60 minutos durante fase ativa, sangramento ou instabilidade.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliação obstétrica seriada; hemograma/coagulograma/fibrinogênio conforme evolução. Após o parto, examinar placenta/feto e providenciar documentação e investigação conforme consentimento.",
+        "CUIDADOS ESPECÍFICOS — Acomodação com privacidade, acompanhante escolhido, comunicação de notícias difíceis, possibilidade de despedida e lembranças conforme desejo da família. Encaminhar para apoio psicológico e seguimento puerperal."
+      ],
+      "fonte": "HC-UFMG/Ebserh. PR 322 — Morte fetal, V01: https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-sudeste/hc-ufmg/saude/protocolos-assistenciais-hc-ufmg-ebserh/PR_322_Morte_fetal_V01.pdf | Política Nacional de Humanização do Luto Materno e Parental, regulamentação MS 2026."
+    },
+    {
+      "id": "gestacao_gemelar",
+      "categoria": "Alterações fetais e placentárias",
+      "nome": "Gestação gemelar/múltipla",
+      "subtitulo": "Gestação de alto risco cuja vigilância depende de corionicidade, amnionicidade, crescimento e complicações fetais.",
+      "gravidade": "Pré-natal de alto risco",
+      "classe": "sev-blue",
+      "resumo": [
+        "Definir corionicidade e amnionicidade precocemente, pois determinam frequência de ultrassonografia e riscos específicos.",
+        "Gestações monocoriônicas têm risco de síndrome de transfusão feto-fetal, restrição seletiva e sequência anemia-policitemia.",
+        "Não existe prescrição única: a conduta depende do tipo de gestação, idade gestacional, crescimento e complicações."
+      ],
+      "avaliacao": [
+        "Confirmar número de fetos, placentas e bolsas; revisar laudos precoces.",
+        "Pesquisar sintomas de parto prematuro, pré-eclâmpsia, anemia e crescimento discordante.",
+        "Avaliar apresentação de cada feto e planejamento do parto."
+      ],
+      "exames": [
+        "Ultrassonografia seriada conforme corionicidade, com biometria, líquido e Doppler de cada feto.",
+        "Nas monocoriônicas, rastrear sinais de síndrome de transfusão feto-fetal e outras complicações específicas.",
+        "Hemograma e rastreio de hipertensão/diabetes conforme risco."
+      ],
+      "conduta": [
+        "Acompanhamento em alto risco; frequência ultrassonográfica definida pela corionicidade e achados.",
+        "Encaminhar à medicina fetal se discordância de crescimento, líquido discordante, Doppler alterado ou suspeita de transfusão feto-fetal.",
+        "Planejar momento e via do parto de acordo com corionicidade, apresentações, complicações e protocolo institucional."
+      ],
+      "prescricao": [
+        "DIETA — Dieta geral com avaliação nutricional; necessidades calóricas e proteicas devem ser individualizadas. Corrigir anemia e deficiências documentadas.",
+        "ACESSO VENOSO E SOROTERAPIA — Sem acesso/soroterapia de rotina se acompanhamento ambulatorial estável. Se internada por complicação, acesso venoso e cristaloide conforme estado clínico.",
+        "MEDICAÇÕES — Não há medicação específica apenas por ser gemelar. Manter ácido fólico/ferro conforme pré-natal e exames. AAS para prevenção de pré-eclâmpsia somente quando indicado pelo protocolo de risco. Se parto prematuro iminente: corticoterapia antenatal e sulfato de magnésio para neuroproteção nas idades indicadas.",
+        "HIDRATAÇÃO E BALANÇO HÍDRICO — Hidratação habitual; balanço em internação conforme complicação.",
+        "BCF OU CARDIOTOCOGRAFIA — Registrar BCF de cada feto separadamente. Em internação, pelo menos a cada 4 horas se estável; cardiotocografia conforme idade gestacional e risco, identificando traçados de ambos.",
+        "SINAIS VITAIS E FREQUÊNCIA — Sinais vitais a cada 4–6 horas se internada; vigilância de PA e sintomas de pré-eclâmpsia.",
+        "AVALIAÇÃO OBSTÉTRICA E CONTROLES LABORATORIAIS — Avaliação especializada; ultrassonografia conforme corionicidade. Hemograma, glicemia e investigação de pré-eclâmpsia conforme quadro.",
+        "CUIDADOS ESPECÍFICOS — Identificar claramente feto A e B em todos os registros. Garantir equipe neonatal para cada recém-nascido e planejamento de via de parto. Monocoriônica com complicação deve ser discutida com medicina fetal."
+      ],
+      "fonte": "MEAC/CH-UFC/Ebserh. Gestação Múltipla, PRO.MED-OBS.033, página atualizada em 01/06/2026: https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-nordeste/ch-ufc/acesso-a-informacao/protocolos-e-pops/protocolos-meac/maternidade-escola-assis-chateaubriand/medicina-fetal"
+    }
+  ]
+}
