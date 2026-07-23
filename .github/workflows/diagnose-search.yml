@@ -1,0 +1,53 @@
+name: Diagnosticar pesquisa
+
+on:
+  push:
+    paths:
+      - '.diagnose-search-trigger'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnosticar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Extrair trechos da pesquisa
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('app-core-stable.html')
+          s=p.read_text(encoding='utf-8')
+          patterns=[
+            'Pesquisar medicamento', 'princípio ativo', 'principio ativo',
+            'searchInput', 'medicineList', 'medicamento', 'render', 'filter',
+            'addEventListener', 'records', 'principioAtivo', 'principio_ativo'
+          ]
+          lines=s.splitlines()
+          hits=[]
+          for i,line in enumerate(lines):
+            if any(x.lower() in line.lower() for x in patterns):
+              a=max(0,i-8); b=min(len(lines),i+13)
+              block='\n'.join(f'{j+1}: {lines[j]}' for j in range(a,b))
+              hits.append(block)
+          # dedupe blocks
+          out=[]; seen=set()
+          for block in hits:
+            key=block[:300]
+            if key not in seen:
+              seen.add(key); out.append(block)
+          Path('search-diagnostic.txt').write_text('\n\n===== BLOCO =====\n\n'.join(out[:120]),encoding='utf-8')
+          PY
+      - name: Publicar diagnóstico
+        run: |
+          git config user.name 'GestaMed Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add search-diagnostic.txt
+          git commit -m 'Gera diagnóstico da pesquisa de medicamentos' || exit 0
+          git push origin main
