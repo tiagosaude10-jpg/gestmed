@@ -8,6 +8,7 @@
     var style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = [
+      '#fatalError{display:none!important}',
       '.exames-resumo-usg .gm-usg-title{margin:0 0 4px;color:var(--trim-color);font-weight:900;font-size:10.5px}',
       '.exames-resumo-usg .gm-usg-list{margin:0;padding:0;list-style:none}',
       '.exames-resumo-usg .gm-usg-list li{position:relative;padding:4px 2px 4px 13px;border-bottom:1px dashed rgba(148,163,184,.42)}',
