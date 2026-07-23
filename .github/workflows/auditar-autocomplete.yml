@@ -1,0 +1,51 @@
+name: Auditar autocomplete de patologias
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/auditar-autocomplete.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  auditar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extrair trechos do autocomplete
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('index.html').read_text(encoding='utf-8')
+          pats = ['const elSearch', 'const elSuggestions', 'function renderSuggestions', 'elSearch.addEventListener', 'document.addEventListener', 'window.addEventListener']
+          out = ['# Auditoria autocomplete', '']
+          for pat in pats:
+              out.append('## ' + pat)
+              start = 0
+              found = False
+              while True:
+                  idx = text.find(pat, start)
+                  if idx < 0:
+                      break
+                  found = True
+                  a = max(0, idx - 900)
+                  b = min(len(text), idx + 2200)
+                  out.append('```js')
+                  out.append(text[a:b])
+                  out.append('```')
+                  start = idx + len(pat)
+              if not found:
+                  out.append('Não encontrado.')
+              out.append('')
+          Path('AUDITORIA_AUTOCOMPLETE.md').write_text('\n'.join(out), encoding='utf-8')
+          PY
+      - name: Publicar auditoria
+        run: |
+          git config user.name 'GestaMed Auditor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add AUDITORIA_AUTOCOMPLETE.md
+          git commit -m 'Audita autocomplete de patologias [skip ci]' || exit 0
+          git push
