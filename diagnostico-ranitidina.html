@@ -1,0 +1,31 @@
+---
+layout: null
+permalink: /diagnostico-ranitidina.html
+---
+{% capture fonte %}{% include_relative backups/gestamed-base-603-1503-fonte.html %}{% endcapture %}
+{% capture diagnostico %}
+<script>
+(function(){
+  function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+  function getData(){
+    try{if(typeof GESTMED_DATA!=='undefined'&&Array.isArray(GESTMED_DATA))return GESTMED_DATA;}catch(e){}
+    try{if(typeof RAW_DATA!=='undefined'&&Array.isArray(RAW_DATA))return RAW_DATA;}catch(e){}
+    return [];
+  }
+  function run(){
+    var data=getData();
+    var termos=['famotidina','cimetidina','omeprazol','pantoprazol'];
+    var achados=[];
+    termos.forEach(function(t){
+      var r=data.find(function(item){try{return norm(JSON.stringify(item)).indexOf(t)>=0;}catch(e){return false;}});
+      if(r)achados.push({termo:t,registro:r});
+    });
+    var txt=JSON.stringify({total:data.length,achados:achados},null,2);
+    document.body.innerHTML='<pre id="diagnostico" style="white-space:pre-wrap;font:14px/1.4 monospace;padding:20px">'+txt.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre>';
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+})();
+</script>
+{% endcapture %}
+{% assign fechamento = diagnostico | append: '</body>' %}
+{{ fonte | replace: '</body>', fechamento }}
