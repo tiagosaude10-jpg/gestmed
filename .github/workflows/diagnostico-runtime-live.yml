@@ -1,0 +1,112 @@
+name: Diagnostico runtime GestaMed
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostico:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Inspecionar HTML publicado
+        shell: bash
+        run: |
+          set -e
+          URL="https://tiagosaude10-jpg.github.io/gestmed/?diagnostico=$(date +%s)"
+          echo "URL=$URL"
+          curl -sS -L -D headers.txt "$URL" -o live.html
+          echo "### CABECALHOS"
+          cat headers.txt
+          echo "### MARCADORES"
+          grep -o "data-gestamed-build[^<]*" live.html | head -5 || true
+          grep -o "2026\.07\.23\.[0-9]*" live.html | sort -u || true
+          grep -o "gestamed-search-clear-size-[^'\"]*" live.html | head -3 || true
+          grep -o "gestamed-quick-filter-bar-[^'\"]*" live.html | head -3 || true
+          echo "TAMANHO=$(wc -c < live.html)"
+
+      - name: Instalar Playwright
+        shell: bash
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+
+      - name: Testar pesquisa e botoes
+        shell: bash
+        run: |
+          cat > diagnostico-live.mjs <<'JS'
+          import { chromium } from 'playwright';
+          const url = 'https://tiagosaude10-jpg.github.io/gestmed/?diagnostico=' + Date.now();
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 }, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1' });
+          const logs = [];
+          page.on('console', msg => logs.push('CONSOLE ' + msg.type() + ': ' + msg.text()));
+          page.on('pageerror', err => logs.push('PAGEERROR: ' + err.stack));
+          page.on('requestfailed', req => logs.push('REQUESTFAILED: ' + req.url() + ' ' + (req.failure()?.errorText || '')));
+          const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
+          await page.waitForTimeout(3000);
+          const snapshot = await page.evaluate(() => {
+            const input = document.querySelector('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]');
+            const buttons = Array.from(document.querySelectorAll('button')).map(b => (b.textContent || '').trim()).filter(Boolean).slice(0, 80);
+            return {
+              statusText: document.readyState,
+              build: document.documentElement.getAttribute('data-gestamed-build'),
+              base: document.documentElement.getAttribute('data-base-integrada'),
+              title: document.title,
+              bodyTextStart: document.body?.innerText?.slice(0, 600),
+              inputFound: !!input,
+              inputId: input?.id,
+              inputPlaceholder: input?.getAttribute('placeholder'),
+              applyFilters: typeof globalThis.applyFilters,
+              renderSuggestions: typeof globalThis.renderSuggestions,
+              rawDataType: typeof globalThis.RAW_DATA,
+              gestmedDataType: typeof globalThis.GESTMED_DATA,
+              buttonCount: document.querySelectorAll('button').length,
+              buttons
+            };
+          });
+          console.log('HTTP', response?.status());
+          console.log('SNAPSHOT', JSON.stringify(snapshot, null, 2));
+          const input = page.locator('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]').first();
+          if (await input.count()) {
+            await input.fill('paracetamol');
+            await page.waitForTimeout(1200);
+            console.log('INPUT_VALUE_AFTER_FILL', await input.inputValue());
+            console.log('BODY_HAS_PARACETAMOL', (await page.locator('body').innerText()).toLowerCase().includes('paracetamol'));
+          }
+          const dor = page.getByRole('button', { name: /dor/i }).first();
+          if (await dor.count()) {
+            await dor.click({ force: true });
+            await page.waitForTimeout(800);
+            console.log('DOR_CLICK_OK', true);
+            if (await input.count()) console.log('INPUT_AFTER_DOR', await input.inputValue());
+          } else {
+            console.log('DOR_CLICK_OK', false);
+          }
+          console.log('LOGS_BEGIN');
+          console.log(logs.join('\n'));
+          console.log('LOGS_END');
+          await page.screenshot({ path: 'live.png', fullPage: true });
+          await browser.close();
+          JS
+          node diagnostico-live.mjs
+
+      - name: Enviar diagnóstico
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: diagnostico-runtime-live
+          path: |
+            live.html
+            headers.txt
+            live.png
+          retention-days: 1
