@@ -12,26 +12,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Mostrar posições dos registros semelhantes
+      - name: Extrair fichas semelhantes
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           text = Path('backups/gestamed-base-603-1503-fonte.html').read_text(encoding='utf-8')
           lower = text.lower()
+          out = []
           for termo in ['famotidina', 'cimetidina', 'omeprazol', 'pantoprazol']:
-              print('\n###', termo)
+              out.append('\n' + '='*30 + ' ' + termo + ' ' + '='*30 + '\n')
               start = 0
               found = 0
-              while found < 12:
+              while found < 8:
                   idx = lower.find(termo, start)
                   if idx < 0:
                       break
-                  a = max(0, idx - 180)
-                  b = min(len(text), idx + 360)
-                  trecho = text[a:b].replace('\n', ' ')
-                  print('POS', idx, trecho)
+                  a = max(0, idx - 1800)
+                  b = min(len(text), idx + 2600)
+                  out.append(f'\nPOSICAO {idx}\n')
+                  out.append(text[a:b])
+                  out.append('\n--- FIM DA OCORRENCIA ---\n')
                   start = idx + len(termo)
                   found += 1
-              print('TOTAL MOSTRADO', found)
+              if not found:
+                  out.append('NAO ENCONTRADO\n')
+          Path('schema-ranitidina.txt').write_text(''.join(out), encoding='utf-8')
           PY
+      - name: Enviar diagnóstico
+        uses: actions/upload-artifact@v4
+        with:
+          name: schema-ranitidina
+          path: schema-ranitidina.txt
+          retention-days: 1
