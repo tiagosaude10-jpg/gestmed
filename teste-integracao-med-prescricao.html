@@ -1,0 +1,12 @@
+---
+layout: null
+permalink: /teste-integracao-med-prescricao.html
+---
+{% capture gestamed_core %}{% include_relative backups/gestamed-base-603-1503-fonte.html %}{% endcapture %}
+{% capture gestamed_scripts %}
+<script>document.documentElement.setAttribute('data-gestamed-integracao','2026.07.23.117');</script>
+<script src="./summary-panel-patch.js?v=2026.07.23.117"></script>
+<script src="./exam-panel-patch.js?v=2026.07.23.117"></script>
+{% endcapture %}
+{% assign gestamed_fechamento = gestamed_scripts | append: '</body>' %}
+{{ gestamed_core | replace: '</body>', gestamed_fechamento }}
