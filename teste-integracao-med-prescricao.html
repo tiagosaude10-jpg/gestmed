@@ -2,11 +2,80 @@
 layout: null
 permalink: /teste-integracao-med-prescricao.html
 ---
-{% capture gestamed_core %}{% include_relative backups/gestamed-base-603-1503-fonte.html %}{% endcapture %}
-{% capture gestamed_scripts %}
+{% assign marcador_dados = '// data.js — GestMed' %}
+{% assign marcador_app = '// app.js — GestMed' %}
+{% capture nucleo_atual %}{% include_relative app-core-stable.html %}{% endcapture %}
+{% capture fonte_603 %}{% include_relative backups/gestamed-base-603-1503-fonte.html %}{% endcapture %}
+{% assign antes_dados = nucleo_atual | split: marcador_dados | first %}
+{% assign depois_app = nucleo_atual | split: marcador_app | last %}
+{% assign fonte_apos_dados = fonte_603 | split: marcador_dados | last %}
+{% assign dados_603 = fonte_apos_dados | split: marcador_app | first %}
+{% assign nucleo_integrado = antes_dados | append: marcador_dados | append: dados_603 | append: marcador_app | append: depois_app %}
+{% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
+{% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
+{% capture scripts_integracao %}
 <script>document.documentElement.setAttribute('data-gestamed-integracao','2026.07.23.117');</script>
-<script src="./summary-panel-patch.js?v=2026.07.23.117"></script>
-<script src="./exam-panel-patch.js?v=2026.07.23.117"></script>
+<script>{{ resumo_js }}</script>
+<script>{{ exames_js }}</script>
+<script>
+(function(){
+  'use strict';
+  function normalizar(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+  function esperar(ms){return new Promise(function(r){setTimeout(r,ms);});}
+  function encontrar(texto){
+    var alvo=normalizar(texto);
+    return Array.prototype.find.call(document.querySelectorAll('button,[role="button"],a,div'),function(el){
+      var t=normalizar(el.textContent).trim();
+      return t===alvo || (t.indexOf(alvo)>=0 && t.length<alvo.length+80);
+    });
+  }
+  async function validar(){
+    await esperar(1200);
+    var testes=[];
+    function add(nome,ok,detalhe){testes.push({nome:nome,ok:!!ok,detalhe:detalhe||''});}
+    var corpo=normalizar(document.body.textContent);
+    add('Aplicativo abriu',corpo.indexOf('carregando gestamed')<0,'sem carregador intermediário');
+    var baseTexto='';
+    var tituloBase=encontrar('Base de medicamentos');
+    if(tituloBase){baseTexto=normalizar((tituloBase.parentElement||tituloBase).textContent);}
+    add('Contadores 1.503 / 603 / 900',baseTexto.indexOf('1.503')>=0&&baseTexto.indexOf('603')>=0&&baseTexto.indexOf('900')>=0,baseTexto.slice(0,180));
+    var campo=document.querySelector('#searchInput,input[placeholder*="medicamento" i],input[placeholder*="princípio" i],input[placeholder*="principio" i]');
+    add('Campo de pesquisa presente',!!campo,'');
+    if(campo){
+      campo.value='Ibuprofeno';
+      ['input','keyup','change'].forEach(function(tipo){campo.dispatchEvent(new Event(tipo,{bubbles:true}));});
+      await esperar(450);
+      add('Pesquisa por Ibuprofeno',normalizar(document.body.textContent).indexOf('ibuprofeno')>=0,'resultado renderizado fora do campo');
+    }
+    var presc=encontrar('Prescrições por Trimestre');
+    add('Botão Prescrições presente',!!presc,'');
+    if(presc){
+      var antes=normalizar(document.body.textContent);
+      presc.click();
+      await esperar(350);
+      var depois=normalizar(document.body.textContent);
+      add('Módulo de prescrições abre',depois.length>antes.length||depois.indexOf('dose e posologia')>=0||depois.indexOf('1º trimestre')>=0,'');
+    }
+    var painel=encontrar('Painel de Exames');
+    add('Botão Painel de Exames preservado',!!painel,'');
+    if(painel){
+      painel.click();
+      await esperar(350);
+      var painelTexto=normalizar(document.body.textContent);
+      add('Resumo e ultrassons preservados',painelTexto.indexOf('resumo rapido')>=0&&painelTexto.indexOf('ultrassonografias')>=0,'');
+    }
+    var aprovado=testes.every(function(t){return t.ok;});
+    var box=document.createElement('div');
+    box.id='gm-validacao-integracao';
+    box.style.cssText='position:fixed;z-index:2147483647;left:12px;right:12px;bottom:12px;max-height:52vh;overflow:auto;background:#fff;border:3px solid '+(aprovado?'#16a34a':'#dc2626')+';border-radius:16px;padding:14px;box-shadow:0 14px 40px rgba(0,0,0,.25);font:14px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;color:#0f172a';
+    box.innerHTML='<strong style="font-size:18px">'+(aprovado?'✓ INTEGRAÇÃO APROVADA':'⚠ VALIDAÇÃO COM PENDÊNCIAS')+'</strong>'+testes.map(function(t){return '<div style="margin-top:7px"><b>'+(t.ok?'✓':'✗')+' '+t.nome+'</b>'+(t.detalhe?'<div style="font-size:12px;color:#64748b">'+t.detalhe.replace(/[<>]/g,'')+'</div>':'')+'</div>';}).join('');
+    document.body.appendChild(box);
+    document.title=(aprovado?'[PASS] ':'[FAIL] ')+document.title;
+    document.documentElement.setAttribute('data-validacao-integracao',aprovado?'pass':'fail');
+  }
+  if(document.readyState==='complete'){validar();}else{window.addEventListener('load',validar,{once:true});}
+})();
+</script>
 {% endcapture %}
-{% assign gestamed_fechamento = gestamed_scripts | append: '</body>' %}
-{{ gestamed_core | replace: '</body>', gestamed_fechamento }}
+{% assign fechamento_integrado = scripts_integracao | append: '</body>' %}
+{{ nucleo_integrado | replace: '</body>', fechamento_integrado }}
