@@ -1,0 +1,38 @@
+name: Diagnostico schema ranitidina
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mostrar registros semelhantes
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('backups/gestamed-base-603-1503-fonte.html').read_text(encoding='utf-8')
+          lower = text.lower()
+          for termo in ['famotidina', 'cimetidina', 'omeprazol', 'pantoprazol']:
+              print('\n' + '='*30, termo, '='*30)
+              start = 0
+              found = 0
+              while found < 3:
+                  idx = lower.find(termo, start)
+                  if idx < 0:
+                      break
+                  a = max(0, idx - 1600)
+                  b = min(len(text), idx + 2200)
+                  print(text[a:b])
+                  print('\n--- OCORRENCIA ---\n')
+                  start = idx + len(termo)
+                  found += 1
+              if not found:
+                  print('NAO ENCONTRADO')
+          PY
