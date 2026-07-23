@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="gestamed-build" content="2026.07.23.95">
+  <meta name="gestamed-build" content="2026.07.23.97">
 
   <!-- Instalação na tela inicial (iOS) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1596,10 +1596,10 @@
   
     /* ===================== PAINEL DE EXAMES — RESUMO DIDÁTICO ===================== */
     .exames-resumo-v2 {
-      margin: 14px 0 16px;
-      padding: 16px;
+      margin: 12px 0 16px;
+      padding: 12px;
       border: 1px solid #cbd5e1;
-      border-radius: 22px;
+      border-radius: 18px;
       background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
       box-shadow: 0 8px 22px rgba(15, 23, 42, .06);
       overflow: hidden;
@@ -1614,41 +1614,56 @@
       font-size: 12px;
       color: #64748b;
       line-height: 1.5;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
     .exames-resumo-v2-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      padding: 14px 0;
-      border-top: 1px dashed #cbd5e1;
+      --trim-color: #0891b2;
+      --trim-soft: #ecfeff;
+      --trim-border: #67e8f9;
+      margin-top: 9px;
+      padding: 10px;
+      border: 1px solid var(--trim-border);
+      border-radius: 16px;
+      background: var(--trim-soft);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, .04);
     }
-    .exames-resumo-v2-subtitle + .exames-resumo-v2-row {
-      border-top: none;
-      padding-top: 0;
+    .exames-resumo-v2-row.t1 {
+      --trim-color: #0891b2;
+      --trim-soft: #ecfeff;
+      --trim-border: #67e8f9;
     }
-    .exames-resumo-v2-row > div:first-child {
-      grid-column: 1 / -1;
+    .exames-resumo-v2-row.t2 {
+      --trim-color: #059669;
+      --trim-soft: #ecfdf5;
+      --trim-border: #6ee7b7;
+    }
+    .exames-resumo-v2-row.t3 {
+      --trim-color: #d97706;
+      --trim-soft: #fffbeb;
+      --trim-border: #fcd34d;
+    }
+    .exames-resumo-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      min-width: 0;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    .exames-resumo-v2-row > div:first-child::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: #e2e8f0;
+    .exames-resumo-periodo {
+      font-size: 10px;
+      line-height: 1.2;
+      color: #475569;
+      font-weight: 700;
+      text-align: right;
     }
     .exames-resumo-pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 36px;
-      padding: 7px 12px;
+      min-height: 30px;
+      padding: 5px 10px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       color: #fff;
       white-space: nowrap;
@@ -1656,18 +1671,24 @@
     .exames-resumo-pill.t1 { background: linear-gradient(135deg,#0891b2,#06b6d4); }
     .exames-resumo-pill.t2 { background: linear-gradient(135deg,#059669,#10b981); }
     .exames-resumo-pill.t3 { background: linear-gradient(135deg,#d97706,#f59e0b); }
+    .exames-resumo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      align-items: start;
+    }
     .exames-resumo-col {
       min-width: 0;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 12px 12px 10px;
-      background: #f8fafc;
+      border: 1px solid rgba(148, 163, 184, .38);
+      border-radius: 12px;
+      padding: 8px;
+      background: rgba(255, 255, 255, .86);
       overflow-wrap: anywhere;
     }
     .exames-resumo-col h4 {
-      margin: 0 0 8px;
-      font-size: 12px;
-      color: #155e75;
+      margin: 0 0 5px;
+      font-size: 10.5px;
+      color: var(--trim-color);
       font-weight: 800;
     }
     .exames-resumo-col ul {
@@ -1675,26 +1696,35 @@
       padding: 0;
       list-style: none;
       color: #334155;
-      font-size: 11.5px;
-      line-height: 1.55;
+      font-size: 10.5px;
+      line-height: 1.35;
     }
     .exames-resumo-col li {
       position: relative;
-      padding: 7px 8px 7px 24px;
-      border-radius: 9px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
+      padding: 4px 2px 4px 13px;
+      border-bottom: 1px dashed rgba(148, 163, 184, .42);
     }
+    .exames-resumo-col li:last-child { border-bottom: 0; }
     .exames-resumo-col li::before {
       content: "•";
       position: absolute;
-      left: 10px;
-      top: 6px;
-      color: #0891b2;
-      font-size: 15px;
+      left: 2px;
+      top: 2px;
+      color: var(--trim-color);
+      font-size: 14px;
       font-weight: 900;
     }
-    .exames-resumo-col li + li { margin-top: 6px; }
+    .exames-resumo-usg {
+      margin-top: 7px;
+      padding: 7px 8px;
+      border-left: 3px solid var(--trim-color);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, .78);
+      color: #334155;
+      font-size: 10.5px;
+      line-height: 1.4;
+    }
+    .exames-resumo-usg strong:first-child { color: var(--trim-color); }
     .vacinas-resumo-box {
       margin: 0 0 18px;
       padding: 16px;
@@ -1808,7 +1838,7 @@
 
   <script>
   (function(){
-const BUILD='2026.07.23.96';
+const BUILD='2026.07.23.97';
     try {
       const previous=localStorage.getItem('gestamed_build');
       if(previous!==BUILD){
@@ -1826,7 +1856,7 @@ const BUILD='2026.07.23.96';
   })();
   </script>
 </head>
-<body data-gestamed-build="2026.07.23.95">
+<body data-gestamed-build="2026.07.23.97">
   <div class="app">
     <div id="fatalError" style="display:none; margin:12px 16px 0; padding:12px; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; border-radius:12px; font-size:12.5px; line-height:1.5; white-space:pre-wrap;"></div>
     <header>
@@ -2289,83 +2319,92 @@ const BUILD='2026.07.23.96';
       <!-- QUADRO-RESUMO DIDÁTICO -->
       <div class="exames-resumo-v2">
         <div class="exames-resumo-v2-title">🗂️ Resumo rápido — janelas principais</div>
-        <div class="exames-resumo-v2-subtitle">Exames organizados por trimestre, <strong>um abaixo do outro</strong>, para consulta rápida.</div>
+        <div class="exames-resumo-v2-subtitle">Rotina essencial separada dos exames solicitados apenas quando houver indicação.</div>
 
-        <div class="exames-resumo-v2-row">
-          <div><span class="exames-resumo-pill t1">1º TRI</span></div>
-          <div class="exames-resumo-col">
-            <h4>Exames laboratoriais / rastreios</h4>
-            <ul>
-              <li><strong>Hemograma</strong> — solicitar na primeira consulta.</li>
-              <li><strong>Tipagem sanguínea ABO e fator Rh.</strong></li>
-              <li><strong>Glicemia de jejum.</strong></li>
-              <li><strong>EAS (urina tipo 1).</strong></li>
-              <li><strong>Urocultura.</strong></li>
-              <li><strong>Sífilis</strong> — teste rápido e/ou VDRL.</li>
-              <li><strong>HIV</strong> — teste rápido e/ou sorologia.</li>
-              <li><strong>Hepatite B</strong> — HBsAg ou teste rápido.</li>
-              <li><strong>Hepatite C</strong> — anti-HCV ou teste rápido.</li>
-              <li><strong>Toxoplasmose</strong> — IgG e IgM.</li>
-              <li><strong>Rubéola</strong> — conforme protocolo local e história vacinal.</li>
-              <li><strong>Citopatológico do colo do útero</strong> — se estiver atrasado ou indicado.</li>
-              <li><strong>Malária</strong> — se houver indicação epidemiológica na Amazônia.</li>
-              <li><strong>Doença de Chagas</strong> — se houver indicação epidemiológica.</li>
-              <li><strong>HTLV</strong> — conforme protocolo local.</li>
-              <li><strong>Eletroforese de hemoglobina</strong> — conforme indicação e protocolo local.</li>
-            </ul>
+        <div class="exames-resumo-v2-row t1">
+          <div class="exames-resumo-head">
+            <span class="exames-resumo-pill t1">1º TRIMESTRE</span>
+            <span class="exames-resumo-periodo">até 13s6d · 1ª consulta</span>
           </div>
-          <div class="exames-resumo-col">
-            <h4>Ultrassons / imagem</h4>
-            <ul>
-              <li><strong>USG obstétrica inicial</strong> — se necessária para localização, viabilidade e datação.</li>
-              <li><strong>USG morfológica do 1º trimestre</strong> — entre 11 semanas e 13 semanas e 6 dias.</li>
-              <li><strong>Translucência nucal e anatomia inicial</strong> — conforme rotina do serviço.</li>
-            </ul>
+          <div class="exames-resumo-grid">
+            <div class="exames-resumo-col">
+              <h4>✓ OBRIGATÓRIOS</h4>
+              <ul>
+                <li><strong>Hemograma</strong></li>
+                <li><strong>ABO e fator Rh</strong></li>
+                <li><strong>Glicemia de jejum</strong></li>
+                <li><strong>EAS</strong></li>
+                <li><strong>Urocultura</strong></li>
+                <li><strong>Sífilis</strong> — TR/VDRL</li>
+                <li><strong>HIV</strong> — TR/sorologia</li>
+                <li><strong>Hepatite B</strong> — HBsAg</li>
+                <li><strong>Hepatite C</strong> — anti-HCV</li>
+                <li><strong>Toxoplasmose</strong> — IgG/IgM</li>
+              </ul>
+            </div>
+            <div class="exames-resumo-col">
+              <h4>○ CONFORME INDICAÇÃO</h4>
+              <ul>
+                <li><strong>Rubéola</strong> — protocolo/histórico</li>
+                <li><strong>Citopatológico</strong> — se atrasado</li>
+                <li><strong>Malária</strong> — risco epidemiológico</li>
+                <li><strong>Doença de Chagas</strong></li>
+                <li><strong>HTLV</strong> — protocolo local</li>
+                <li><strong>Eletroforese de Hb</strong></li>
+              </ul>
+            </div>
           </div>
+          <div class="exames-resumo-usg"><strong>USG:</strong> inicial se necessária para localização, viabilidade e datação. Morfológica do 1º trimestre entre <strong>11s e 13s6d</strong>, com translucência nucal/anatomia inicial conforme o serviço.</div>
         </div>
 
-        <div class="exames-resumo-v2-row">
-          <div><span class="exames-resumo-pill t2">2º TRI</span></div>
-          <div class="exames-resumo-col">
-            <h4>Exames laboratoriais / rastreios</h4>
-            <ul>
-              <li><strong>TOTG 75 g</strong> — entre 24 e 28 semanas.</li>
-              <li><strong>Toxoplasmose IgG/IgM</strong> — repetir bimestralmente se a gestante for suscetível, conforme fluxo local.</li>
-              <li><strong>Coombs indireto</strong> — para gestante Rh negativo não sensibilizada, conforme protocolo.</li>
-              <li><strong>Outros exames</strong> — repetir somente se houver indicação clínica ou epidemiológica.</li>
-            </ul>
+        <div class="exames-resumo-v2-row t2">
+          <div class="exames-resumo-head">
+            <span class="exames-resumo-pill t2">2º TRIMESTRE</span>
+            <span class="exames-resumo-periodo">14s a 27s6d</span>
           </div>
-          <div class="exames-resumo-col">
-            <h4>Ultrassons / imagem</h4>
-            <ul>
-              <li><strong>USG morfológica do 2º trimestre</strong> — entre 18 e 24 semanas; preferencialmente entre 20 semanas e 23 semanas e 6 dias.</li>
-              <li><strong>Doppler obstétrico</strong> — somente se indicado.</li>
-              <li><strong>Ecocardiografia fetal</strong> — somente se indicada.</li>
-            </ul>
+          <div class="exames-resumo-grid">
+            <div class="exames-resumo-col">
+              <h4>✓ OBRIGATÓRIOS</h4>
+              <ul>
+                <li><strong>TOTG 75 g</strong> — 24–28s</li>
+              </ul>
+            </div>
+            <div class="exames-resumo-col">
+              <h4>○ CONFORME INDICAÇÃO</h4>
+              <ul>
+                <li><strong>Toxoplasmose IgG/IgM</strong> — se suscetível</li>
+                <li><strong>Coombs indireto</strong> — Rh negativo</li>
+                <li><strong>Outros exames</strong> — clínica/epidemiologia</li>
+              </ul>
+            </div>
           </div>
+          <div class="exames-resumo-usg"><strong>USG:</strong> morfológica do 2º trimestre entre <strong>18–24s</strong>, preferencialmente 20–23s6d. Doppler e ecocardiografia fetal somente se indicados.</div>
         </div>
 
-        <div class="exames-resumo-v2-row">
-          <div><span class="exames-resumo-pill t3">3º TRI</span></div>
-          <div class="exames-resumo-col">
-            <h4>Exames laboratoriais / rastreios</h4>
-            <ul>
-              <li><strong>Hemograma</strong> — repetir por volta de 28–30 semanas.</li>
-              <li><strong>Sífilis</strong> — repetir por volta de 28–30 semanas e na admissão para o parto.</li>
-              <li><strong>HIV</strong> — repetir por volta de 28–30 semanas e na admissão para o parto.</li>
-              <li><strong>EAS (urina tipo 1)</strong> — repetir conforme rotina e indicação clínica.</li>
-              <li><strong>Urocultura</strong> — repetir conforme rotina e indicação clínica.</li>
-              <li><strong>HBsAg</strong> — repetir apenas se não houver resultado confiável ou existir nova exposição/risco.</li>
-              <li><strong>Swab para estreptococo do grupo B (EGB)</strong> — entre 35 e 37 semanas, conforme rotina municipal.</li>
-            </ul>
+        <div class="exames-resumo-v2-row t3">
+          <div class="exames-resumo-head">
+            <span class="exames-resumo-pill t3">3º TRIMESTRE</span>
+            <span class="exames-resumo-periodo">a partir de 28s</span>
           </div>
-          <div class="exames-resumo-col">
-            <h4>Ultrassons / imagem</h4>
-            <ul>
-              <li><strong>USG obstétrica de crescimento e líquido amniótico</strong> — somente se indicada; não é rotina universal no baixo risco.</li>
-              <li><strong>Doppler obstétrico</strong> — somente se indicado.</li>
-            </ul>
+          <div class="exames-resumo-grid">
+            <div class="exames-resumo-col">
+              <h4>✓ OBRIGATÓRIOS</h4>
+              <ul>
+                <li><strong>Hemograma</strong> — 28–30s</li>
+                <li><strong>Sífilis</strong> — 28–30s e admissão</li>
+                <li><strong>HIV</strong> — 28–30s e admissão</li>
+              </ul>
+            </div>
+            <div class="exames-resumo-col">
+              <h4>○ CONFORME INDICAÇÃO</h4>
+              <ul>
+                <li><strong>EAS e urocultura</strong> — rotina/clínica</li>
+                <li><strong>HBsAg</strong> — sem resultado ou novo risco</li>
+                <li><strong>Swab EGB</strong> — 35–37s, protocolo municipal</li>
+              </ul>
+            </div>
           </div>
+          <div class="exames-resumo-usg"><strong>USG:</strong> crescimento, líquido amniótico e Doppler somente se indicados; não são rotina universal no baixo risco.</div>
         </div>
       </div>
 
@@ -5511,7 +5550,7 @@ function gestmedGetPosologiaAdulto(med) {
         return `<section class="condutas-group ${info.theme}"><div class="condutas-group-head"><div class="condutas-group-main"><div class="condutas-group-label"><span class="condutas-group-icon">${info.icon}</span><span>${esc(cat)}</span></div><div class="condutas-group-desc">${esc(info.desc)}</div></div><div class="condutas-group-count">${lista.length}</div></div><div class="condutas-group-list">${lista.map(p=>`<button class="conduta-card" onclick="GestMedCondutas.detail('${p.id}')"><div class="conduta-card-title">${esc(p.nome)}</div><div class="conduta-card-sub">${esc(p.subtitulo)}</div><span class="conduta-severity ${p.classe}">${esc(p.gravidade)}</span></button>`).join('')}</div></section>`;
       }).join('');
     };
-    root.innerHTML=`<div class="condutas-header"><h2>🩺 Condutas Obstétricas</h2><p>Protocolos clínicos e prescrições hospitalares-modelo organizados por categoria.</p><div style="margin-top:8px;font-size:10.5px;font-weight:800;opacity:.9">Versão 2026.07.23.95 · ${PROTOCOLOS.length} patologias</div></div><div class="condutas-alert"><strong>Uso profissional e educacional.</strong> Antes de copiar qualquer item, confirme idade gestacional, peso, função renal, alergias, apresentação/concentração do medicamento, protocolo institucional e avaliação do obstetra responsável.</div><div class="condutas-search-panel"><label class="condutas-search-label" for="condutasSearch">Pesquisar e selecionar uma patologia</label><div class="condutas-search-wrap"><span class="condutas-search-icon">🔎</span><input class="condutas-search" id="condutasSearch" type="search" autocomplete="off" placeholder="Digite ou toque para escolher a patologia" value="${esc(filter)}"><button class="condutas-search-clear" id="condutasSearchClear" type="button" aria-label="Limpar pesquisa">×</button></div><div class="condutas-suggestions" id="condutasSuggestions"></div><div class="condutas-search-help">Toque no campo para visualizar as patologias disponíveis ou digite parte do nome.</div></div><div class="condutas-browse-title"><strong>Patologias disponíveis</strong><span class="condutas-browse-count" id="condutasBrowseCount">${PROTOCOLOS.length}</span></div><div id="condutasCardsArea">${buildBlocks(PROTOCOLOS)}</div>`;
+    root.innerHTML=`<div class="condutas-header"><h2>🩺 Condutas Obstétricas</h2><p>Protocolos clínicos e prescrições hospitalares-modelo organizados por categoria.</p><div style="margin-top:8px;font-size:10.5px;font-weight:800;opacity:.9">Versão 2026.07.23.97 · ${PROTOCOLOS.length} patologias</div></div><div class="condutas-alert"><strong>Uso profissional e educacional.</strong> Antes de copiar qualquer item, confirme idade gestacional, peso, função renal, alergias, apresentação/concentração do medicamento, protocolo institucional e avaliação do obstetra responsável.</div><div class="condutas-search-panel"><label class="condutas-search-label" for="condutasSearch">Pesquisar e selecionar uma patologia</label><div class="condutas-search-wrap"><span class="condutas-search-icon">🔎</span><input class="condutas-search" id="condutasSearch" type="search" autocomplete="off" placeholder="Digite ou toque para escolher a patologia" value="${esc(filter)}"><button class="condutas-search-clear" id="condutasSearchClear" type="button" aria-label="Limpar pesquisa">×</button></div><div class="condutas-suggestions" id="condutasSuggestions"></div><div class="condutas-search-help">Toque no campo para visualizar as patologias disponíveis ou digite parte do nome.</div></div><div class="condutas-browse-title"><strong>Patologias disponíveis</strong><span class="condutas-browse-count" id="condutasBrowseCount">${PROTOCOLOS.length}</span></div><div id="condutasCardsArea">${buildBlocks(PROTOCOLOS)}</div>`;
     const inp=document.getElementById('condutasSearch');
     const sug=document.getElementById('condutasSuggestions');
     const clear=document.getElementById('condutasSearchClear');
