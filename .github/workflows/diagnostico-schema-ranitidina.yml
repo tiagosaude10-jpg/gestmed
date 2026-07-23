@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Mostrar registros semelhantes
+      - name: Mostrar posições dos registros semelhantes
         shell: bash
         run: |
           python - <<'PY'
@@ -20,19 +20,18 @@ jobs:
           text = Path('backups/gestamed-base-603-1503-fonte.html').read_text(encoding='utf-8')
           lower = text.lower()
           for termo in ['famotidina', 'cimetidina', 'omeprazol', 'pantoprazol']:
-              print('\n' + '='*30, termo, '='*30)
+              print('\n###', termo)
               start = 0
               found = 0
-              while found < 3:
+              while found < 12:
                   idx = lower.find(termo, start)
                   if idx < 0:
                       break
-                  a = max(0, idx - 1600)
-                  b = min(len(text), idx + 2200)
-                  print(text[a:b])
-                  print('\n--- OCORRENCIA ---\n')
+                  a = max(0, idx - 180)
+                  b = min(len(text), idx + 360)
+                  trecho = text[a:b].replace('\n', ' ')
+                  print('POS', idx, trecho)
                   start = idx + len(termo)
                   found += 1
-              if not found:
-                  print('NAO ENCONTRADO')
+              print('TOTAL MOSTRADO', found)
           PY
