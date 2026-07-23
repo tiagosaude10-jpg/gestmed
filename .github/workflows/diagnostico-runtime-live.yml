@@ -1,4 +1,4 @@
-name: Diagnostico runtime GestaMed
+name: Validacao isolada GestaMed
 
 on:
   pull_request:
@@ -8,111 +8,124 @@ permissions:
   contents: read
 
 jobs:
-  diagnostico:
+  validar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Montar pagina como o GitHub Pages
+        shell: bash
+        run: |
+          gem install jekyll -v 4.3.4 --no-document
+          jekyll build --destination _site
+          test -s _site/index.html
+          grep -q '2026.07.23.124' _site/index.html
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Inspecionar HTML publicado
-        shell: bash
-        run: |
-          set -e
-          URL="https://tiagosaude10-jpg.github.io/gestmed/?diagnostico=$(date +%s)"
-          curl -sS -L -D headers.txt "$URL" -o live.html
-
-      - name: Instalar Playwright
+      - name: Instalar navegador de teste
         shell: bash
         run: |
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
 
-      - name: Testar pesquisa e botoes
+      - name: Testar pesquisa, filtros e X
         shell: bash
         run: |
-          cat > diagnostico-live.mjs <<'JS'
+          python3 -m http.server 4173 --directory _site >server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 2
+          cat > validar.mjs <<'JS'
           import { chromium } from 'playwright';
-          const out = [];
-          const write = (...parts) => out.push(parts.map(p => typeof p === 'string' ? p : JSON.stringify(p, null, 2)).join(' '));
-          const url = 'https://tiagosaude10-jpg.github.io/gestmed/?diagnostico=' + Date.now();
+          import fs from 'node:fs';
+
+          const report = [];
+          const errors = [];
+          const say = (...parts) => report.push(parts.map(p => typeof p === 'string' ? p : JSON.stringify(p, null, 2)).join(' '));
           const browser = await chromium.launch({ headless: true });
           const page = await browser.newPage({ viewport: { width: 390, height: 844 }, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1' });
-          const logs = [];
-          page.on('console', msg => logs.push('CONSOLE ' + msg.type() + ': ' + msg.text()));
-          page.on('pageerror', err => logs.push('PAGEERROR: ' + (err.stack || err.message)));
-          page.on('requestfailed', req => logs.push('REQUESTFAILED: ' + req.url() + ' ' + (req.failure()?.errorText || '')));
-          const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
-          await page.waitForTimeout(3000);
-          const snapshot = await page.evaluate(() => {
-            const input = document.querySelector('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]');
-            const labels = Array.from(document.querySelectorAll('button')).map(b => (b.textContent || '').trim()).filter(Boolean);
-            return {
-              readyState: document.readyState,
-              build: document.documentElement.getAttribute('data-gestamed-build'),
-              base: document.documentElement.getAttribute('data-base-integrada'),
-              inputFound: !!input,
-              inputId: input?.id,
-              inputPlaceholder: input?.getAttribute('placeholder'),
-              applyFilters: typeof globalThis.applyFilters,
-              renderSuggestions: typeof globalThis.renderSuggestions,
-              rawData: typeof globalThis.RAW_DATA,
-              gestmedData: typeof globalThis.GESTMED_DATA,
-              dataLength: (() => { try { return typeof GESTMED_DATA !== 'undefined' && Array.isArray(GESTMED_DATA) ? GESTMED_DATA.length : null; } catch(e) { return null; } })(),
-              buttonCount: labels.length,
-              firstButtons: labels.slice(0, 45),
-              clearButton: !!document.querySelector('#gm-search-clear-button'),
-              strip: !!document.querySelector('.gm-filter-strip'),
-              overlayElements: Array.from(document.querySelectorAll('body *')).filter(el => {
-                const s = getComputedStyle(el);
-                const r = el.getBoundingClientRect();
-                return s.position === 'fixed' && s.display !== 'none' && s.visibility !== 'hidden' && Number(s.zIndex || 0) > 10 && r.width > innerWidth * .8 && r.height > innerHeight * .8;
-              }).slice(0, 10).map(el => ({tag:el.tagName,id:el.id,class:el.className,text:(el.textContent||'').trim().slice(0,120),z:getComputedStyle(el).zIndex}))
-            };
-          });
-          write('HTTP', response?.status());
-          write('SNAPSHOT', snapshot);
-          const input = page.locator('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]').first();
-          if (await input.count()) {
-            try {
-              await input.click({ force: true });
-              await input.fill('paracetamol');
-              await page.waitForTimeout(1200);
-              write('INPUT_VALUE_AFTER_FILL', await input.inputValue());
-              write('BODY_HAS_PARACETAMOL', (await page.locator('body').innerText()).toLowerCase().includes('paracetamol'));
-              write('VISIBLE_TEXT_AFTER_FILL', (await page.locator('body').innerText()).slice(0,1200));
-            } catch (e) { write('SEARCH_TEST_ERROR', e.stack || e.message); }
-          }
-          for (const name of ['Dor','Febre','Alergia','Náuseas','Analgésicos']) {
-            const button = page.getByRole('button', { name: new RegExp(name, 'i') }).first();
-            write('BUTTON_COUNT_' + name, await button.count());
-            if (await button.count()) {
-              try {
-                await button.click({ force: true });
-                await page.waitForTimeout(500);
-                write('BUTTON_CLICK_' + name, 'OK', await input.count() ? await input.inputValue() : 'NO_INPUT');
-              } catch (e) { write('BUTTON_CLICK_' + name, 'ERROR', e.stack || e.message); }
-            }
-          }
-          write('RUNTIME_LOGS', logs);
-          await page.screenshot({ path: 'live.png', fullPage: true });
-          await import('node:fs').then(fs => fs.writeFileSync('runtime.txt', out.join('\n\n'), 'utf8'));
-          console.log(out.join('\n\n'));
-          await browser.close();
-          JS
-          node diagnostico-live.mjs
+          page.on('pageerror', err => errors.push('PAGEERROR: ' + (err.stack || err.message)));
+          page.on('console', msg => { if (msg.type() === 'error') errors.push('CONSOLE: ' + msg.text()); });
 
-      - name: Enviar diagnóstico
+          const response = await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle', timeout: 120000 });
+          await page.waitForTimeout(2500);
+          const input = page.locator('#search, #searchInput, input[type="search"], input[placeholder*="medicamento" i]').first();
+          const build = await page.locator('html').getAttribute('data-gestamed-build');
+          say('HTTP', response?.status(), 'BUILD', build);
+          if (response?.status() !== 200) errors.push('HTTP diferente de 200');
+          if (build !== '2026.07.23.124') errors.push('Build incorreto: ' + build);
+          if (!(await input.count())) errors.push('Campo de pesquisa não encontrado');
+
+          if (await input.count()) {
+            await input.fill('paracetamol');
+            await page.waitForTimeout(700);
+            const typed = await input.inputValue();
+            say('DIGITACAO', typed);
+            if (typed !== 'paracetamol') errors.push('Digitação não permaneceu no campo');
+            const body = (await page.locator('body').innerText()).toLowerCase();
+            if (!body.includes('paracetamol')) errors.push('Pesquisa digitada não atualizou os resultados');
+          }
+
+          for (const name of ['Dor', 'Febre', 'Alergia', 'Náuseas', 'Vômitos', 'Analgésicos', 'Antibióticos', 'Protetores gástricos']) {
+            const button = page.getByRole('button', { name: new RegExp(name, 'i') }).first();
+            if (!(await button.count())) {
+              errors.push('Botão ausente: ' + name);
+              continue;
+            }
+            const query = await button.getAttribute('data-gm-query');
+            await button.click();
+            await page.waitForTimeout(500);
+            const value = await input.inputValue();
+            say('BOTAO', name, 'QUERY', query, 'VALOR', value);
+            if (!query) errors.push('Botão sem consulta: ' + name);
+            if (value !== query) errors.push('Clique não atualizou a pesquisa: ' + name + ' esperado=' + query + ' obtido=' + value);
+          }
+
+          const clear = page.locator('#gm-search-clear-button');
+          if (!(await clear.count())) {
+            errors.push('Botão X ausente');
+          } else {
+            await clear.click();
+            await page.waitForTimeout(500);
+            const cleared = await input.inputValue();
+            say('LIMPEZA', cleared === '' ? 'OK' : cleared);
+            if (cleared !== '') errors.push('Botão X não limpou a pesquisa');
+          }
+
+          await input.fill('dipirona');
+          await page.waitForTimeout(700);
+          if ((await input.inputValue()) !== 'dipirona') errors.push('Pesquisa manual falhou após usar filtros e X');
+          if (!(await page.locator('body').innerText()).toLowerCase().includes('dipirona')) errors.push('Resultados não atualizaram após nova pesquisa manual');
+
+          if (errors.length) {
+            say('ERROS', errors);
+          } else {
+            say('RESULTADO', 'TODOS OS TESTES PASSARAM');
+          }
+          fs.writeFileSync('validacao.txt', report.join('\n\n'), 'utf8');
+          await page.screenshot({ path: 'validacao.png', fullPage: true });
+          await browser.close();
+          console.log(report.join('\n\n'));
+          if (errors.length) process.exit(1);
+          JS
+          node validar.mjs
+
+      - name: Enviar relatório
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: diagnostico-runtime-live
+          name: validacao-isolada-gestamed
           path: |
-            live.html
-            headers.txt
-            runtime.txt
-            live.png
+            validacao.txt
+            validacao.png
+            server.log
+            _site/index.html
           retention-days: 1
