@@ -1,0 +1,182 @@
+name: Corrigir pesquisa de medicamentos
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-medication-search.yml'
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  corrigir:
+    if: github.event_name != 'issues' || github.event.issue.title == 'Executar correção da pesquisa de medicamentos'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar versão atual
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Aplicar correção isolada
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('app-core-stable.html')
+          html = path.read_text(encoding='utf-8')
+
+          marker = 'id="gmMedicationSearchFix"'
+          if marker in html:
+              print('A correção já está presente.')
+              raise SystemExit(0)
+
+          patch = r'''
+  <style id="gmMedicationSearchFixStyle">
+    input[placeholder*="Pesquisar medicamento"],
+    input[placeholder*="princípio ativo"],
+    input[placeholder*="principio ativo"],
+    input[type="search"] {
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+      position: relative !important;
+      z-index: 3 !important;
+    }
+  </style>
+  <script id="gmMedicationSearchFix">
+  (function () {
+    'use strict';
+
+    function localizarCampo() {
+      return document.querySelector(
+        'input[placeholder*="Pesquisar medicamento"], ' +
+        'input[placeholder*="princípio ativo"], ' +
+        'input[placeholder*="principio ativo"], ' +
+        'input[type="search"]'
+      );
+    }
+
+    function dispararBusca(campo) {
+      try {
+        campo.dispatchEvent(new Event('input', { bubbles: true }));
+        campo.dispatchEvent(new Event('change', { bubbles: true }));
+      } catch (erro) {
+        console.error('Falha ao disparar pesquisa:', erro);
+      }
+    }
+
+    function ativarPesquisa() {
+      var campo = localizarCampo();
+      if (!campo) return false;
+
+      campo.disabled = false;
+      campo.readOnly = false;
+      campo.removeAttribute('disabled');
+      campo.removeAttribute('readonly');
+      campo.style.pointerEvents = 'auto';
+      campo.style.touchAction = 'manipulation';
+
+      if (campo.dataset.gmMedicationSearchFixed === '1') return true;
+      campo.dataset.gmMedicationSearchFixed = '1';
+
+      campo.addEventListener('keydown', function (evento) {
+        if (evento.key === 'Enter') {
+          evento.preventDefault();
+          dispararBusca(campo);
+        }
+      });
+
+      var container = campo.closest('form, .search-box, .search-container, .search-wrap, .search-bar') || campo.parentElement;
+      if (container) {
+        container.style.pointerEvents = 'auto';
+
+        var botoes = container.querySelectorAll('button, [role="button"], .search-icon, .search-button');
+        botoes.forEach(function (botao) {
+          if (botao.dataset.gmMedicationSearchFixed === '1') return;
+          botao.dataset.gmMedicationSearchFixed = '1';
+          botao.style.pointerEvents = 'auto';
+          botao.addEventListener('click', function () {
+            campo.focus();
+            setTimeout(function () { dispararBusca(campo); }, 0);
+          });
+          botao.addEventListener('touchend', function () {
+            campo.focus();
+          }, { passive: true });
+        });
+
+        if (container.tagName === 'FORM' && container.dataset.gmMedicationSearchFormFixed !== '1') {
+          container.dataset.gmMedicationSearchFormFixed = '1';
+          container.addEventListener('submit', function (evento) {
+            evento.preventDefault();
+            campo.focus();
+            dispararBusca(campo);
+          });
+        }
+      }
+
+      return true;
+    }
+
+    function iniciar() {
+      if (ativarPesquisa()) return;
+      var tentativas = 0;
+      var timer = setInterval(function () {
+        tentativas += 1;
+        if (ativarPesquisa() || tentativas >= 24) clearInterval(timer);
+      }, 250);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', iniciar, { once: true });
+    } else {
+      iniciar();
+    }
+  })();
+  </script>
+'''
+
+          if '</body>' not in html:
+              raise SystemExit('Tag </body> não encontrada. Nenhum arquivo foi alterado.')
+
+          html = html.replace('</body>', patch + '\n</body>', 1)
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Validar que somente a pesquisa foi acrescentada
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path('app-core-stable.html').read_text(encoding='utf-8')
+          assert html.count('id="gmMedicationSearchFix"') == 1
+          assert 'input[placeholder*="Pesquisar medicamento"]' in html
+          assert 'dispararBusca(campo)' in html
+          assert html.count('<!DOCTYPE html>') == 1
+          print('Correção isolada validada.')
+          PY
+
+      - name: Publicar e remover rotina temporária
+        shell: bash
+        run: |
+          git config user.name "GestaMed Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app-core-stable.html
+          git rm .github/workflows/fix-medication-search.yml
+          if git diff --cached --quiet; then
+            echo 'Nenhuma alteração pendente.'
+            exit 0
+          fi
+          git commit -m "Corrige somente a pesquisa de medicamentos"
+          git push origin main
+
+      - name: Fechar solicitação
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close ${{ github.event.issue.number }} --comment "Pesquisa de medicamentos corrigida e validada."
