@@ -1,0 +1,69 @@
+name: Auditar Buscopan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/auditar-buscopan.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  auditar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Auditar base de medicamentos
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          text = Path('index.html').read_text(encoding='utf-8')
+          terms = ['buscopan', 'butilbrometo', 'escopolamina', 'hioscina', 'buscoduo']
+          out = ['# Auditoria Buscopan', '']
+
+          for term in terms:
+              matches = list(re.finditer(term, text, flags=re.I))
+              out.append(f'## {term}')
+              out.append(f'- Ocorrências: {len(matches)}')
+              for i, m in enumerate(matches[:20], 1):
+                  a = max(0, m.start()-350)
+                  b = min(len(text), m.end()+650)
+                  snippet = text[a:b].replace('```', '')
+                  out.append(f'### ocorrência {i}')
+                  out.append('```text')
+                  out.append(snippet)
+                  out.append('```')
+              out.append('')
+
+          ids = sorted(set(re.findall(r'\bGESTMED_[A-Z0-9_]+\b', text)))
+          out.append('## Identificadores GESTMED')
+          for name in ids:
+              out.append(f'- {name}')
+
+          for pattern in [
+              r'const\s+(GESTMED_[A-Z0-9_]+)\s*=\s*',
+              r'function\s+([A-Za-z0-9_]*(?:med|busca|search)[A-Za-z0-9_]*)\s*\(',
+          ]:
+              out.append('')
+              out.append(f'## Padrão `{pattern}`')
+              for m in re.finditer(pattern, text, flags=re.I):
+                  a = max(0, m.start()-120)
+                  b = min(len(text), m.start()+900)
+                  out.append('```text')
+                  out.append(text[a:b].replace('```', ''))
+                  out.append('```')
+
+          Path('AUDITORIA_BUSCOPAN.md').write_text('\n'.join(out)+'\n', encoding='utf-8')
+          print('\n'.join(out[:60]))
+          PY
+      - name: Publicar auditoria
+        run: |
+          git config user.name 'GestaMed Auditor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add AUDITORIA_BUSCOPAN.md
+          git commit -m 'Audita presença do Buscopan na base [skip ci]' || exit 0
+          git push
