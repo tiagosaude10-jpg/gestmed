@@ -122,6 +122,9 @@ jobs:
       - name: Esclarecer hepatite B no painel
         run: python scripts/esclarecer_hepatite_b.py
 
+      - name: Restaurar linha Buscopan
+        run: python scripts/restaurar_buscopan.py
+
       - name: Publicar index atualizado
         run: |
           if git diff --quiet -- index.html; then
@@ -131,5 +134,5 @@ jobs:
           git config user.name 'GestaMed Atualizador'
           git config user.email 'actions@users.noreply.github.com'
           git add index.html
-          git commit -m 'Atualiza painel de exames e hepatite B [skip ci]'
+          git commit -m 'Restaura Buscopan e variantes na base [skip ci]'
           git push
