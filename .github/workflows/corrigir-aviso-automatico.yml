@@ -1,6 +1,9 @@
 name: Corrigir falso aviso do GestaMed
 
 on:
+  push:
+    paths:
+      - '.github/workflows/corrigir-aviso-automatico.yml'
   issues:
     types: [opened]
   schedule:
@@ -13,7 +16,7 @@ permissions:
 
 jobs:
   corrigir:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event.issue.title == 'Executar correção do falso aviso'
+    if: github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event.issue.title == 'Executar correção do falso aviso'
     runs-on: ubuntu-latest
     steps:
       - name: Baixar repositório
