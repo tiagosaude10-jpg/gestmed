@@ -1,0 +1,31 @@
+name: Aplicar painel de exames e vacinas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/corrigir_painel_exames_vacinas.py'
+      - '.github/workflows/aplicar-painel-exames-vacinas.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar painel revisado
+        run: python scripts/corrigir_painel_exames_vacinas.py
+      - name: Publicar painel revisado
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Nenhuma alteração necessária.'
+            exit 0
+          fi
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Restaura painel completo de exames e vacinas [skip ci]'
+          git push
