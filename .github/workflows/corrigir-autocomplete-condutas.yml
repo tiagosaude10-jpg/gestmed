@@ -1,0 +1,31 @@
+name: Corrigir autocomplete das patologias
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/corrigir_autocomplete_condutas.py'
+      - '.github/workflows/corrigir-autocomplete-condutas.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Corrigir autocomplete
+        run: python scripts/corrigir_autocomplete_condutas.py
+      - name: Publicar correção
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Nenhuma alteração necessária.'
+            exit 0
+          fi
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Corrige fechamento do autocomplete das patologias [skip ci]'
+          git push
