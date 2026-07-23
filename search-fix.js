@@ -41,6 +41,21 @@
     var container = campo.closest('form, .search-box, .search-container, .search-wrap, .search-bar') || campo.parentElement;
     if (container) {
       container.style.pointerEvents = 'auto';
+      container.style.touchAction = 'manipulation';
+
+      if (container.dataset.gmSearchContainerFixed !== '1') {
+        container.dataset.gmSearchContainerFixed = '1';
+        container.addEventListener('click', function (evento) {
+          if (evento.target !== campo) {
+            campo.focus();
+            if (campo.value.trim()) setTimeout(function () { dispararBusca(campo); }, 0);
+          }
+        });
+        container.addEventListener('touchend', function (evento) {
+          if (evento.target !== campo) campo.focus();
+        }, { passive: true });
+      }
+
       container.querySelectorAll('button, [role="button"], .search-icon, .search-button').forEach(function (botao) {
         if (botao.dataset.gmSearchFixed === '1') return;
         botao.dataset.gmSearchFixed = '1';
