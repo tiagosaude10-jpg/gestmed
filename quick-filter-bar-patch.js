@@ -1,9 +1,16 @@
 (function () {
   'use strict';
 
-  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-121';
+  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-124';
   if (document.documentElement.getAttribute('data-gm-quick-filter-patch') === PATCH_ID) return;
   document.documentElement.setAttribute('data-gm-quick-filter-patch', PATCH_ID);
+
+  var originalFilters = [
+    { label: 'Dor', terms: ['dor', 'analgésico', 'analgesia'] },
+    { label: 'Febre', terms: ['febre', 'antitérmico', 'antipirético'] },
+    { label: 'Alergia', terms: ['alergia', 'antialérgico', 'anti-histamínico'] },
+    { label: 'Náuseas', terms: ['náusea', 'antiemético', 'vômito'] }
+  ];
 
   var clinicalFilters = [
     { label: 'Vômitos', icon: '🤮', terms: ['vômito', 'êmese', 'antiemético', 'ondansetrona', 'metoclopramida'] },
@@ -139,26 +146,56 @@
   }
 
   function findSearchInput() {
-    return document.querySelector('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]');
+    return document.querySelector('#search, #searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]');
+  }
+
+  function setInputValue(input, value) {
+    var descriptor = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value');
+    if (descriptor && typeof descriptor.set === 'function') descriptor.set.call(input, value);
+    else input.value = value;
+  }
+
+  function dispatchSearch(input) {
+    ['input', 'change', 'search'].forEach(function (type) {
+      input.dispatchEvent(new Event(type, { bubbles: true }));
+    });
+    try {
+      input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'Enter', code: 'Enter' }));
+    } catch (error) {
+      input.dispatchEvent(new Event('keyup', { bubbles: true }));
+    }
   }
 
   function runSearch(term, clickedButton, strip) {
     var input = findSearchInput();
-    if (!input) return;
+    if (!input || !term) return;
 
-    Array.prototype.forEach.call(strip.querySelectorAll('.gm-added-filter'), function (button) {
+    Array.prototype.forEach.call(strip.querySelectorAll('.gm-filter-active'), function (button) {
       button.classList.remove('gm-filter-active');
+      button.setAttribute('aria-pressed', 'false');
     });
     clickedButton.classList.add('gm-filter-active');
+    clickedButton.setAttribute('aria-pressed', 'true');
 
-    input.value = term;
-    ['input', 'keyup', 'change'].forEach(function (type) {
-      input.dispatchEvent(new Event(type, { bubbles: true }));
-    });
+    setInputValue(input, term);
+    dispatchSearch(input);
+  }
 
-    try {
-      if (typeof applyFilters === 'function') applyFilters();
-    } catch (error) {}
+  function ensureDelegatedHandler() {
+    if (document.documentElement.getAttribute('data-gm-filter-delegation') === PATCH_ID) return;
+    document.documentElement.setAttribute('data-gm-filter-delegation', PATCH_ID);
+
+    document.addEventListener('click', function (event) {
+      var target = event.target && event.target.closest ? event.target.closest('.gm-filter-strip button, .gm-filter-strip [role="button"], .gm-filter-strip a') : null;
+      if (!target) return;
+      var term = target.getAttribute('data-gm-query');
+      if (!term) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      runSearch(term, target, target.closest('.gm-filter-strip'));
+    }, true);
   }
 
   function cleanClone(template) {
@@ -166,6 +203,7 @@
     clone.removeAttribute('id');
     clone.removeAttribute('onclick');
     clone.removeAttribute('href');
+    clone.removeAttribute('disabled');
     Array.prototype.slice.call(clone.attributes).forEach(function (attribute) {
       if (attribute.name.indexOf('data-') === 0) clone.removeAttribute(attribute.name);
     });
@@ -174,12 +212,14 @@
     return clone;
   }
 
-  function makeButton(template, definition, group, queryInfo, strip) {
+  function makeButton(template, definition, group, queryInfo) {
     var button = cleanClone(template);
     button.classList.add('gm-added-filter', group === 'class' ? 'gm-class-filter' : 'gm-clinical-filter');
     button.setAttribute('data-gm-added-filter', definition.label);
+    button.setAttribute('data-gm-query', queryInfo.term);
     button.setAttribute('data-gm-result-count', String(queryInfo.count));
     button.setAttribute('aria-label', definition.label);
+    button.setAttribute('aria-pressed', 'false');
     button.setAttribute('title', definition.label);
 
     if (group === 'class') {
@@ -199,14 +239,6 @@
 
     button.appendChild(icon);
     button.appendChild(label);
-
-    button.addEventListener('click', function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-      runSearch(queryInfo.term, button, strip);
-    }, true);
-
     return button;
   }
 
@@ -226,10 +258,34 @@
       '.gm-clinical-filter{box-shadow:0 2px 7px rgba(15,23,42,.08)!important;}',
       '.gm-class-filter{background:var(--gm-filter-bg)!important;border-color:var(--gm-filter-border)!important;color:var(--gm-filter-text)!important;}',
       '.gm-added-filter:active{transform:scale(.97)!important;filter:brightness(.98)!important;}',
-      '.gm-added-filter.gm-filter-active{box-shadow:0 0 0 3px rgba(8,145,178,.18),0 4px 10px rgba(15,23,42,.12)!important;transform:translateY(-1px)!important;}',
+      '.gm-filter-active{box-shadow:0 0 0 3px rgba(8,145,178,.18),0 4px 10px rgba(15,23,42,.12)!important;transform:translateY(-1px)!important;}',
       '@media (prefers-reduced-motion:reduce){.gm-added-filter{transition:none!important;}}'
     ].join('');
     document.head.appendChild(style);
+  }
+
+  function prepareOriginals(found, index) {
+    found.originals.forEach(function (button, position) {
+      var definition = originalFilters[position];
+      var queryInfo = chooseTerm(definition, index);
+      button.setAttribute('data-gm-original-filter', definition.label);
+      button.setAttribute('data-gm-query', queryInfo.term);
+      button.setAttribute('data-gm-result-count', String(queryInfo.count));
+      button.setAttribute('aria-pressed', 'false');
+      if (button.tagName === 'BUTTON') button.type = 'button';
+    });
+  }
+
+  function refreshQueries(strip, index) {
+    var definitions = clinicalFilters.concat(therapeuticFilters);
+    Array.prototype.forEach.call(strip.querySelectorAll('.gm-added-filter'), function (button) {
+      var label = button.getAttribute('data-gm-added-filter');
+      var definition = definitions.find(function (item) { return item.label === label; });
+      if (!definition) return;
+      var queryInfo = chooseTerm(definition, index);
+      button.setAttribute('data-gm-query', queryInfo.term);
+      button.setAttribute('data-gm-result-count', String(queryInfo.count));
+    });
   }
 
   function applyPatch() {
@@ -238,10 +294,17 @@
 
     var strip = found.strip;
     var expectedAdded = clinicalFilters.length + therapeuticFilters.length;
-    if (strip.getAttribute('data-gm-filter-patch') === PATCH_ID && strip.querySelectorAll('.gm-added-filter').length === expectedAdded) return true;
+    var index = buildIndex();
 
     ensureStyle();
+    ensureDelegatedHandler();
     strip.classList.add('gm-filter-strip');
+    prepareOriginals(found, index);
+
+    if (strip.getAttribute('data-gm-filter-patch') === PATCH_ID && strip.querySelectorAll('.gm-added-filter').length === expectedAdded) {
+      refreshQueries(strip, index);
+      return true;
+    }
 
     var keep = found.originals;
     var clickables = Array.prototype.slice.call(strip.querySelectorAll('button, [role="button"], a'));
@@ -252,9 +315,8 @@
       element.remove();
     });
 
-    var index = buildIndex();
     clinicalFilters.forEach(function (definition) {
-      strip.appendChild(makeButton(found.template, definition, 'clinical', chooseTerm(definition, index), strip));
+      strip.appendChild(makeButton(found.template, definition, 'clinical', chooseTerm(definition, index)));
     });
 
     var divider = document.createElement('span');
@@ -263,7 +325,7 @@
     strip.appendChild(divider);
 
     therapeuticFilters.forEach(function (definition) {
-      strip.appendChild(makeButton(found.template, definition, 'class', chooseTerm(definition, index), strip));
+      strip.appendChild(makeButton(found.template, definition, 'class', chooseTerm(definition, index)));
     });
 
     strip.setAttribute('data-gm-filter-patch', PATCH_ID);
