@@ -12,4 +12,8 @@ payload = ''.join(part.read_text(encoding='utf-8').strip() for part in parts)
 source = zlib.decompress(base64.b64decode(payload)).decode('utf-8')
 exec(compile(source, 'painel_exames_payload.py', 'exec'))
 
-# Revisão acionada para explicitar que HBsAg não é repetição universal do 3º trimestre.
+# Aplica sempre a camada final validada: vacinas completas e orientação clara
+# sobre HBsAg, impedindo que o painel antigo volte em futuras atualizações.
+patch_path = Path(__file__).with_name('corrigir_painel_exames_vacinas.py')
+patch_source = patch_path.read_text(encoding='utf-8')
+exec(compile(patch_source, str(patch_path), 'exec'))
