@@ -1,0 +1,53 @@
+name: Auditar painel final de exames
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/auditar-painel-final.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  auditar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar conteúdo final
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path('index.html').read_text(encoding='utf-8')
+          tokens = [
+              'gestamed-build" content="2026.07.23.93',
+              'Vacinas da gestante — Calendário Nacional',
+              'dTpa — difteria, tétano e coqueluche',
+              'a partir de 20 semanas · toda gestação',
+              'VSR — vírus sincicial respiratório',
+              'a partir de 28 semanas · toda gestação',
+              'Não repetir de rotina no 3º trimestre',
+              'Não repetir apenas por estar no 3º trimestre.',
+              'Influenza',
+              'Covid-19',
+              'Hepatite B — HBsAg ou teste rápido',
+          ]
+          out = ['# Auditoria final do painel de exames e vacinas', '']
+          for token in tokens:
+              out.append(f'- {token}: {text.count(token)} ocorrência(s)')
+          for title, needle in [('HBsAg inicial','Hepatite B — HBsAg ou teste rápido'),('Vacinas','Vacinas da gestante — Calendário Nacional'),('HBsAg no parto','Não repetir apenas por estar no 3º trimestre.')]:
+              idx = text.find(needle)
+              out += ['', '## ' + title, f'Índice: {idx}', '```html', text[max(0,idx-700):idx+3000] if idx >= 0 else 'NÃO ENCONTRADO', '```']
+          Path('AUDITORIA_PAINEL_FINAL.md').write_text('\n'.join(out), encoding='utf-8')
+          if any(text.count(token) < 1 for token in tokens):
+              raise SystemExit('Falha: conteúdo obrigatório ausente.')
+          PY
+      - name: Publicar auditoria
+        run: |
+          git config user.name 'GestaMed Auditor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add AUDITORIA_PAINEL_FINAL.md
+          git commit -m 'Audita painel final de exames e vacinas [skip ci]' || exit 0
+          git push
