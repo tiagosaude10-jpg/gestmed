@@ -1,0 +1,98 @@
+name: Restaurar Buscopan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/restaurar-buscopan.yml'
+      - 'scripts/restaurar_buscopan.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restaurar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Restaurar Buscopan e variantes
+        run: python scripts/restaurar_buscopan.py
+
+      - name: Validar presença e sintaxe
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import re
+
+          text = Path('index.html').read_text(encoding='utf-8')
+          required = [
+              'Butilbrometo de escopolamina (Buscopan)',
+              'Butilbrometo de escopolamina + dipirona (Buscopan Composto)',
+              'Butilbrometo de escopolamina + paracetamol (Buscoduo/Buscopan Duo)',
+              'Buscopan Pediátrico',
+              'Buscopan Composto gotas',
+              'Buscoduo',
+          ]
+          missing = [term for term in required if term not in text]
+          if missing:
+              raise SystemExit('Termos ausentes: ' + ', '.join(missing))
+
+          start = text.index('const GESTMED_STRINGS = ') + len('const GESTMED_STRINGS = ')
+          end = text.index(';\n\nconst GESTMED_COMPACT', start)
+          strings = json.loads(text[start:end])
+
+          start = text.index('const GESTMED_COMPACT = ') + len('const GESTMED_COMPACT = ')
+          end = text.index(';\n\nconst GESTMED_DATA', start)
+          records = json.loads(text[start:end])
+
+          matches = []
+          for record in records:
+              searchable = ' '.join([
+                  record.get('principio_ativo', ''),
+                  record.get('principio_ativo_base', ''),
+                  record.get('sinonimos_nomes_comerciais', ''),
+              ]).casefold()
+              if 'buscopan' in searchable or 'buscoduo' in searchable:
+                  matches.append(record)
+
+          if len(matches) != 3:
+              raise SystemExit(f'Esperados 3 registros clínicos da linha Buscopan; encontrados {len(matches)}.')
+
+          if 'content="2026.07.23.91"' not in text:
+              raise SystemExit('Build 2026.07.23.91 não aplicado.')
+
+          print(f'Validação concluída: {len(records)} registros totais e {len(matches)} registros da linha Buscopan.')
+          PY
+
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          text = Path('index.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>', text, flags=re.S | re.I)
+          out = Path('/tmp/gestmed-js')
+          out.mkdir(exist_ok=True)
+          for i, script in enumerate(scripts):
+              (out / f'script-{i}.js').write_text(script, encoding='utf-8')
+          print(f'{len(scripts)} blocos JavaScript extraídos.')
+          PY
+
+          for file in /tmp/gestmed-js/*.js; do
+            node --check "$file"
+          done
+
+      - name: Publicar index atualizado
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Nenhuma alteração necessária.'
+            exit 0
+          fi
+          git config user.name 'GestaMed Atualizador'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Restaura Buscopan, Buscopan Composto e Buscoduo [skip ci]'
+          git push
