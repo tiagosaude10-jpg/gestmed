@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-119';
+  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-120';
   if (document.documentElement.getAttribute('data-gm-quick-filter-patch') === PATCH_ID) return;
   document.documentElement.setAttribute('data-gm-quick-filter-patch', PATCH_ID);
 
@@ -49,6 +49,19 @@
       .trim();
   }
 
+  function wordsOnly(value) {
+    return normalize(value)
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function matchesLabel(element, label) {
+    var text = wordsOnly(element && element.textContent);
+    var wanted = wordsOnly(label);
+    return text === wanted || text.slice(-(wanted.length + 1)) === ' ' + wanted;
+  }
+
   function getData() {
     try {
       if (typeof RAW_DATA !== 'undefined' && Array.isArray(RAW_DATA)) return RAW_DATA;
@@ -77,7 +90,6 @@
   function chooseTerm(definition, index) {
     var bestTerm = definition.terms[0];
     var bestCount = 0;
-
     definition.terms.forEach(function (term) {
       var normalizedTerm = normalize(term);
       var count = index.reduce(function (total, text) {
@@ -88,48 +100,53 @@
         bestTerm = term;
       }
     });
-
     return { term: bestTerm, count: bestCount };
   }
 
-  function exactClickable(label) {
-    var wanted = normalize(label);
-    return Array.prototype.find.call(
-      document.querySelectorAll('button, [role="button"], a'),
-      function (element) {
-        return normalize(element.textContent) === wanted;
-      }
-    );
+  function findClickable(label) {
+    var elements = document.querySelectorAll('button, [role="button"], a');
+    return Array.prototype.find.call(elements, function (element) {
+      return matchesLabel(element, label);
+    });
   }
 
   function locateStrip() {
-    var buttons = [exactClickable('Dor'), exactClickable('Febre'), exactClickable('Alergia'), exactClickable('Náusea')];
-    if (!buttons[3]) buttons[3] = exactClickable('Náuseas');
-    buttons = buttons.filter(Boolean);
-    if (buttons.length < 3) return null;
+    var dor = findClickable('Dor');
+    var febre = findClickable('Febre');
+    var alergia = findClickable('Alergia');
+    var nauseas = findClickable('Náuseas') || findClickable('Náusea');
+    var buttons = [dor, febre, alergia, nauseas].filter(Boolean);
+    if (buttons.length < 4) return null;
 
-    var ancestor = buttons[0].parentElement;
+    var ancestor = dor.parentElement;
+    var fallback = null;
     var depth = 0;
-    while (ancestor && depth < 7) {
-      var contained = buttons.filter(function (button) { return ancestor.contains(button); }).length;
-      if (contained === buttons.length) return { strip: ancestor, template: buttons[0] };
+    while (ancestor && depth < 8) {
+      var containsAll = buttons.every(function (button) { return ancestor.contains(button); });
+      if (containsAll) {
+        if (!fallback) fallback = ancestor;
+        var style = window.getComputedStyle(ancestor);
+        var rect = ancestor.getBoundingClientRect();
+        var isHorizontal = style.display.indexOf('flex') !== -1 || style.overflowX === 'auto' || style.overflowX === 'scroll' || ancestor.scrollWidth > ancestor.clientWidth;
+        if (isHorizontal && rect.height > 0 && rect.height < 160) {
+          return { strip: ancestor, template: dor, originals: buttons };
+        }
+      }
       ancestor = ancestor.parentElement;
       depth += 1;
     }
-    return null;
+    return fallback ? { strip: fallback, template: dor, originals: buttons } : null;
   }
 
   function findSearchInput() {
-    return document.querySelector(
-      '#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]'
-    );
+    return document.querySelector('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]');
   }
 
   function runSearch(term, clickedButton, strip) {
     var input = findSearchInput();
     if (!input) return;
 
-    strip.querySelectorAll('.gm-added-filter').forEach(function (button) {
+    Array.prototype.forEach.call(strip.querySelectorAll('.gm-added-filter'), function (button) {
       button.classList.remove('gm-filter-active');
     });
     clickedButton.classList.add('gm-filter-active');
@@ -180,7 +197,8 @@
   }
 
   function ensureStyle() {
-    if (document.getElementById('gm-quick-filter-style')) return;
+    var oldStyle = document.getElementById('gm-quick-filter-style');
+    if (oldStyle) oldStyle.remove();
     var style = document.createElement('style');
     style.id = 'gm-quick-filter-style';
     style.textContent = [
@@ -201,20 +219,24 @@
     if (!found) return false;
 
     var strip = found.strip;
-    if (strip.getAttribute('data-gm-filter-patch') === PATCH_ID) return true;
-
-    strip.querySelectorAll('.gm-added-filter, .gm-filter-divider').forEach(function (element) {
-      element.remove();
-    });
+    var expectedAdded = clinicalFilters.length + therapeuticFilters.length;
+    if (strip.getAttribute('data-gm-filter-patch') === PATCH_ID && strip.querySelectorAll('.gm-added-filter').length === expectedAdded) return true;
 
     ensureStyle();
     strip.classList.add('gm-filter-strip');
-    strip.setAttribute('data-gm-filter-patch', PATCH_ID);
+
+    var keep = found.originals;
+    var clickables = Array.prototype.slice.call(strip.querySelectorAll('button, [role="button"], a'));
+    clickables.forEach(function (element) {
+      if (keep.indexOf(element) === -1) element.remove();
+    });
+    Array.prototype.forEach.call(strip.querySelectorAll('.gm-added-filter, .gm-filter-divider'), function (element) {
+      element.remove();
+    });
 
     var index = buildIndex();
     clinicalFilters.forEach(function (definition) {
-      var queryInfo = chooseTerm(definition, index);
-      strip.appendChild(makeButton(found.template, definition, 'clinical', queryInfo, strip));
+      strip.appendChild(makeButton(found.template, definition, 'clinical', chooseTerm(definition, index), strip));
     });
 
     var divider = document.createElement('span');
@@ -223,18 +245,19 @@
     strip.appendChild(divider);
 
     therapeuticFilters.forEach(function (definition) {
-      var queryInfo = chooseTerm(definition, index);
-      strip.appendChild(makeButton(found.template, definition, 'class', queryInfo, strip));
+      strip.appendChild(makeButton(found.template, definition, 'class', chooseTerm(definition, index), strip));
     });
 
-    strip.setAttribute('data-gm-filter-groups', 'clinical:' + clinicalFilters.length + ';classes:' + therapeuticFilters.length);
+    strip.setAttribute('data-gm-filter-patch', PATCH_ID);
+    strip.setAttribute('data-gm-filter-groups', 'clinical:7;classes:' + therapeuticFilters.length);
+    strip.scrollLeft = 0;
     return true;
   }
 
   var attempts = 0;
   function start() {
     attempts += 1;
-    if (applyPatch() || attempts >= 40) return;
+    if (applyPatch() || attempts >= 60) return;
     window.setTimeout(start, 250);
   }
 
@@ -246,7 +269,7 @@
 
   var observer = new MutationObserver(function () {
     window.clearTimeout(observer._gmTimer);
-    observer._gmTimer = window.setTimeout(applyPatch, 120);
+    observer._gmTimer = window.setTimeout(applyPatch, 150);
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
