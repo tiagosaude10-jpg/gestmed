@@ -1,0 +1,82 @@
+name: Aplicar correção da pesquisa
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Corrigir somente a pesquisa de medicamentos
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('app-core-stable.html')
+          html = path.read_text(encoding='utf-8')
+          marker = 'id="gmMedicationSearchFix"'
+
+          if marker not in html:
+              patch = r'''
+  <style id="gmMedicationSearchFixStyle">
+    input[placeholder*="Pesquisar medicamento"],input[placeholder*="princípio ativo"],input[placeholder*="principio ativo"],input[type="search"]{pointer-events:auto!important;touch-action:manipulation!important;position:relative!important;z-index:3!important}
+  </style>
+  <script id="gmMedicationSearchFix">
+  (function(){
+    'use strict';
+    function campo(){return document.querySelector('input[placeholder*="Pesquisar medicamento"],input[placeholder*="princípio ativo"],input[placeholder*="principio ativo"],input[type="search"]');}
+    function buscar(el){el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}
+    function ativar(){
+      var el=campo();if(!el)return false;
+      el.disabled=false;el.readOnly=false;el.removeAttribute('disabled');el.removeAttribute('readonly');el.style.pointerEvents='auto';
+      if(el.dataset.gmMedicationSearchFixed==='1')return true;
+      el.dataset.gmMedicationSearchFixed='1';
+      el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();buscar(el);}});
+      var box=el.closest('form,.search-box,.search-container,.search-wrap,.search-bar')||el.parentElement;
+      if(box){
+        box.style.pointerEvents='auto';
+        box.querySelectorAll('button,[role="button"],.search-icon,.search-button').forEach(function(btn){
+          btn.style.pointerEvents='auto';
+          btn.addEventListener('click',function(){el.focus();setTimeout(function(){buscar(el);},0);});
+          btn.addEventListener('touchend',function(){el.focus();},{passive:true});
+        });
+        if(box.tagName==='FORM')box.addEventListener('submit',function(e){e.preventDefault();el.focus();buscar(el);});
+      }
+      return true;
+    }
+    function iniciar(){if(ativar())return;var n=0,t=setInterval(function(){n++;if(ativar()||n>=24)clearInterval(t);},250);}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',iniciar,{once:true});else iniciar();
+  })();
+  </script>
+'''
+              if '</body>' not in html:
+                  raise SystemExit('Tag </body> não encontrada.')
+              html = html.replace('</body>', patch + '\n</body>', 1)
+              path.write_text(html, encoding='utf-8')
+
+          final = path.read_text(encoding='utf-8')
+          assert final.count(marker) == 1
+          assert 'dispararBusca' not in final or 'gmMedicationSearchFix' in final
+          assert final.count('<!DOCTYPE html>') == 1
+          PY
+
+      - name: Publicar correção validada
+        shell: bash
+        run: |
+          git config user.name "GestaMed Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm -f .github/workflows/fix-medication-search.yml .github/workflows/fix-medication-search-pr.yml
+          git add app-core-stable.html
+          git commit -m "Corrige somente a pesquisa de medicamentos"
+          git push origin main
