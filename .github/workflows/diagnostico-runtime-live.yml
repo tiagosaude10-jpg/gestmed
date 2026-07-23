@@ -22,16 +22,7 @@ jobs:
         run: |
           set -e
           URL="https://tiagosaude10-jpg.github.io/gestmed/?diagnostico=$(date +%s)"
-          echo "URL=$URL"
           curl -sS -L -D headers.txt "$URL" -o live.html
-          echo "### CABECALHOS"
-          cat headers.txt
-          echo "### MARCADORES"
-          grep -o "data-gestamed-build[^<]*" live.html | head -5 || true
-          grep -o "2026\.07\.23\.[0-9]*" live.html | sort -u || true
-          grep -o "gestamed-search-clear-size-[^'\"]*" live.html | head -3 || true
-          grep -o "gestamed-quick-filter-bar-[^'\"]*" live.html | head -3 || true
-          echo "TAMANHO=$(wc -c < live.html)"
 
       - name: Instalar Playwright
         shell: bash
@@ -45,57 +36,71 @@ jobs:
         run: |
           cat > diagnostico-live.mjs <<'JS'
           import { chromium } from 'playwright';
+          const out = [];
+          const write = (...parts) => out.push(parts.map(p => typeof p === 'string' ? p : JSON.stringify(p, null, 2)).join(' '));
           const url = 'https://tiagosaude10-jpg.github.io/gestmed/?diagnostico=' + Date.now();
           const browser = await chromium.launch({ headless: true });
           const page = await browser.newPage({ viewport: { width: 390, height: 844 }, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1' });
           const logs = [];
           page.on('console', msg => logs.push('CONSOLE ' + msg.type() + ': ' + msg.text()));
-          page.on('pageerror', err => logs.push('PAGEERROR: ' + err.stack));
+          page.on('pageerror', err => logs.push('PAGEERROR: ' + (err.stack || err.message)));
           page.on('requestfailed', req => logs.push('REQUESTFAILED: ' + req.url() + ' ' + (req.failure()?.errorText || '')));
           const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
           await page.waitForTimeout(3000);
           const snapshot = await page.evaluate(() => {
             const input = document.querySelector('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]');
-            const buttons = Array.from(document.querySelectorAll('button')).map(b => (b.textContent || '').trim()).filter(Boolean).slice(0, 80);
+            const labels = Array.from(document.querySelectorAll('button')).map(b => (b.textContent || '').trim()).filter(Boolean);
             return {
-              statusText: document.readyState,
+              readyState: document.readyState,
               build: document.documentElement.getAttribute('data-gestamed-build'),
               base: document.documentElement.getAttribute('data-base-integrada'),
-              title: document.title,
-              bodyTextStart: document.body?.innerText?.slice(0, 600),
               inputFound: !!input,
               inputId: input?.id,
               inputPlaceholder: input?.getAttribute('placeholder'),
               applyFilters: typeof globalThis.applyFilters,
               renderSuggestions: typeof globalThis.renderSuggestions,
-              rawDataType: typeof globalThis.RAW_DATA,
-              gestmedDataType: typeof globalThis.GESTMED_DATA,
-              buttonCount: document.querySelectorAll('button').length,
-              buttons
+              rawData: typeof globalThis.RAW_DATA,
+              gestmedData: typeof globalThis.GESTMED_DATA,
+              dataLength: (() => { try { return typeof GESTMED_DATA !== 'undefined' && Array.isArray(GESTMED_DATA) ? GESTMED_DATA.length : null; } catch(e) { return null; } })(),
+              buttonCount: labels.length,
+              firstButtons: labels.slice(0, 45),
+              clearButton: !!document.querySelector('#gm-search-clear-button'),
+              strip: !!document.querySelector('.gm-filter-strip'),
+              overlayElements: Array.from(document.querySelectorAll('body *')).filter(el => {
+                const s = getComputedStyle(el);
+                const r = el.getBoundingClientRect();
+                return s.position === 'fixed' && s.display !== 'none' && s.visibility !== 'hidden' && Number(s.zIndex || 0) > 10 && r.width > innerWidth * .8 && r.height > innerHeight * .8;
+              }).slice(0, 10).map(el => ({tag:el.tagName,id:el.id,class:el.className,text:(el.textContent||'').trim().slice(0,120),z:getComputedStyle(el).zIndex}))
             };
           });
-          console.log('HTTP', response?.status());
-          console.log('SNAPSHOT', JSON.stringify(snapshot, null, 2));
+          write('HTTP', response?.status());
+          write('SNAPSHOT', snapshot);
           const input = page.locator('#searchInput, input[type="search"], input[placeholder*="medicamento" i], input[placeholder*="princípio" i], input[placeholder*="principio" i]').first();
           if (await input.count()) {
-            await input.fill('paracetamol');
-            await page.waitForTimeout(1200);
-            console.log('INPUT_VALUE_AFTER_FILL', await input.inputValue());
-            console.log('BODY_HAS_PARACETAMOL', (await page.locator('body').innerText()).toLowerCase().includes('paracetamol'));
+            try {
+              await input.click({ force: true });
+              await input.fill('paracetamol');
+              await page.waitForTimeout(1200);
+              write('INPUT_VALUE_AFTER_FILL', await input.inputValue());
+              write('BODY_HAS_PARACETAMOL', (await page.locator('body').innerText()).toLowerCase().includes('paracetamol'));
+              write('VISIBLE_TEXT_AFTER_FILL', (await page.locator('body').innerText()).slice(0,1200));
+            } catch (e) { write('SEARCH_TEST_ERROR', e.stack || e.message); }
           }
-          const dor = page.getByRole('button', { name: /dor/i }).first();
-          if (await dor.count()) {
-            await dor.click({ force: true });
-            await page.waitForTimeout(800);
-            console.log('DOR_CLICK_OK', true);
-            if (await input.count()) console.log('INPUT_AFTER_DOR', await input.inputValue());
-          } else {
-            console.log('DOR_CLICK_OK', false);
+          for (const name of ['Dor','Febre','Alergia','Náuseas','Analgésicos']) {
+            const button = page.getByRole('button', { name: new RegExp(name, 'i') }).first();
+            write('BUTTON_COUNT_' + name, await button.count());
+            if (await button.count()) {
+              try {
+                await button.click({ force: true });
+                await page.waitForTimeout(500);
+                write('BUTTON_CLICK_' + name, 'OK', await input.count() ? await input.inputValue() : 'NO_INPUT');
+              } catch (e) { write('BUTTON_CLICK_' + name, 'ERROR', e.stack || e.message); }
+            }
           }
-          console.log('LOGS_BEGIN');
-          console.log(logs.join('\n'));
-          console.log('LOGS_END');
+          write('RUNTIME_LOGS', logs);
           await page.screenshot({ path: 'live.png', fullPage: true });
+          await import('node:fs').then(fs => fs.writeFileSync('runtime.txt', out.join('\n\n'), 'utf8'));
+          console.log(out.join('\n\n'));
           await browser.close();
           JS
           node diagnostico-live.mjs
@@ -108,5 +113,6 @@ jobs:
           path: |
             live.html
             headers.txt
+            runtime.txt
             live.png
           retention-days: 1
