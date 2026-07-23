@@ -1,43 +1,43 @@
 (function () {
   'use strict';
 
-  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-120';
+  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-121';
   if (document.documentElement.getAttribute('data-gm-quick-filter-patch') === PATCH_ID) return;
   document.documentElement.setAttribute('data-gm-quick-filter-patch', PATCH_ID);
 
   var clinicalFilters = [
-    { label: 'Vômitos', terms: ['vômito', 'êmese', 'antiemético', 'ondansetrona', 'metoclopramida'] },
-    { label: 'Azia/Refluxo', terms: ['refluxo', 'azia', 'pirose', 'antiácido', 'omeprazol', 'pantoprazol'] },
-    { label: 'Constipação', terms: ['constipação', 'prisão de ventre', 'laxante', 'lactulose', 'macrogol'] }
+    { label: 'Vômitos', icon: '🤮', terms: ['vômito', 'êmese', 'antiemético', 'ondansetrona', 'metoclopramida'] },
+    { label: 'Azia/Refluxo', icon: '🔥', terms: ['refluxo', 'azia', 'pirose', 'antiácido', 'omeprazol', 'pantoprazol'] },
+    { label: 'Constipação', icon: '🚻', terms: ['constipação', 'prisão de ventre', 'laxante', 'lactulose', 'macrogol'] }
   ];
 
   var therapeuticFilters = [
-    { label: 'Analgésicos', terms: ['analgésico', 'analgesia', 'antálgico'] },
-    { label: 'Anti-inflamatórios', terms: ['anti-inflamatório', 'antiinflamatório', 'aine'] },
-    { label: 'Antibióticos', terms: ['antibiótico', 'antibacteriano', 'antimicrobiano', 'penicilina', 'cefalosporina', 'macrolídeo'] },
-    { label: 'Antifúngicos', terms: ['antifúngico', 'antimicótico'] },
-    { label: 'Antivirais', terms: ['antiviral'] },
-    { label: 'Anti-histamínicos', terms: ['anti-histamínico', 'antihistamínico', 'antialérgico'] },
-    { label: 'Antieméticos', terms: ['antiemético', 'náusea', 'vômito'] },
-    { label: 'Anti-hipertensivos', terms: ['anti-hipertensivo', 'antihipertensivo', 'hipertensão'] },
-    { label: 'Antidiabéticos', terms: ['antidiabético', 'hipoglicemiante', 'diabetes', 'insulina'] },
-    { label: 'Anticoagulantes', terms: ['anticoagulante', 'heparina'] },
-    { label: 'Antiagregantes', terms: ['antiagregante', 'antiplaquetário', 'antiagregação'] },
-    { label: 'Anticonvulsivantes', terms: ['anticonvulsivante', 'antiepiléptico', 'epilepsia'] },
-    { label: 'Antidepressivos', terms: ['antidepressivo', 'depressão', 'isrs'] },
-    { label: 'Ansiolíticos', terms: ['ansiolítico', 'ansiedade', 'benzodiazepínico'] },
-    { label: 'Antipsicóticos', terms: ['antipsicótico', 'neuroléptico'] },
-    { label: 'Corticoides', terms: ['corticoide', 'corticosteroide', 'glicocorticoide'] },
-    { label: 'Broncodilatadores', terms: ['broncodilatador'] },
-    { label: 'Antiasmáticos', terms: ['antiasmático', 'asma'] },
-    { label: 'Antiácidos', terms: ['antiácido', 'azia', 'pirose'] },
-    { label: 'Protetores gástricos', terms: ['protetor gástrico', 'inibidor da bomba de prótons', 'ibp', 'antiulceroso'] },
-    { label: 'Laxantes', terms: ['laxante', 'constipação'] },
-    { label: 'Antidiarreicos', terms: ['antidiarreico', 'diarreia'] },
-    { label: 'Diuréticos', terms: ['diurético'] },
-    { label: 'Hormônios', terms: ['hormônio', 'hormonal', 'progesterona', 'levotiroxina'] },
-    { label: 'Vitaminas e suplementos', terms: ['vitamina', 'suplemento', 'mineral', 'ácido fólico', 'ferro'] },
-    { label: 'Medicamentos obstétricos', terms: ['obstétrico', 'tocolítico', 'uterotônico', 'ocitocina', 'misoprostol', 'sulfato de magnésio'] }
+    { label: 'Analgésicos', icon: '🩹', bg: '#FEE2E2', border: '#DC2626', text: '#7F1D1D', terms: ['analgésico', 'analgesia', 'antálgico'] },
+    { label: 'Anti-inflamatórios', icon: '🧊', bg: '#FFEDD5', border: '#EA580C', text: '#7C2D12', terms: ['anti-inflamatório', 'antiinflamatório', 'aine'] },
+    { label: 'Antibióticos', icon: '💊', bg: '#FEF3C7', border: '#D97706', text: '#78350F', terms: ['antibiótico', 'antibacteriano', 'antimicrobiano', 'penicilina', 'cefalosporina', 'macrolídeo'] },
+    { label: 'Antifúngicos', icon: '🍄', bg: '#ECFCCB', border: '#65A30D', text: '#365314', terms: ['antifúngico', 'antimicótico'] },
+    { label: 'Antivirais', icon: '🛡️', bg: '#DCFCE7', border: '#16A34A', text: '#14532D', terms: ['antiviral'] },
+    { label: 'Anti-histamínicos', icon: '🤧', bg: '#D1FAE5', border: '#059669', text: '#064E3B', terms: ['anti-histamínico', 'antihistamínico', 'antialérgico'] },
+    { label: 'Antieméticos', icon: '🤢', bg: '#CCFBF1', border: '#0D9488', text: '#134E4A', terms: ['antiemético', 'náusea', 'vômito'] },
+    { label: 'Anti-hipertensivos', icon: '❤️', bg: '#CFFAFE', border: '#0891B2', text: '#164E63', terms: ['anti-hipertensivo', 'antihipertensivo', 'hipertensão'] },
+    { label: 'Antidiabéticos', icon: '🩸', bg: '#DBEAFE', border: '#2563EB', text: '#1E3A8A', terms: ['antidiabético', 'hipoglicemiante', 'diabetes', 'insulina'] },
+    { label: 'Anticoagulantes', icon: '🧬', bg: '#E0E7FF', border: '#4F46E5', text: '#312E81', terms: ['anticoagulante', 'heparina'] },
+    { label: 'Antiagregantes', icon: '🩹', bg: '#EDE9FE', border: '#7C3AED', text: '#4C1D95', terms: ['antiagregante', 'antiplaquetário', 'antiagregação'] },
+    { label: 'Anticonvulsivantes', icon: '🧠', bg: '#F3E8FF', border: '#9333EA', text: '#581C87', terms: ['anticonvulsivante', 'antiepiléptico', 'epilepsia'] },
+    { label: 'Antidepressivos', icon: '☀️', bg: '#FAE8FF', border: '#C026D3', text: '#701A75', terms: ['antidepressivo', 'depressão', 'isrs'] },
+    { label: 'Ansiolíticos', icon: '🕊️', bg: '#FCE7F3', border: '#DB2777', text: '#831843', terms: ['ansiolítico', 'ansiedade', 'benzodiazepínico'] },
+    { label: 'Antipsicóticos', icon: '💭', bg: '#FFE4E6', border: '#E11D48', text: '#881337', terms: ['antipsicótico', 'neuroléptico'] },
+    { label: 'Corticoides', icon: '🧪', bg: '#FEF2F2', border: '#B91C1C', text: '#7F1D1D', terms: ['corticoide', 'corticosteroide', 'glicocorticoide'] },
+    { label: 'Broncodilatadores', icon: '🫁', bg: '#F0FDFA', border: '#0F766E', text: '#134E4A', terms: ['broncodilatador'] },
+    { label: 'Antiasmáticos', icon: '🌬️', bg: '#ECFEFF', border: '#0E7490', text: '#164E63', terms: ['antiasmático', 'asma'] },
+    { label: 'Antiácidos', icon: '🔥', bg: '#FFF7ED', border: '#C2410C', text: '#7C2D12', terms: ['antiácido', 'azia', 'pirose'] },
+    { label: 'Protetores gástricos', icon: '🛡️', bg: '#F0FDF4', border: '#15803D', text: '#14532D', terms: ['protetor gástrico', 'inibidor da bomba de prótons', 'ibp', 'antiulceroso'] },
+    { label: 'Laxantes', icon: '🚻', bg: '#FEFCE8', border: '#A16207', text: '#713F12', terms: ['laxante', 'constipação'] },
+    { label: 'Antidiarreicos', icon: '💧', bg: '#EFF6FF', border: '#1D4ED8', text: '#1E3A8A', terms: ['antidiarreico', 'diarreia'] },
+    { label: 'Diuréticos', icon: '🚰', bg: '#F0F9FF', border: '#0369A1', text: '#0C4A6E', terms: ['diurético'] },
+    { label: 'Hormônios', icon: '⚗️', bg: '#F5F3FF', border: '#6D28D9', text: '#4C1D95', terms: ['hormônio', 'hormonal', 'progesterona', 'levotiroxina'] },
+    { label: 'Vitaminas e suplementos', icon: '🍊', bg: '#FFFBEB', border: '#B45309', text: '#78350F', terms: ['vitamina', 'suplemento', 'mineral', 'ácido fólico', 'ferro'] },
+    { label: 'Medicamentos obstétricos', icon: '🤰', bg: '#FDF2F8', border: '#BE185D', text: '#831843', terms: ['obstétrico', 'tocolítico', 'uterotônico', 'ocitocina', 'misoprostol', 'sulfato de magnésio'] }
   ];
 
   function normalize(value) {
@@ -182,8 +182,22 @@
     button.setAttribute('aria-label', definition.label);
     button.setAttribute('title', definition.label);
 
+    if (group === 'class') {
+      button.style.setProperty('--gm-filter-bg', definition.bg);
+      button.style.setProperty('--gm-filter-border', definition.border);
+      button.style.setProperty('--gm-filter-text', definition.text);
+    }
+
+    var icon = document.createElement('span');
+    icon.className = 'gm-filter-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = definition.icon;
+
     var label = document.createElement('span');
+    label.className = 'gm-filter-label';
     label.textContent = definition.label;
+
+    button.appendChild(icon);
     button.appendChild(label);
 
     button.addEventListener('click', function (event) {
@@ -202,14 +216,18 @@
     var style = document.createElement('style');
     style.id = 'gm-quick-filter-style';
     style.textContent = [
-      '.gm-filter-strip{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;padding-bottom:3px!important;}',
+      '.gm-filter-strip{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;padding-bottom:4px!important;scroll-snap-type:x proximity!important;}',
       '.gm-filter-strip::-webkit-scrollbar{display:none!important;}',
-      '.gm-filter-strip>*{flex:0 0 auto!important;}',
-      '.gm-filter-divider{width:1px!important;min-width:1px!important;height:28px!important;background:rgba(100,116,139,.45)!important;margin:0 3px!important;align-self:center!important;}',
-      '.gm-added-filter{flex:0 0 auto!important;white-space:nowrap!important;}',
-      '.gm-clinical-filter{background:#fff7ed!important;border-color:#fdba74!important;color:#9a3412!important;}',
-      '.gm-class-filter{background:#eef2ff!important;border-color:#a5b4fc!important;color:#3730a3!important;}',
-      '.gm-added-filter.gm-filter-active{box-shadow:0 0 0 2px rgba(15,118,110,.20)!important;transform:translateY(-1px);}'
+      '.gm-filter-strip>*{flex:0 0 auto!important;scroll-snap-align:start!important;}',
+      '.gm-filter-divider{width:2px!important;min-width:2px!important;height:32px!important;background:linear-gradient(180deg,rgba(14,116,144,.18),rgba(14,116,144,.55),rgba(14,116,144,.18))!important;border-radius:999px!important;margin:0 4px!important;align-self:center!important;}',
+      '.gm-added-filter{flex:0 0 auto!important;white-space:nowrap!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;min-height:44px!important;padding-left:14px!important;padding-right:14px!important;border-width:1.5px!important;border-style:solid!important;border-radius:999px!important;font-weight:600!important;letter-spacing:.01em!important;box-shadow:0 2px 7px rgba(15,23,42,.08)!important;transition:transform .16s ease,box-shadow .16s ease,filter .16s ease!important;}',
+      '.gm-filter-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;font-size:19px!important;line-height:1!important;min-width:20px!important;filter:saturate(1.08)!important;}',
+      '.gm-filter-label{display:inline-block!important;line-height:1.15!important;}',
+      '.gm-clinical-filter{box-shadow:0 2px 7px rgba(15,23,42,.08)!important;}',
+      '.gm-class-filter{background:var(--gm-filter-bg)!important;border-color:var(--gm-filter-border)!important;color:var(--gm-filter-text)!important;}',
+      '.gm-added-filter:active{transform:scale(.97)!important;filter:brightness(.98)!important;}',
+      '.gm-added-filter.gm-filter-active{box-shadow:0 0 0 3px rgba(8,145,178,.18),0 4px 10px rgba(15,23,42,.12)!important;transform:translateY(-1px)!important;}',
+      '@media (prefers-reduced-motion:reduce){.gm-added-filter{transition:none!important;}}'
     ].join('');
     document.head.appendChild(style);
   }
