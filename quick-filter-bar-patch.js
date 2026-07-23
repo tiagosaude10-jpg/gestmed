@@ -1,43 +1,43 @@
 (function () {
   'use strict';
 
-  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-118';
+  var PATCH_ID = 'gestamed-quick-filter-bar-2026-07-23-119';
   if (document.documentElement.getAttribute('data-gm-quick-filter-patch') === PATCH_ID) return;
   document.documentElement.setAttribute('data-gm-quick-filter-patch', PATCH_ID);
 
   var clinicalFilters = [
-    { label: 'Vômito', terms: ['vômito', 'êmese'] },
-    { label: 'Azia/Refluxo', terms: ['refluxo', 'azia', 'pirose'] },
-    { label: 'Constipação', terms: ['constipação', 'prisão de ventre'] }
+    { label: 'Vômitos', terms: ['vômito', 'êmese', 'antiemético', 'ondansetrona', 'metoclopramida'] },
+    { label: 'Azia/Refluxo', terms: ['refluxo', 'azia', 'pirose', 'antiácido', 'omeprazol', 'pantoprazol'] },
+    { label: 'Constipação', terms: ['constipação', 'prisão de ventre', 'laxante', 'lactulose', 'macrogol'] }
   ];
 
   var therapeuticFilters = [
-    { label: 'Analgésicos', terms: ['analgésico', 'analgesia'] },
-    { label: 'Anti-inflamatórios', terms: ['anti-inflamatório', 'aine'] },
-    { label: 'Antibióticos', terms: ['antibiótico', 'antimicrobiano'] },
-    { label: 'Antifúngicos', terms: ['antifúngico'] },
+    { label: 'Analgésicos', terms: ['analgésico', 'analgesia', 'antálgico'] },
+    { label: 'Anti-inflamatórios', terms: ['anti-inflamatório', 'antiinflamatório', 'aine'] },
+    { label: 'Antibióticos', terms: ['antibiótico', 'antibacteriano', 'antimicrobiano', 'penicilina', 'cefalosporina', 'macrolídeo'] },
+    { label: 'Antifúngicos', terms: ['antifúngico', 'antimicótico'] },
     { label: 'Antivirais', terms: ['antiviral'] },
-    { label: 'Anti-histamínicos', terms: ['anti-histamínico', 'antialérgico'] },
-    { label: 'Antieméticos', terms: ['antiemético'] },
-    { label: 'Anti-hipertensivos', terms: ['anti-hipertensivo', 'antihipertensivo'] },
-    { label: 'Antidiabéticos', terms: ['antidiabético', 'hipoglicemiante'] },
-    { label: 'Anticoagulantes', terms: ['anticoagulante'] },
-    { label: 'Antiagregantes', terms: ['antiagregante'] },
-    { label: 'Anticonvulsivantes', terms: ['anticonvulsivante', 'antiepiléptico'] },
-    { label: 'Antidepressivos', terms: ['antidepressivo'] },
-    { label: 'Ansiolíticos', terms: ['ansiolítico'] },
-    { label: 'Antipsicóticos', terms: ['antipsicótico'] },
+    { label: 'Anti-histamínicos', terms: ['anti-histamínico', 'antihistamínico', 'antialérgico'] },
+    { label: 'Antieméticos', terms: ['antiemético', 'náusea', 'vômito'] },
+    { label: 'Anti-hipertensivos', terms: ['anti-hipertensivo', 'antihipertensivo', 'hipertensão'] },
+    { label: 'Antidiabéticos', terms: ['antidiabético', 'hipoglicemiante', 'diabetes', 'insulina'] },
+    { label: 'Anticoagulantes', terms: ['anticoagulante', 'heparina'] },
+    { label: 'Antiagregantes', terms: ['antiagregante', 'antiplaquetário', 'antiagregação'] },
+    { label: 'Anticonvulsivantes', terms: ['anticonvulsivante', 'antiepiléptico', 'epilepsia'] },
+    { label: 'Antidepressivos', terms: ['antidepressivo', 'depressão', 'isrs'] },
+    { label: 'Ansiolíticos', terms: ['ansiolítico', 'ansiedade', 'benzodiazepínico'] },
+    { label: 'Antipsicóticos', terms: ['antipsicótico', 'neuroléptico'] },
     { label: 'Corticoides', terms: ['corticoide', 'corticosteroide', 'glicocorticoide'] },
     { label: 'Broncodilatadores', terms: ['broncodilatador'] },
     { label: 'Antiasmáticos', terms: ['antiasmático', 'asma'] },
-    { label: 'Antiácidos', terms: ['antiácido'] },
-    { label: 'Protetores gástricos', terms: ['protetor gástrico', 'inibidor da bomba de prótons', 'ibp'] },
-    { label: 'Laxantes', terms: ['laxante'] },
-    { label: 'Antidiarreicos', terms: ['antidiarreico'] },
+    { label: 'Antiácidos', terms: ['antiácido', 'azia', 'pirose'] },
+    { label: 'Protetores gástricos', terms: ['protetor gástrico', 'inibidor da bomba de prótons', 'ibp', 'antiulceroso'] },
+    { label: 'Laxantes', terms: ['laxante', 'constipação'] },
+    { label: 'Antidiarreicos', terms: ['antidiarreico', 'diarreia'] },
     { label: 'Diuréticos', terms: ['diurético'] },
-    { label: 'Hormônios', terms: ['hormônio', 'hormonal'] },
-    { label: 'Vitaminas/Suplementos', terms: ['vitamina', 'suplemento'] },
-    { label: 'Uso obstétrico', terms: ['obstétrico', 'tocolítico', 'uterotônico'] }
+    { label: 'Hormônios', terms: ['hormônio', 'hormonal', 'progesterona', 'levotiroxina'] },
+    { label: 'Vitaminas e suplementos', terms: ['vitamina', 'suplemento', 'mineral', 'ácido fólico', 'ferro'] },
+    { label: 'Medicamentos obstétricos', terms: ['obstétrico', 'tocolítico', 'uterotônico', 'ocitocina', 'misoprostol', 'sulfato de magnésio'] }
   ];
 
   function normalize(value) {
@@ -201,38 +201,33 @@
     if (!found) return false;
 
     var strip = found.strip;
-    if (strip.querySelector('[data-gm-added-filter]')) return true;
+    if (strip.getAttribute('data-gm-filter-patch') === PATCH_ID) return true;
+
+    strip.querySelectorAll('.gm-added-filter, .gm-filter-divider').forEach(function (element) {
+      element.remove();
+    });
 
     ensureStyle();
     strip.classList.add('gm-filter-strip');
+    strip.setAttribute('data-gm-filter-patch', PATCH_ID);
 
     var index = buildIndex();
-    var addedClinical = 0;
     clinicalFilters.forEach(function (definition) {
       var queryInfo = chooseTerm(definition, index);
-      if (index.length && queryInfo.count === 0) return;
       strip.appendChild(makeButton(found.template, definition, 'clinical', queryInfo, strip));
-      addedClinical += 1;
     });
 
-    var availableClasses = therapeuticFilters.map(function (definition) {
-      return { definition: definition, queryInfo: chooseTerm(definition, index) };
-    }).filter(function (item) {
-      return !index.length || item.queryInfo.count > 0;
+    var divider = document.createElement('span');
+    divider.className = 'gm-filter-divider';
+    divider.setAttribute('aria-hidden', 'true');
+    strip.appendChild(divider);
+
+    therapeuticFilters.forEach(function (definition) {
+      var queryInfo = chooseTerm(definition, index);
+      strip.appendChild(makeButton(found.template, definition, 'class', queryInfo, strip));
     });
 
-    if (availableClasses.length) {
-      var divider = document.createElement('span');
-      divider.className = 'gm-filter-divider';
-      divider.setAttribute('aria-hidden', 'true');
-      strip.appendChild(divider);
-
-      availableClasses.forEach(function (item) {
-        strip.appendChild(makeButton(found.template, item.definition, 'class', item.queryInfo, strip));
-      });
-    }
-
-    strip.setAttribute('data-gm-filter-groups', 'clinical:' + addedClinical + ';classes:' + availableClasses.length);
+    strip.setAttribute('data-gm-filter-groups', 'clinical:' + clinicalFilters.length + ';classes:' + therapeuticFilters.length);
     return true;
   }
 
