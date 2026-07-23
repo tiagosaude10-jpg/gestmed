@@ -18,15 +18,17 @@ layout: null
 {% else %}
   {% assign nucleo_integrado = nucleo_atual %}
 {% endif %}
-{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.23.121' | replace: '2026.07.23.97', '2026.07.23.121' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.23.122' | replace: '2026.07.23.97', '2026.07.23.122' %}
 {% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
 {% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
 {% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
+{% capture limpar_js %}{% include_relative search-clear-and-size-patch.js %}{% endcapture %}
 {% capture scripts_integracao %}
-<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.23.121');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}603-1503{% else %}fallback{% endif %}');</script>
+<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.23.122');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}603-1503{% else %}fallback{% endif %}');</script>
 <script>{{ resumo_js }}</script>
 <script>{{ exames_js }}</script>
 <script>{{ filtros_js }}</script>
+<script>{{ limpar_js }}</script>
 {% endcapture %}
 {% assign fechamento_integrado = scripts_integracao | append: '</body>' %}
 {{ nucleo_integrado | replace: '</body>', fechamento_integrado }}
