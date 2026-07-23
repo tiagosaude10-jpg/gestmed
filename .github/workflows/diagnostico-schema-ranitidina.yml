@@ -12,36 +12,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extrair fichas semelhantes
+      - name: Expandir fichas de referência
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+          import json, re, unicodedata
+
           text = Path('backups/gestamed-base-603-1503-fonte.html').read_text(encoding='utf-8')
-          lower = text.lower()
-          out = []
-          for termo in ['famotidina', 'cimetidina', 'omeprazol', 'pantoprazol']:
-              out.append('\n' + '='*30 + ' ' + termo + ' ' + '='*30 + '\n')
-              start = 0
-              found = 0
-              while found < 8:
-                  idx = lower.find(termo, start)
-                  if idx < 0:
-                      break
-                  a = max(0, idx - 1800)
-                  b = min(len(text), idx + 2600)
-                  out.append(f'\nPOSICAO {idx}\n')
-                  out.append(text[a:b])
-                  out.append('\n--- FIM DA OCORRENCIA ---\n')
-                  start = idx + len(termo)
-                  found += 1
-              if not found:
-                  out.append('NAO ENCONTRADO\n')
-          Path('schema-ranitidina.txt').write_text(''.join(out), encoding='utf-8')
+
+          def extract_array(name):
+              pattern = rf'(?:const|let|var)\s+{name}\s*=\s*(\[.*?\]);'
+              match = re.search(pattern, text, re.S)
+              if not match:
+                  raise RuntimeError(f'{name} não encontrado')
+              return json.loads(match.group(1))
+
+          def norm(value):
+              value = unicodedata.normalize('NFD', str(value or ''))
+              return ''.join(c for c in value if unicodedata.category(c) != 'Mn').lower()
+
+          strings = extract_array('GESTMED_STRINGS')
+          compact = extract_array('GESTMED_COMPACT')
+
+          targets = ['famotidina', 'omeprazol', 'isotretinoina', 'talidomida', 'misoprostol', 'warfarina']
+          output = {'strings_total': len(strings), 'compact_total': len(compact), 'registros': {}}
+
+          for target in targets:
+              record = next((r for r in compact if target in norm(r.get('principio_ativo'))), None)
+              if not record:
+                  output['registros'][target] = None
+                  continue
+              expanded = {}
+              for key, value in record.items():
+                  if key != 'id' and isinstance(value, int) and 0 <= value < len(strings):
+                      expanded[key] = strings[value]
+                  else:
+                      expanded[key] = value
+              output['registros'][target] = {'compacto': record, 'expandido': expanded}
+
+          Path('schema-ranitidina.json').write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding='utf-8')
           PY
       - name: Enviar diagnóstico
         uses: actions/upload-artifact@v4
         with:
-          name: schema-ranitidina
-          path: schema-ranitidina.txt
+          name: schema-ranitidina-expandido
+          path: schema-ranitidina.json
           retention-days: 1
