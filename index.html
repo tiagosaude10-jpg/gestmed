@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="GestaMed">
-  <meta name="gestamed-build" content="2026.07.23.114">
+  <meta name="gestamed-build" content="2026.07.23.115">
   <title>GestaMed</title>
   <style>
     html,body{margin:0;min-height:100%;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -25,65 +25,10 @@
   <script>
   (async function () {
     'use strict';
-    var BUILD = '2026.07.23.114';
-
-    function extrairBlocoDados(documento) {
-      var inicio = documento.indexOf('// data.js — GestMed');
-      var inicioApp = documento.indexOf('// app.js — GestMed', inicio);
-      var fim = documento.lastIndexOf('</script>', inicioApp);
-      if (inicio < 0 || inicioApp < 0 || fim < inicio) {
-        throw new Error('Bloco da base de medicamentos não localizado.');
-      }
-      return {
-        inicio: inicio,
-        fim: fim,
-        conteudo: documento.slice(inicio, fim)
-      };
-    }
-
-    function validarBase603(bloco) {
-      var requisitos = [
-        '"total_registros":1503',
-        '"registros_base_clinica":603',
-        '"registros_adicionais_indexacao":900',
-        'const GESTMED_COMPACT',
-        'const GESTMED_DATA',
-        'const GESTMED_POSOLOGIA_ADULTO',
-        'Butilbrometo de escopolamina (Buscopan)',
-        'Buscopan Composto',
-        'Buscoduo/Buscopan Duo'
-      ];
-      requisitos.forEach(function (termo) {
-        if (bloco.indexOf(termo) < 0) {
-          throw new Error('Base histórica incompleta: ' + termo);
-        }
-      });
-    }
-
     try {
-      var respostas = await Promise.all([
-        fetch('./app-core-stable.html?v=' + BUILD, { cache: 'no-store' }),
-        fetch('./backups/gestamed-base-603-1503-fonte.html?v=' + BUILD, { cache: 'no-store' })
-      ]);
-      if (!respostas[0].ok) throw new Error('Falha no núcleo atual: HTTP ' + respostas[0].status);
-      if (!respostas[1].ok) throw new Error('Falha na base recuperada: HTTP ' + respostas[1].status);
-
-      var textos = await Promise.all([respostas[0].text(), respostas[1].text()]);
-      var html = textos[0];
-      var fonteHistorica = textos[1];
-      var blocoAtual = extrairBlocoDados(html);
-      var bloco603 = extrairBlocoDados(fonteHistorica);
-      validarBase603(bloco603.conteudo);
-
-      // Substitui exclusivamente a base de medicamentos. Interface e app.js atuais são preservados.
-      html = html.slice(0, blocoAtual.inicio) + bloco603.conteudo + html.slice(blocoAtual.fim);
-
-      if ((html.match(/const GESTMED_DATA/g) || []).length !== 1) {
-        throw new Error('GESTMED_DATA duplicado após a recuperação.');
-      }
-      if ((html.match(/function applyFilters/g) || []).length !== 1) {
-        throw new Error('Mecanismo original de pesquisa ausente ou duplicado.');
-      }
+      var response = await fetch('./app-core-stable.html?v=2026.07.23.115', { cache: 'no-store' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      var html = await response.text();
 
       var cssResumo = '#fatalError{display:none!important}.exames-resumo-usg .gm-usg-title{margin:0 0 4px;color:var(--trim-color);font-weight:900;font-size:10.5px}.exames-resumo-usg .gm-usg-list{margin:0;padding:0;list-style:none}.exames-resumo-usg .gm-usg-list li{position:relative;padding:4px 2px 4px 13px;border-bottom:1px dashed rgba(148,163,184,.42)}.exames-resumo-usg .gm-usg-list li:last-child{border-bottom:0}.exames-resumo-usg .gm-usg-list li:before{content:"•";position:absolute;left:2px;top:2px;color:var(--trim-color);font-size:14px;font-weight:900}.gm-exames-grupo{margin:14px 0 9px;padding:9px 12px;border-radius:12px;font-size:11px;font-weight:900;letter-spacing:.02em}.gm-exames-grupo.rotina{background:#ecfdf5;border:1px solid #6ee7b7;color:#047857}.gm-exames-grupo.indicacao{background:#f8fafc;border:1px solid #cbd5e1;color:#475569}';
       html = html.replace('</head>', '<style id="gmAjustesPainelExames">' + cssResumo + '</style></head>');
@@ -100,11 +45,13 @@
         '<strong>USG obstétrica inicial (preferencialmente transvaginal)</strong> — localização, viabilidade, datação e número de fetos.',
         '<strong>USG morfológica do 1º trimestre com translucência nucal</strong> — 11s a 13s6d.'
       ]);
+
       substituirUltrassons('t2', [
         '<strong>USG morfológica do 2º trimestre</strong> — 18 a 24 semanas.',
         '<strong>USG transvaginal para cervicometria</strong> — conforme indicação clínica/obstétrica.',
         '<strong>USG obstétrica com Doppler</strong> — conforme indicação clínica/obstétrica.'
       ]);
+
       substituirUltrassons('t3', [
         '<strong>USG obstétrica para avaliação do crescimento fetal</strong> — biometria, apresentação, placenta e líquido amniótico, conforme indicação/protocolo.',
         '<strong>USG obstétrica com Doppler</strong> — conforme indicação clínica/obstétrica.',
@@ -112,9 +59,9 @@
       ]);
 
       html = html.replace('"Toxoplasmose (IgG/IgM)", "Rubéola", "TSH", "USG inicial (7-9s)",', '"Toxoplasmose (IgG/IgM)", "Rubéola (se indicada)", "USG inicial (se indicada)",');
-      html = html.replace('</body>', '<script src="./exam-panel-patch.js?v=' + BUILD + '"><\/script></body>');
-      html = html.split('2026.07.23.91').join(BUILD);
-      html = html.split('2026.07.23.97').join(BUILD);
+      html = html.replace('</body>', '<script src="./exam-panel-patch.js?v=2026.07.23.115"><\/script><script src="./search-fix.js?v=2026.07.23.115"><\/script></body>');
+      html = html.split('2026.07.23.97').join('2026.07.23.115');
+      html = html.split('2026.07.23.91').join('2026.07.23.115');
 
       document.open();
       document.write(html);
