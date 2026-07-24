@@ -18,15 +18,15 @@ layout: null
 {% else %}
   {% assign nucleo_integrado = nucleo_atual %}
 {% endif %}
-{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.137' | replace: '2026.07.23.97', '2026.07.24.137' | replace: '2026.07.24.126', '2026.07.24.137' | replace: '2026.07.24.127', '2026.07.24.137' | replace: '2026.07.24.128', '2026.07.24.137' | replace: '2026.07.24.129', '2026.07.24.137' | replace: '2026.07.24.130', '2026.07.24.137' | replace: '2026.07.24.131', '2026.07.24.137' | replace: '2026.07.24.132', '2026.07.24.137' | replace: '2026.07.24.133', '2026.07.24.137' | replace: '2026.07.24.134', '2026.07.24.137' | replace: '2026.07.24.135', '2026.07.24.137' | replace: '2026.07.24.136', '2026.07.24.137' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.138' | replace: '2026.07.23.97', '2026.07.24.138' | replace: '2026.07.24.126', '2026.07.24.138' | replace: '2026.07.24.127', '2026.07.24.138' | replace: '2026.07.24.128', '2026.07.24.138' | replace: '2026.07.24.129', '2026.07.24.138' | replace: '2026.07.24.130', '2026.07.24.138' | replace: '2026.07.24.131', '2026.07.24.138' | replace: '2026.07.24.132', '2026.07.24.138' | replace: '2026.07.24.133', '2026.07.24.138' | replace: '2026.07.24.134', '2026.07.24.138' | replace: '2026.07.24.135', '2026.07.24.138' | replace: '2026.07.24.136', '2026.07.24.138' | replace: '2026.07.24.137', '2026.07.24.138' %}
 {% capture boot_entry_head %}
 <script>document.documentElement.classList.add('gm-entry-boot');</script>
 <style>
 html.gm-entry-boot{background:#fbeef3!important;overflow:hidden!important}
 html.gm-entry-boot body{visibility:hidden!important}
-html.gm-entry-boot:before{content:"";position:fixed;inset:0;z-index:2147483646;background:#fbeef3 url('./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=137') center center/cover no-repeat}
+html.gm-entry-boot:before{content:"";position:fixed;inset:0;z-index:2147483646;background:#fbeef3 url('./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=138') center center/cover no-repeat}
 </style>
-<link rel="preload" as="image" href="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=137">
+<link rel="preload" as="image" href="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=138">
 {% endcapture %}
 {% assign head_integrado = boot_entry_head | append: '</head>' %}
 {% assign nucleo_integrado = nucleo_integrado | replace: '</head>', head_integrado %}
@@ -37,12 +37,12 @@ html.gm-entry-boot:before{content:"";position:fixed;inset:0;z-index:2147483646;b
 {% capture entrada_aprovada_js %}{% include_relative entry-screen-approved-patch.js %}{% endcapture %}
 {% capture home_rosa_js %}{% include_relative home-visual-pink-patch.js %}{% endcapture %}
 {% capture scripts_integracao %}
-<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.137');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
+<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.138');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
+<script>{{ entrada_aprovada_js }}</script>
 <script>{{ resumo_js }}</script>
 <script>{{ exames_js }}</script>
 <script>{{ filtros_js }}</script>
 <script>{{ limpar_js }}</script>
-<script>{{ entrada_aprovada_js }}</script>
 <script>{{ home_rosa_js }}</script>
 {% endcapture %}
 {% assign fechamento_integrado = scripts_integracao | append: '</body>' %}
