@@ -9,8 +9,7 @@
   style.textContent=`
     :root{--gm-pink:#ec3f78;--gm-pink-2:#ff7f9c;--gm-soft:#fff4f7;--gm-ink:#152036;--gm-muted:#71809a}
     body{background:linear-gradient(180deg,#fff8fa 0%,#fff 55%,#fff6f9 100%)!important;color:var(--gm-ink)}
-    header.gm-legacy-hero-header{display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important;pointer-events:none!important}
-    header.gm-legacy-hero-header>.hero-banner,header.gm-legacy-hero-header>.hero-sr{display:none!important}
+    .hero-banner,.hero-sr{display:none!important}
     .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 16px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
     .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%);pointer-events:none}
     .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
@@ -55,24 +54,9 @@
     }
     return null;
   }
-  function hideExactLegacyHeader(){
-    var hero=document.querySelector('header > .hero-banner');
-    if(!hero) return false;
-    var header=hero.parentElement;
-    var safe=true;
-    Array.prototype.forEach.call(header.children,function(child){
-      if(!child.classList.contains('hero-banner')&&!child.classList.contains('hero-sr')) safe=false;
-    });
-    if(!safe) return false;
-    header.classList.add('gm-legacy-hero-header');
-    header.setAttribute('aria-hidden','true');
-    return true;
-  }
   function apply(){
     var search=document.querySelector('#search,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
     if(!search) return false;
-
-    hideExactLegacyHeader();
 
     if(!document.querySelector('.gm-home-brand-panel')){
       var main=search.closest('main');
