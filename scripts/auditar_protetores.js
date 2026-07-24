@@ -4,11 +4,10 @@ const vm = require('vm');
 const sourcePath = 'backups/gestamed-base-603-1503-fonte.html';
 const text = fs.readFileSync(sourcePath, 'utf8');
 const dataMarker = '// data.js — GestMed';
-const appMarker = '// app.js — GestMed';
 const start = text.indexOf(dataMarker);
-const end = text.indexOf(appMarker, start + dataMarker.length);
-if (start < 0 || end < 0 || end <= start) throw new Error('Marcadores da base não encontrados');
-let block = text.slice(start + dataMarker.length, end);
+const scriptEnd = text.indexOf('</script>', start + dataMarker.length);
+if (start < 0 || scriptEnd < 0 || scriptEnd <= start) throw new Error('Bloco JavaScript da base não encontrado');
+let block = text.slice(start + dataMarker.length, scriptEnd);
 block = block.replace(/^\s*\([^\n]*\)\s*/, '');
 
 const sandbox = { console: { log() {}, warn() {}, error() {} }, window: {}, document: {} };
