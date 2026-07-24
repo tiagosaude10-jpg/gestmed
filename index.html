@@ -1,76 +1,57 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#155e75">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="GestaMed">
-  <meta name="gestamed-build" content="2026.07.23.115">
-  <title>GestaMed</title>
-  <style>
-    html,body{margin:0;min-height:100%;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    #gmBoot{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;color:#155e75;text-align:center}
-    #gmBoot>div{background:#fff;border:1px solid #dbeafe;border-radius:20px;padding:22px 24px;box-shadow:0 12px 30px rgba(15,23,42,.08);font-weight:800}
-    .gmSpin{width:30px;height:30px;margin:0 auto 12px;border:3px solid #bae6fd;border-top-color:#0891b2;border-radius:50%;animation:gmSpin .8s linear infinite}
-    @keyframes gmSpin{to{transform:rotate(360deg)}}
-  </style>
-</head>
-<body>
-  <div id="gmBoot"><div><div class="gmSpin"></div>Carregando GestaMed…</div></div>
-  <script>
-  (async function () {
-    'use strict';
-    try {
-      var response = await fetch('./app-core-stable.html?v=2026.07.23.115', { cache: 'no-store' });
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      var html = await response.text();
-
-      var cssResumo = '#fatalError{display:none!important}.exames-resumo-usg .gm-usg-title{margin:0 0 4px;color:var(--trim-color);font-weight:900;font-size:10.5px}.exames-resumo-usg .gm-usg-list{margin:0;padding:0;list-style:none}.exames-resumo-usg .gm-usg-list li{position:relative;padding:4px 2px 4px 13px;border-bottom:1px dashed rgba(148,163,184,.42)}.exames-resumo-usg .gm-usg-list li:last-child{border-bottom:0}.exames-resumo-usg .gm-usg-list li:before{content:"•";position:absolute;left:2px;top:2px;color:var(--trim-color);font-size:14px;font-weight:900}.gm-exames-grupo{margin:14px 0 9px;padding:9px 12px;border-radius:12px;font-size:11px;font-weight:900;letter-spacing:.02em}.gm-exames-grupo.rotina{background:#ecfdf5;border:1px solid #6ee7b7;color:#047857}.gm-exames-grupo.indicacao{background:#f8fafc;border:1px solid #cbd5e1;color:#475569}';
-      html = html.replace('</head>', '<style id="gmAjustesPainelExames">' + cssResumo + '</style></head>');
-
-      function substituirUltrassons(trimestre, itens) {
-        var padrao = new RegExp('(<div class="exames-resumo-v2-row ' + trimestre + '">[\\s\\S]*?)<div class="exames-resumo-usg">[\\s\\S]*?<\\/div>');
-        var bloco = '<div class="exames-resumo-usg"><div class="gm-usg-title">ULTRASSONOGRAFIAS</div><ul class="gm-usg-list">' + itens.map(function (item) { return '<li>' + item + '</li>'; }).join('') + '</ul></div>';
-        var atualizado = html.replace(padrao, '$1' + bloco);
-        if (atualizado === html) throw new Error('Bloco de ultrassons não encontrado: ' + trimestre);
-        html = atualizado;
-      }
-
-      substituirUltrassons('t1', [
-        '<strong>USG obstétrica inicial (preferencialmente transvaginal)</strong> — localização, viabilidade, datação e número de fetos.',
-        '<strong>USG morfológica do 1º trimestre com translucência nucal</strong> — 11s a 13s6d.'
-      ]);
-
-      substituirUltrassons('t2', [
-        '<strong>USG morfológica do 2º trimestre</strong> — 18 a 24 semanas.',
-        '<strong>USG transvaginal para cervicometria</strong> — conforme indicação clínica/obstétrica.',
-        '<strong>USG obstétrica com Doppler</strong> — conforme indicação clínica/obstétrica.'
-      ]);
-
-      substituirUltrassons('t3', [
-        '<strong>USG obstétrica para avaliação do crescimento fetal</strong> — biometria, apresentação, placenta e líquido amniótico, conforme indicação/protocolo.',
-        '<strong>USG obstétrica com Doppler</strong> — conforme indicação clínica/obstétrica.',
-        '<strong>Perfil biofísico fetal</strong> — quando indicado para avaliação complementar da vitalidade fetal.'
-      ]);
-
-      html = html.replace('"Toxoplasmose (IgG/IgM)", "Rubéola", "TSH", "USG inicial (7-9s)",', '"Toxoplasmose (IgG/IgM)", "Rubéola (se indicada)", "USG inicial (se indicada)",');
-      html = html.replace('</body>', '<script src="./exam-panel-patch.js?v=2026.07.23.115"><\/script><script src="./search-fix.js?v=2026.07.23.115"><\/script></body>');
-      html = html.split('2026.07.23.97').join('2026.07.23.115');
-      html = html.split('2026.07.23.91').join('2026.07.23.115');
-
-      document.open();
-      document.write(html);
-      document.close();
-    } catch (error) {
-      console.error('Falha ao carregar o GestaMed:', error);
-      document.getElementById('gmBoot').innerHTML = '<div>Falha temporária ao carregar.<br><button type="button" onclick="location.reload()" style="margin-top:12px;border:0;border-radius:12px;padding:10px 16px;background:#0891b2;color:#fff;font-weight:800">Tentar novamente</button></div>';
-    }
-  })();
-  </script>
-</body>
-</html>
+---
+layout: null
+---
+{% assign marcador_dados = '// data.js — GestMed' %}
+{% assign marcador_app = '// app.js — GestMed' %}
+{% capture nucleo_atual %}{% include_relative app-core-stable.html %}{% endcapture %}
+{% capture fonte_603 %}{% include_relative backups/gestamed-base-603-1503-fonte.html %}{% endcapture %}
+{% assign integracao_valida = false %}
+{% if nucleo_atual contains marcador_dados and nucleo_atual contains marcador_app and fonte_603 contains marcador_dados and fonte_603 contains marcador_app and fonte_603 contains '"total_registros":1514' and fonte_603 contains '"registros_base_clinica":614' and fonte_603 contains '"registros_adicionais_indexacao":900' and fonte_603 contains 'GESTMED_GASTRIC_PACKAGE_126_START' %}
+  {% assign integracao_valida = true %}
+{% endif %}
+{% if integracao_valida %}
+  {% assign antes_dados = nucleo_atual | split: marcador_dados | first %}
+  {% assign depois_app = nucleo_atual | split: marcador_app | last %}
+  {% assign fonte_apos_dados = fonte_603 | split: marcador_dados | last %}
+  {% assign dados_603 = fonte_apos_dados | split: marcador_app | first %}
+  {% assign nucleo_integrado = antes_dados | append: marcador_dados | append: dados_603 | append: marcador_app | append: depois_app %}
+{% else %}
+  {% assign nucleo_integrado = nucleo_atual %}
+{% endif %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.146' | replace: '2026.07.23.97', '2026.07.24.146' | replace: '2026.07.24.126', '2026.07.24.146' | replace: '2026.07.24.127', '2026.07.24.146' | replace: '2026.07.24.128', '2026.07.24.146' | replace: '2026.07.24.129', '2026.07.24.146' %}
+{% capture safe_head %}
+<meta name="gestamed-build" content="2026.07.24.146">
+<style>
+#gm-entry-approved,#gm-entry-screen,.gm-entry-screen,.entry-screen,[aria-label="Tela de abertura do GestaMed"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;height:0!important;min-height:0!important;overflow:hidden!important}
+html,body{overflow-x:hidden!important;touch-action:auto!important}
+</style>
+<script>
+(function(){
+  document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');
+  function removeSplash(){
+    ['gm-entry-approved','gm-entry-screen'].forEach(function(id){var el=document.getElementById(id);if(el)el.remove();});
+    document.querySelectorAll('.gm-entry-screen,.entry-screen,[aria-label="Tela de abertura do GestaMed"]').forEach(function(el){el.remove();});
+    document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');
+    if(document.body){document.body.classList.remove('gm-entry-boot','gm-entry-lock');document.body.style.removeProperty('overflow');}
+  }
+  removeSplash();
+  document.addEventListener('DOMContentLoaded',removeSplash);
+  setTimeout(removeSplash,50);setTimeout(removeSplash,250);setTimeout(removeSplash,1000);
+})();
+</script>
+{% endcapture %}
+{% assign head_integrado = safe_head | append: '</head>' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '</head>', head_integrado %}
+{% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
+{% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
+{% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
+{% capture limpar_js %}{% include_relative search-clear-and-size-patch.js %}{% endcapture %}
+{% capture scripts_integracao %}
+<script>(function(){document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');var ids=['gm-entry-approved','gm-entry-screen'];ids.forEach(function(id){var o=document.getElementById(id);if(o)o.remove();});document.documentElement.setAttribute('data-gestamed-build','2026.07.24.146');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');})();</script>
+<script>{{ resumo_js }}</script>
+<script>{{ exames_js }}</script>
+<script>{{ filtros_js }}</script>
+<script>{{ limpar_js }}</script>
+{% endcapture %}
+{% assign fechamento_integrado = scripts_integracao | append: '</body>' %}
+{{ nucleo_integrado | replace: '</body>', fechamento_integrado }}
