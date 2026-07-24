@@ -12,22 +12,20 @@
     header.gm-legacy-hero-header{display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
     header.gm-legacy-hero-header>.hero-banner,
     header.gm-legacy-hero-header>.hero-sr{display:none!important}
-    .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 14px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
+    .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 16px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
     .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%)}
-    .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1}
+    .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
     .gm-home-brand-copy{min-width:0}.gm-home-brand-logo{font-size:34px;line-height:1;font-weight:800;letter-spacing:-.045em;background:linear-gradient(90deg,#df255f,#ff8da8);-webkit-background-clip:text;background-clip:text;color:transparent}
     .gm-home-brand-tag{margin-top:6px;font-size:12px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:#a94c68;font-weight:650}
-    .gm-home-professional{width:102px;height:102px;flex:0 0 102px;border-radius:28px;position:relative;overflow:hidden;background-color:#fff7fa;background-image:url('./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=142');background-repeat:no-repeat;background-size:430% auto;background-position:50% 22%;box-shadow:0 10px 22px rgba(222,61,111,.14);border:1px solid rgba(236,63,120,.08)}
-    .gm-home-professional:after{content:"🍃";position:absolute;right:5px;bottom:4px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);font-size:15px;box-shadow:0 4px 10px rgba(31,117,74,.16)}
+    .gm-home-professional{width:94px;height:94px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,#ffe0e9,#fff);font-size:52px;box-shadow:0 10px 22px rgba(222,61,111,.14)}
     .gm-home-hello{margin:14px 0 3px;font-size:26px;font-weight:800;letter-spacing:-.025em;color:#231b2c}.gm-home-desc{margin:0;color:#59647a;font-size:14px;line-height:1.45}
-    .gm-home-credit{position:relative;z-index:1;margin-top:11px;padding-top:9px;border-top:1px solid rgba(223,37,95,.10);font-size:10.5px;line-height:1.2;letter-spacing:.025em;color:#9a6174;text-align:right;font-weight:600}
     input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]{border-color:#f2c6d3!important;box-shadow:0 9px 20px rgba(217,77,119,.08)!important;background:#fff!important}
     button,[role="button"],a{-webkit-tap-highlight-color:transparent}
     .gm-pink-card{border-radius:22px!important;box-shadow:0 9px 22px rgba(37,46,70,.07)!important;overflow:hidden}
     .gm-pink-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
     .gm-pink-grid>*{min-width:0!important;margin:0!important;height:100%!important}
     .gm-pink-accent{outline:1px solid rgba(236,63,120,.13)!important}
-    @media(max-width:390px){.gm-home-brand-logo{font-size:30px}.gm-home-professional{width:90px;height:90px;flex-basis:90px}.gm-home-hello{font-size:23px}}
+    @media(max-width:390px){.gm-home-brand-logo{font-size:30px}.gm-home-professional{width:82px;height:82px;font-size:46px}.gm-home-hello{font-size:23px}}
   `;
   document.head.appendChild(style);
 
@@ -82,7 +80,7 @@
       var anchor=main||search.closest('section,div')||search.parentElement;
       var panel=document.createElement('section');
       panel.className='gm-home-brand-panel';
-      panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" role="img" aria-label="Ilustração oficial do GestaMed"></div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p><div class="gm-home-credit">By Tiago Pereira de Albuquerque</div>';
+      panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
       anchor.parentNode.insertBefore(panel,anchor);
     }
 
