@@ -1,0 +1,63 @@
+name: Aplicar pacote protetores gastricos
+
+on:
+  push:
+    branches: [feature/protetores-gastricos-126]
+    paths:
+      - '.github/workflows/aplicar-protetores-gastricos.yml'
+      - 'scripts/implantar_protetores_gastricos.js'
+      - 'scripts/auditar_protetores.js'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    if: ${{ !contains(github.event.head_commit.message, '[pacote-gastrico-aplicado]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/protetores-gastricos-126
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar scripts
+        run: |
+          node --check scripts/implantar_protetores_gastricos.js
+          node --check scripts/auditar_protetores.js
+      - name: Implantar diretamente na base permanente
+        run: node scripts/implantar_protetores_gastricos.js
+      - name: Auditar resultado antes do commit
+        run: |
+          node scripts/auditar_protetores.js
+          python3 - <<'PY'
+          import json
+          data=json.load(open('auditoria-protetores.json',encoding='utf-8'))
+          targets=['Omeprazol','Pantoprazol','Esomeprazol','Lansoprazol','Rabeprazol','Dexlansoprazol','Famotidina','Cimetidina','Nizatidina','Ranitidina','Carbonato de cálcio','Hidróxido de alumínio','Hidróxido de magnésio','Alginato de sódio','Sucralfato','Subsalicilato de bismuto','Subcitrato de bismuto']
+          assert data['packageMarkerPresent'] is True
+          assert data['dataLength'] == 1514, data['dataLength']
+          assert data['meta']['registros_base_clinica'] == 614
+          assert data['meta']['registros_adicionais_indexacao'] == 900
+          assert data['meta']['total_registros'] == 1514
+          for name in targets:
+              assert len(data['exactMatches'][name]) == 1, (name, len(data['exactMatches'][name]))
+          for name in ['Esomeprazol','Lansoprazol','Rabeprazol','Dexlansoprazol','Cimetidina','Nizatidina','Ranitidina','Alginato de sódio','Sucralfato','Subsalicilato de bismuto','Subcitrato de bismuto']:
+              assert name in data['posology'], name
+          print('AUDITORIA_OK 614 900 1514')
+          PY
+      - name: Confirmar alterações restritas
+        run: |
+          git diff --check
+          git status --short
+          CHANGED=$(git diff --name-only | sort)
+          printf '%s\n' "$CHANGED"
+          test "$CHANGED" = $'backups/gestamed-base-603-1503-fonte.html\nindex.html'
+      - name: Gravar na branch isolada
+        run: |
+          git config user.name 'GestaMed Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add backups/gestamed-base-603-1503-fonte.html index.html
+          git commit -m 'Implanta pacote permanente de protetores gástricos [pacote-gastrico-aplicado]'
+          git push origin HEAD:feature/protetores-gastricos-126
