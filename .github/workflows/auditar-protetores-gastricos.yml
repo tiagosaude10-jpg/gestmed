@@ -1,0 +1,27 @@
+name: Auditar protetores gastricos
+
+on:
+  push:
+    branches: [feature/protetores-gastricos-126]
+    paths:
+      - '.github/workflows/auditar-protetores-gastricos.yml'
+      - 'scripts/auditar_protetores.js'
+
+permissions:
+  contents: read
+
+jobs:
+  auditar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Auditar base permanente
+        run: node scripts/auditar_protetores.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-protetores-gastricos
+          path: auditoria-protetores.json
+          retention-days: 1
