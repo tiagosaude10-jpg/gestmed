@@ -2,8 +2,9 @@
 (function(){
   'use strict';
   if(document.getElementById('gm-entry-approved')) return;
+  var root=document.documentElement;
   var body=document.body;
-  if(!body) return;
+  if(!body){ root.classList.remove('gm-entry-boot'); return; }
   var probe=new Image();
   probe.onload=function(){
     var css=document.createElement('style');
@@ -14,18 +15,22 @@
     overlay.setAttribute('role','dialog');
     overlay.setAttribute('aria-modal','true');
     overlay.setAttribute('aria-label','Tela de abertura do GestaMed');
-    overlay.innerHTML='<div class="gm-entry-approved-wrap"><img class="gm-entry-approved-img" alt="" src="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=131"><button class="gm-entry-approved-start" type="button" aria-label="Começar agora"></button><button class="gm-entry-approved-login" type="button" aria-label="Entrar"></button></div>';
+    overlay.innerHTML='<div class="gm-entry-approved-wrap"><img class="gm-entry-approved-img" alt="" src="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=135"><button class="gm-entry-approved-start" type="button" aria-label="Começar agora"></button><button class="gm-entry-approved-login" type="button" aria-label="Entrar"></button></div>';
     function closeEntry(){
       if(overlay.classList.contains('gm-out')) return;
       overlay.classList.add('gm-out');
-      document.documentElement.classList.remove('gm-entry-lock');
+      root.classList.remove('gm-entry-lock');
       window.setTimeout(function(){if(overlay.parentNode) overlay.parentNode.removeChild(overlay);},220);
     }
     overlay.querySelector('.gm-entry-approved-start').addEventListener('click',closeEntry);
     overlay.querySelector('.gm-entry-approved-login').addEventListener('click',closeEntry);
-    document.documentElement.classList.add('gm-entry-lock');
+    root.classList.add('gm-entry-lock');
     body.appendChild(overlay);
+    root.classList.remove('gm-entry-boot');
   };
-  probe.onerror=function(){console.error('GestaMed: imagem da tela de abertura não encontrada.');};
-  probe.src='./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=131';
+  probe.onerror=function(){
+    root.classList.remove('gm-entry-boot');
+    console.error('GestaMed: imagem da tela de abertura não encontrada.');
+  };
+  probe.src='./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=135';
 })();
