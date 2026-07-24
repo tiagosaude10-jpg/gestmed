@@ -18,25 +18,28 @@ layout: null
 {% else %}
   {% assign nucleo_integrado = nucleo_atual %}
 {% endif %}
-{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.142' | replace: '2026.07.23.97', '2026.07.24.142' | replace: '2026.07.24.126', '2026.07.24.142' | replace: '2026.07.24.127', '2026.07.24.142' | replace: '2026.07.24.128', '2026.07.24.142' | replace: '2026.07.24.129', '2026.07.24.142' | replace: '2026.07.24.130', '2026.07.24.142' | replace: '2026.07.24.131', '2026.07.24.142' | replace: '2026.07.24.132', '2026.07.24.142' | replace: '2026.07.24.133', '2026.07.24.142' | replace: '2026.07.24.134', '2026.07.24.142' | replace: '2026.07.24.135', '2026.07.24.142' | replace: '2026.07.24.136', '2026.07.24.142' | replace: '2026.07.24.137', '2026.07.24.142' | replace: '2026.07.24.138', '2026.07.24.142' | replace: '2026.07.24.139', '2026.07.24.142' | replace: '2026.07.24.140', '2026.07.24.142' | replace: '2026.07.24.141', '2026.07.24.142' %}
-{% capture desbloqueio_head %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.141' | replace: '2026.07.23.97', '2026.07.24.141' | replace: '2026.07.24.126', '2026.07.24.141' | replace: '2026.07.24.127', '2026.07.24.141' | replace: '2026.07.24.128', '2026.07.24.141' | replace: '2026.07.24.129', '2026.07.24.141' | replace: '2026.07.24.130', '2026.07.24.141' | replace: '2026.07.24.131', '2026.07.24.141' | replace: '2026.07.24.132', '2026.07.24.141' | replace: '2026.07.24.133', '2026.07.24.141' | replace: '2026.07.24.134', '2026.07.24.141' | replace: '2026.07.24.135', '2026.07.24.141' | replace: '2026.07.24.136', '2026.07.24.141' | replace: '2026.07.24.137', '2026.07.24.141' | replace: '2026.07.24.138', '2026.07.24.141' | replace: '2026.07.24.139', '2026.07.24.141' | replace: '2026.07.24.140', '2026.07.24.141' %}
+{% capture boot_entry_head %}
 <meta name="theme-color" content="#fbeef3">
+<link rel="preload" as="image" href="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=141">
+<script>document.documentElement.classList.add('gm-entry-boot');</script>
 <style>
-html,body{overflow-x:hidden}
-html.gm-entry-boot,html.gm-entry-lock,html.gm-entry-boot body,html.gm-entry-lock body{overflow-y:auto!important;touch-action:auto!important}
-html.gm-entry-boot body:before,#gm-entry-approved{display:none!important;pointer-events:none!important}
+html.gm-entry-boot{background:#fbeef3!important;overflow:hidden!important}
+html.gm-entry-boot body{overflow:hidden!important}
+html.gm-entry-boot body:before{content:"";position:fixed;inset:0;z-index:2147483646;background:#fbeef3 url('./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=141') center center/cover no-repeat;pointer-events:none}
 </style>
-<script>document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');</script>
 {% endcapture %}
-{% assign head_integrado = desbloqueio_head | append: '</head>' %}
+{% assign head_integrado = boot_entry_head | append: '</head>' %}
 {% assign nucleo_integrado = nucleo_integrado | replace: '</head>', head_integrado %}
 {% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
 {% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
 {% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
 {% capture limpar_js %}{% include_relative search-clear-and-size-patch.js %}{% endcapture %}
+{% capture entrada_aprovada_js %}{% include_relative entry-screen-approved-patch.js %}{% endcapture %}
 {% capture home_rosa_js %}{% include_relative home-visual-pink-patch.js %}{% endcapture %}
 {% capture scripts_integracao %}
-<script>document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');var bloqueio=document.getElementById('gm-entry-approved');if(bloqueio)bloqueio.remove();document.documentElement.setAttribute('data-gestamed-build','2026.07.24.142');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
+<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.141');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
+<script>{{ entrada_aprovada_js }}</script>
 <script>{{ resumo_js }}</script>
 <script>{{ exames_js }}</script>
 <script>{{ filtros_js }}</script>
