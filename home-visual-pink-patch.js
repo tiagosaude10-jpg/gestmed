@@ -1,5 +1,5 @@
 /* GestaMed — identidade visual rosa da tela principal.
-   Patch visual conservador: preserva os elementos, IDs, eventos e funções existentes. */
+   Patch visual conservador: preserva elementos, IDs, eventos e funções existentes. */
 (function(){
   'use strict';
   if(document.getElementById('gm-home-pink-style')) return;
@@ -17,7 +17,7 @@
     .gm-home-professional{width:94px;height:94px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,#ffe0e9,#fff);font-size:52px;box-shadow:0 10px 22px rgba(222,61,111,.14)}
     .gm-home-hello{margin:14px 0 3px;font-size:26px;font-weight:800;letter-spacing:-.025em;color:#231b2c}.gm-home-desc{margin:0;color:#59647a;font-size:14px;line-height:1.45}
     input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]{border-color:#f2c6d3!important;box-shadow:0 9px 20px rgba(217,77,119,.08)!important;background:#fff!important}
-    button,[role="button"],a{ -webkit-tap-highlight-color:transparent }
+    button,[role="button"],a{-webkit-tap-highlight-color:transparent}
     .gm-pink-card{border-radius:22px!important;box-shadow:0 9px 22px rgba(37,46,70,.07)!important;overflow:hidden}
     .gm-pink-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
     .gm-pink-grid>*{min-width:0!important;margin:0!important;height:100%!important}
@@ -31,7 +31,7 @@
     var all=document.querySelectorAll('body *');
     for(var i=0;i<all.length;i++){
       var el=all[i];
-      if(el.children.length>4) continue;
+      if(el.children.length>6) continue;
       if(re.test(norm(el.textContent))) return el;
     }
     return null;
@@ -48,40 +48,46 @@
     var candidate=clickableAncestor(el)||el;
     while(candidate&&candidate!==document.body){
       var r=candidate.getBoundingClientRect();
-      if(r.width>140&&r.height>48&&r.height<220) return candidate;
+      if(r.width>120&&r.height>44&&r.height<240) return candidate;
       candidate=candidate.parentElement;
     }
     return null;
   }
+  function findSearch(){
+    return document.querySelector('input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i],input[placeholder*="principio" i]');
+  }
   function apply(){
-    if(document.querySelector('.gm-home-brand-panel')) return;
-    var search=document.querySelector('input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
-    if(!search) return;
+    var search=findSearch();
+    if(!search) return false;
 
-    var anchor=search.closest('section,header,main,div')||search.parentElement;
-    var panel=document.createElement('section');
-    panel.className='gm-home-brand-panel';
-    panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
-    anchor.parentNode.insertBefore(panel,anchor);
+    if(!document.querySelector('.gm-home-brand-panel')){
+      var anchor=search.closest('section,header,main,div')||search.parentElement;
+      if(anchor&&anchor.parentNode){
+        var panel=document.createElement('section');
+        panel.className='gm-home-brand-panel';
+        panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
+        anchor.parentNode.insertBefore(panel,anchor);
+      }
+    }
 
-    var labels=[
-      /idade gestacional/,
-      /cálculo de insulina/,
-      /painel de exames/,
-      /ganho de peso gestacional/,
-      /prescrições por trimestre/,
-      /condutas obstétricas/
-    ];
+    var labels=[/idade gestacional/,/cálculo de insulina/,/painel de exames/,/ganho de peso gestacional/,/prescrições por trimestre/,/condutas obstétricas/];
     var cards=[];
     labels.forEach(function(rx){var t=findText(rx);var c=t&&cardAncestor(t);if(c&&cards.indexOf(c)<0){c.classList.add('gm-pink-card','gm-pink-accent');cards.push(c);}});
     if(cards.length>=4){
       var parent=cards[0].parentElement;
       if(parent&&cards.every(function(c){return c.parentElement===parent;})) parent.classList.add('gm-pink-grid');
     }
-
-    var quick=findText(/acesso rápido/);
-    if(quick) quick.style.color='#161d31';
+    var quick=findText(/acesso rápido/);if(quick) quick.style.color='#161d31';
+    return true;
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(apply,80);});
-  else setTimeout(apply,80);
+
+  var attempts=0;
+  var timer=setInterval(function(){
+    attempts++;
+    if(apply()||attempts>=40) clearInterval(timer);
+  },250);
+
+  var observer=new MutationObserver(function(){apply();});
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  setTimeout(function(){observer.disconnect();},15000);
 })();
