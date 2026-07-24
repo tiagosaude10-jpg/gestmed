@@ -18,30 +18,18 @@ layout: null
 {% else %}
   {% assign nucleo_integrado = nucleo_atual %}
 {% endif %}
-{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.136' | replace: '2026.07.23.97', '2026.07.24.136' | replace: '2026.07.24.126', '2026.07.24.136' | replace: '2026.07.24.127', '2026.07.24.136' | replace: '2026.07.24.128', '2026.07.24.136' | replace: '2026.07.24.129', '2026.07.24.136' | replace: '2026.07.24.130', '2026.07.24.136' | replace: '2026.07.24.131', '2026.07.24.136' | replace: '2026.07.24.132', '2026.07.24.136' | replace: '2026.07.24.133', '2026.07.24.136' | replace: '2026.07.24.134', '2026.07.24.136' | replace: '2026.07.24.135', '2026.07.24.136' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.137' | replace: '2026.07.23.97', '2026.07.24.137' | replace: '2026.07.24.126', '2026.07.24.137' | replace: '2026.07.24.127', '2026.07.24.137' | replace: '2026.07.24.128', '2026.07.24.137' | replace: '2026.07.24.129', '2026.07.24.137' | replace: '2026.07.24.130', '2026.07.24.137' | replace: '2026.07.24.131', '2026.07.24.137' | replace: '2026.07.24.132', '2026.07.24.137' | replace: '2026.07.24.133', '2026.07.24.137' | replace: '2026.07.24.134', '2026.07.24.137' | replace: '2026.07.24.135', '2026.07.24.137' | replace: '2026.07.24.136', '2026.07.24.137' %}
 {% capture boot_entry_head %}
-<meta name="theme-color" content="#fbeef3">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="preload" as="image" href="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=136">
-<link rel="apple-touch-startup-image" href="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=136">
-<script>document.documentElement.classList.add('gm-entry-boot','gm-entry-lock');</script>
+<script>document.documentElement.classList.add('gm-entry-boot');</script>
 <style>
-html.gm-entry-boot,html.gm-entry-lock{background:#fbeef3!important;overflow:hidden!important}
-html.gm-entry-boot body{background:#fbeef3!important}
-#gm-entry-approved{position:fixed;inset:0;z-index:2147483647;background:#fbeef3;display:flex;align-items:stretch;justify-content:center;opacity:1;transition:opacity .2s ease}
-#gm-entry-approved.gm-out{opacity:0;pointer-events:none}
-.gm-entry-approved-wrap{position:relative;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#fbeef3}
-.gm-entry-approved-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;user-select:none;-webkit-user-drag:none}
-.gm-entry-approved-start{position:absolute;left:17%;right:17%;top:79.7%;height:7.2%;border:0;background:transparent;border-radius:999px;cursor:pointer;padding:0}
-.gm-entry-approved-login{position:absolute;left:25%;right:25%;top:87.6%;height:4.8%;border:0;background:transparent;cursor:pointer;padding:0}
+html.gm-entry-boot{background:#fbeef3!important;overflow:hidden!important}
+html.gm-entry-boot body{visibility:hidden!important}
+html.gm-entry-boot:before{content:"";position:fixed;inset:0;z-index:2147483646;background:#fbeef3 url('./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=137') center center/cover no-repeat}
 </style>
+<link rel="preload" as="image" href="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=137">
 {% endcapture %}
 {% assign head_integrado = boot_entry_head | append: '</head>' %}
 {% assign nucleo_integrado = nucleo_integrado | replace: '</head>', head_integrado %}
-{% capture splash_html %}
-<body><section id="gm-entry-approved" role="dialog" aria-modal="true" aria-label="Tela de abertura do GestaMed"><div class="gm-entry-approved-wrap"><img class="gm-entry-approved-img" alt="" src="./019B1C8C-CF04-45E6-9A4F-FB80A4C6A3C9.png?v=136"><button class="gm-entry-approved-start" type="button" aria-label="Começar agora"></button><button class="gm-entry-approved-login" type="button" aria-label="Entrar"></button></div></section>
-{% endcapture %}
-{% assign nucleo_integrado = nucleo_integrado | replace_first: '<body>', splash_html %}
 {% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
 {% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
 {% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
@@ -49,7 +37,7 @@ html.gm-entry-boot body{background:#fbeef3!important}
 {% capture entrada_aprovada_js %}{% include_relative entry-screen-approved-patch.js %}{% endcapture %}
 {% capture home_rosa_js %}{% include_relative home-visual-pink-patch.js %}{% endcapture %}
 {% capture scripts_integracao %}
-<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.136');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
+<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.137');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
 <script>{{ resumo_js }}</script>
 <script>{{ exames_js }}</script>
 <script>{{ filtros_js }}</script>
