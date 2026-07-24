@@ -26,7 +26,7 @@ jobs:
           jekyll build --destination _site
           test -s _site/index.html
           grep -q '2026.07.24.126' _site/index.html
-          grep -q 'data-base-integrada="614-1514"' _site/index.html
+          grep -q "data-base-integrada','614-1514" _site/index.html
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
