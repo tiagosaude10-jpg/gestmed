@@ -1,0 +1,90 @@
+name: Verificar publicacao 125
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar navegador
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Executar verificacao
+        run: |
+          cat > verificar.mjs <<'JS'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const out=[]; const fail=[]; const log=(...x)=>out.push(x.join(' '));
+          let browser;
+          try {
+            browser=await chromium.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:390,height:844},userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'});
+            page.on('pageerror',e=>fail.push('PAGEERROR '+(e.stack||e.message)));
+            const response=await page.goto('https://tiagosaude10-jpg.github.io/gestmed/?verificar125='+Date.now(),{waitUntil:'domcontentloaded',timeout:60000});
+            await page.waitForTimeout(4500);
+            const input=page.locator('#search, #searchInput, input[type="search"], input[placeholder*="medicamento" i]').first();
+            const build=await page.locator('html').getAttribute('data-gestamed-build');
+            log('HTTP',response?.status(),'BUILD',build);
+            if(build!=='2026.07.23.125') fail.push('Build publicado ainda não é 125: '+build);
+            if(!(await input.count())) fail.push('Campo de pesquisa ausente');
+            else {
+              await input.fill('paracetamol'); await page.waitForTimeout(700);
+              log('PESQUISA',await input.inputValue());
+              if((await input.inputValue())!=='paracetamol') fail.push('Digitação falhou');
+              if(!(await page.locator('body').innerText()).toLowerCase().includes('paracetamol')) fail.push('Resultado da pesquisa não apareceu');
+              await input.fill(''); await page.waitForTimeout(400);
+            }
+            const dor=page.getByRole('button',{name:/dor/i}).first();
+            if(!(await dor.count())) fail.push('Dor ausente');
+            else {
+              await dor.click(); await page.waitForTimeout(500);
+              const aberto=await page.locator('#categoryModal').evaluate(el=>el.classList.contains('open'));
+              log('DOR_MODAL',String(aberto));
+              if(!aberto) fail.push('Dor não abriu a categoria');
+              await page.locator('#categoryModal').evaluate(el=>el.classList.remove('open'));
+            }
+            const vomitos=page.getByRole('button',{name:/vômitos/i}).first();
+            if(!(await vomitos.count())) fail.push('Vômitos ausente');
+            else {
+              await vomitos.click(); await page.waitForTimeout(600);
+              log('VOMITOS_VALOR',await input.inputValue());
+              if(!(await input.inputValue())) fail.push('Vômitos não aplicou filtro');
+            }
+            const clear=page.locator('#gm-search-clear-button');
+            if(!(await clear.count())) fail.push('X ausente');
+            else {
+              await clear.click(); await page.waitForTimeout(500);
+              log('X_VALOR',JSON.stringify(await input.inputValue()));
+              if((await input.inputValue())!=='') fail.push('X não limpou');
+            }
+            await page.screenshot({path:'verificacao-125.png',fullPage:true});
+          } catch(e) {
+            fail.push('FATAL '+(e.stack||e.message));
+          } finally {
+            if(fail.length) log('FALHAS',JSON.stringify(fail)); else log('RESULTADO','TODOS OS TESTES PASSARAM');
+            fs.writeFileSync('verificacao-125.txt',out.join('\n'),'utf8');
+            console.log(out.join('\n'));
+            if(browser) await browser.close();
+          }
+          if(fail.length) process.exit(1);
+          JS
+          node verificar.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verificacao-publicacao-125
+          path: |
+            verificacao-125.txt
+            verificacao-125.png
+          retention-days: 1
