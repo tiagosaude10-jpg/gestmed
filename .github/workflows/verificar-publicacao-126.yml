@@ -44,12 +44,14 @@ jobs:
               dataLength:typeof GESTMED_DATA!=='undefined'&&Array.isArray(GESTMED_DATA)?GESTMED_DATA.length:null,
               clinical:typeof GESTMED_META!=='undefined'?GESTMED_META.registros_base_clinica:null,
               total:typeof GESTMED_META!=='undefined'?GESTMED_META.total_registros:null,
+              baseName:typeof GESTMED_META!=='undefined'?GESTMED_META.nome_base:null,
+              methodology:typeof GESTMED_META!=='undefined'?GESTMED_META.nota_metodologica:null,
               status:document.body?.innerText?.length||0,
               responseStatus:null
             }));
             snapshot.responseStatus=response?.status();
             log('TENTATIVA',attempt,snapshot);
-            if(snapshot.build==='2026.07.24.126'&&snapshot.base==='614-1514') break;
+            if(snapshot.build==='2026.07.24.126'&&snapshot.base==='614-1514'&&snapshot.baseName==='GestMed — Base ampliada com 1.514 entradas pesquisáveis') break;
             await page.waitForTimeout(8000);
           }
           expect(snapshot?.responseStatus===200,'HTTP diferente de 200');
@@ -58,6 +60,8 @@ jobs:
           expect(snapshot?.dataLength===1514,'Publicação não carregou 1514 registros');
           expect(snapshot?.clinical===614,'Publicação não carregou 614 fichas clínicas');
           expect(snapshot?.total===1514,'Contador total publicado diferente de 1514');
+          expect(snapshot?.baseName==='GestMed — Base ampliada com 1.514 entradas pesquisáveis','Nome interno da base ainda está desatualizado');
+          expect(String(snapshot?.methodology||'').startsWith('A base contém 614 registros'),'Nota metodológica ainda está desatualizada');
           expect(snapshot?.status>1000,'Interface publicada não foi montada');
           const input=page.locator('#search, #searchInput, input[type="search"], input[placeholder*="medicamento" i]').first();
           expect(await input.count()===1,'Campo de pesquisa ausente');
@@ -92,7 +96,7 @@ jobs:
           }
           expect(runtime.length===0,'Erros de execução: '+runtime.join(' | '));
           if(runtime.length) log('RUNTIME',runtime);
-          if(failures.length) log('FALHAS',failures); else log('RESULTADO','PUBLICAÇÃO 126 APROVADA');
+          if(failures.length) log('FALHAS',failures); else log('RESULTADO','PUBLICAÇÃO 126 FINAL APROVADA');
           fs.writeFileSync('verificacao-publicacao-126.txt',report.join('\n\n'),'utf8');
           await page.screenshot({path:'verificacao-publicacao-126.png',fullPage:true});
           await browser.close();
