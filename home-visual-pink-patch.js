@@ -9,7 +9,7 @@
   style.textContent=`
     :root{--gm-pink:#ec3f78;--gm-pink-2:#ff7f9c;--gm-soft:#fff4f7;--gm-ink:#152036;--gm-muted:#71809a}
     body{background:linear-gradient(180deg,#fff8fa 0%,#fff 55%,#fff6f9 100%)!important;color:var(--gm-ink)}
-    .hero-banner,.hero-sr{display:none!important}
+    .hero-banner,.hero-sr,.gm-legacy-blue-visual{display:none!important}
     .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 16px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
     .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%);pointer-events:none}
     .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
@@ -54,9 +54,45 @@
     }
     return null;
   }
+  function hideLegacyBlueVisual(search){
+    var sr=search.getBoundingClientRect();
+    var viewport=Math.max(document.documentElement.clientWidth||0,window.innerWidth||0);
+    var imgs=document.querySelectorAll('img,picture,svg,canvas');
+    var best=null,bestArea=0;
+
+    for(var i=0;i<imgs.length;i++){
+      var el=imgs[i];
+      if(el.closest('.gm-home-brand-panel')) continue;
+      if(clickableAncestor(el)) continue;
+      var r=el.getBoundingClientRect();
+      if(r.bottom>sr.top+12) continue;
+      if(r.width<viewport*.75||r.height<260) continue;
+      if(r.top>80) continue;
+      var area=r.width*r.height;
+      if(area>bestArea){best=el;bestArea=area;}
+    }
+
+    if(!best) return false;
+
+    var target=best;
+    var parent=best.parentElement;
+    if(parent&&parent!==document.body){
+      var interactive=parent.querySelector('a,button,input,select,textarea,[role="button"],[data-action]');
+      var meaningful=Array.prototype.filter.call(parent.children,function(child){
+        return child.nodeType===1&&!['SOURCE'].includes(child.tagName);
+      });
+      if(!interactive&&meaningful.length===1) target=parent;
+    }
+
+    target.classList.add('gm-legacy-blue-visual');
+    target.setAttribute('aria-hidden','true');
+    return true;
+  }
   function apply(){
     var search=document.querySelector('#search,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
     if(!search) return false;
+
+    hideLegacyBlueVisual(search);
 
     if(!document.querySelector('.gm-home-brand-panel')){
       var main=search.closest('main');
@@ -79,12 +115,13 @@
     return true;
   }
   function start(){
-    if(apply()) return;
     var attempts=0;
-    var timer=setInterval(function(){attempts++;if(apply()||attempts>=50) clearInterval(timer);},200);
-    var observer=new MutationObserver(function(){if(apply()) observer.disconnect();});
-    observer.observe(document.documentElement,{childList:true,subtree:true});
-    setTimeout(function(){observer.disconnect();},10000);
+    var timer=setInterval(function(){
+      attempts++;
+      apply();
+      if(attempts>=30) clearInterval(timer);
+    },250);
+    apply();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
   else start();
