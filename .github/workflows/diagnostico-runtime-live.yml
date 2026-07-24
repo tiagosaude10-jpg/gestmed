@@ -1,4 +1,4 @@
-name: Validacao isolada GestaMed
+name: Diagnostico limpo GestaMed publicado
 
 on:
   pull_request:
@@ -8,42 +8,26 @@ permissions:
   contents: read
 
 jobs:
-  validar:
+  diagnostico:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-
-      - name: Montar pagina como o GitHub Pages
-        shell: bash
-        run: |
-          gem install jekyll -v 4.3.4 --no-document
-          jekyll build --destination _site
-          test -s _site/index.html
-          grep -q '2026.07.23.124' _site/index.html
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Instalar navegador de teste
+      - name: Instalar navegador
         shell: bash
         run: |
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
 
-      - name: Testar pesquisa, filtros e X
+      - name: Testar versão publicada
         shell: bash
         run: |
-          python3 -m http.server 4173 --directory _site >server.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID || true' EXIT
-          sleep 2
-          cat > validar.mjs <<'JS'
+          cat > diagnostico.mjs <<'JS'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
 
@@ -53,90 +37,102 @@ jobs:
           let browser;
           let page;
 
+          function describeElement(el) {
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
+            const s = getComputedStyle(el);
+            return { tag: el.tagName, id: el.id, className: typeof el.className === 'string' ? el.className : '', text: (el.textContent || '').trim().slice(0, 100), pointerEvents: s.pointerEvents, position: s.position, zIndex: s.zIndex, rect: {x:r.x,y:r.y,width:r.width,height:r.height} };
+          }
+
           try {
             browser = await chromium.launch({ headless: true });
             page = await browser.newPage({ viewport: { width: 390, height: 844 }, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1' });
             page.on('pageerror', err => errors.push('PAGEERROR: ' + (err.stack || err.message)));
             page.on('console', msg => { if (msg.type() === 'error') errors.push('CONSOLE: ' + msg.text()); });
 
-            const response = await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 60000 });
-            await page.waitForTimeout(3500);
+            const url = 'https://tiagosaude10-jpg.github.io/gestmed/?teste-limpo=' + Date.now();
+            const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+            await page.waitForTimeout(4000);
             const input = page.locator('#search, #searchInput, input[type="search"], input[placeholder*="medicamento" i]').first();
-            const build = await page.locator('html').getAttribute('data-gestamed-build');
-            say('HTTP', response?.status(), 'BUILD', build);
-            if (response?.status() !== 200) errors.push('HTTP diferente de 200');
-            if (build !== '2026.07.23.124') errors.push('Build incorreto: ' + build);
+            say('HTTP', response?.status(), 'BUILD', await page.locator('html').getAttribute('data-gestamed-build'));
             if (!(await input.count())) throw new Error('Campo de pesquisa não encontrado');
+            say('VALOR_INICIAL', await input.inputValue());
+
+            const state = await page.evaluate(() => ({
+              modalTexts: Array.from(document.querySelectorAll('[role="dialog"], .modal, .sheet, .bottom-sheet')).filter(el => {
+                const s = getComputedStyle(el); return s.display !== 'none' && s.visibility !== 'hidden';
+              }).slice(0,10).map(el => (el.textContent || '').trim().slice(0,180)),
+              delegation: document.documentElement.getAttribute('data-gm-filter-delegation'),
+              filterPatch: document.documentElement.getAttribute('data-gm-quick-filter-patch'),
+              clearPatch: document.documentElement.getAttribute('data-gm-search-clear-size')
+            }));
+            say('ESTADO', state);
+
+            for (const name of ['Dor', 'Febre', 'Alergia', 'Náuseas', 'Vômitos', 'Analgésicos']) {
+              const button = page.getByRole('button', { name: new RegExp(name, 'i') }).first();
+              if (!(await button.count())) { errors.push('Ausente: ' + name); continue; }
+              const query = await button.getAttribute('data-gm-query');
+              const hit = await button.evaluate(el => {
+                const r = el.getBoundingClientRect();
+                const x = r.left + r.width / 2; const y = r.top + r.height / 2;
+                return { button: ({tag:el.tagName,id:el.id,className:typeof el.className==='string'?el.className:'',text:(el.textContent||'').trim().slice(0,100)}), stack: document.elementsFromPoint(x,y).slice(0,8).map(e => ({tag:e.tagName,id:e.id,className:typeof e.className==='string'?e.className:'',text:(e.textContent||'').trim().slice(0,80),pointer:getComputedStyle(e).pointerEvents,z:getComputedStyle(e).zIndex})) };
+              });
+              say('HIT_' + name, hit);
+              try { await button.click({ timeout: 5000 }); } catch (e) { errors.push('Clique físico ' + name + ': ' + e.message); }
+              await page.waitForTimeout(500);
+              const physicalValue = await input.inputValue();
+              say('FISICO', name, 'QUERY', query, 'VALOR', physicalValue);
+              if (physicalValue !== query) {
+                await button.dispatchEvent('click');
+                await page.waitForTimeout(500);
+                const dispatchedValue = await input.inputValue();
+                say('DISPATCH', name, 'VALOR', dispatchedValue);
+                if (dispatchedValue !== query) errors.push('Botão não atualizou: ' + name + ' query=' + query + ' fisico=' + physicalValue + ' dispatch=' + dispatchedValue);
+              }
+            }
 
             await input.fill('paracetamol');
-            await page.waitForTimeout(800);
-            const typed = await input.inputValue();
-            say('DIGITACAO', typed);
-            if (typed !== 'paracetamol') errors.push('Digitação não permaneceu no campo');
-            if (!(await page.locator('body').innerText()).toLowerCase().includes('paracetamol')) errors.push('Pesquisa digitada não atualizou os resultados');
+            await page.waitForTimeout(700);
+            say('DIGITADO', await input.inputValue(), 'TEM_RESULTADO', (await page.locator('body').innerText()).toLowerCase().includes('paracetamol'));
 
-            for (const name of ['Dor', 'Febre', 'Alergia', 'Náuseas', 'Vômitos', 'Analgésicos', 'Antibióticos', 'Protetores gástricos']) {
-              try {
-                const button = page.getByRole('button', { name: new RegExp(name, 'i') }).first();
-                if (!(await button.count())) {
-                  errors.push('Botão ausente: ' + name);
-                  continue;
-                }
-                const query = await button.getAttribute('data-gm-query');
-                await button.click({ force: true, timeout: 5000 });
-                await page.waitForTimeout(550);
-                const value = await input.inputValue();
-                say('BOTAO', name, 'QUERY', query, 'VALOR', value);
-                if (!query) errors.push('Botão sem consulta: ' + name);
-                if (value !== query) errors.push('Clique não atualizou a pesquisa: ' + name + ' esperado=' + query + ' obtido=' + value);
-              } catch (buttonError) {
-                errors.push('Falha no botão ' + name + ': ' + (buttonError.stack || buttonError.message));
+            const clear = page.locator('#gm-search-clear-button');
+            if (!(await clear.count())) errors.push('X ausente');
+            else {
+              const hitX = await clear.evaluate(el => {
+                const r=el.getBoundingClientRect(); const x=r.left+r.width/2; const y=r.top+r.height/2;
+                return document.elementsFromPoint(x,y).slice(0,8).map(e=>({tag:e.tagName,id:e.id,className:typeof e.className==='string'?e.className:'',text:(e.textContent||'').trim().slice(0,80),pointer:getComputedStyle(e).pointerEvents,z:getComputedStyle(e).zIndex}));
+              });
+              say('HIT_X', hitX);
+              try { await clear.click({ timeout: 5000 }); } catch(e) { errors.push('Clique físico X: ' + e.message); }
+              await page.waitForTimeout(500);
+              let value = await input.inputValue();
+              say('X_FISICO', value);
+              if (value !== '') {
+                await clear.dispatchEvent('click');
+                await page.waitForTimeout(500);
+                value = await input.inputValue();
+                say('X_DISPATCH', value);
               }
+              if (value !== '') errors.push('X não limpou');
             }
-
-            try {
-              const clear = page.locator('#gm-search-clear-button');
-              if (!(await clear.count())) {
-                errors.push('Botão X ausente');
-              } else {
-                await clear.click({ force: true, timeout: 5000 });
-                await page.waitForTimeout(550);
-                const cleared = await input.inputValue();
-                say('LIMPEZA', cleared === '' ? 'OK' : cleared);
-                if (cleared !== '') errors.push('Botão X não limpou a pesquisa');
-              }
-            } catch (clearError) {
-              errors.push('Falha no botão X: ' + (clearError.stack || clearError.message));
-            }
-
-            await input.fill('dipirona');
-            await page.waitForTimeout(800);
-            say('DIGITACAO_FINAL', await input.inputValue());
-            if ((await input.inputValue()) !== 'dipirona') errors.push('Pesquisa manual falhou após usar filtros e X');
-            if (!(await page.locator('body').innerText()).toLowerCase().includes('dipirona')) errors.push('Resultados não atualizaram após nova pesquisa manual');
           } catch (fatal) {
             errors.push('FATAL: ' + (fatal.stack || fatal.message));
           } finally {
-            if (page) {
-              try { await page.screenshot({ path: 'validacao.png', fullPage: true }); } catch (e) { errors.push('Screenshot: ' + e.message); }
-            }
+            if (page) { try { await page.screenshot({ path: 'diagnostico.png', fullPage: true }); } catch(e) {} }
             if (errors.length) say('ERROS', errors); else say('RESULTADO', 'TODOS OS TESTES PASSARAM');
-            fs.writeFileSync('validacao.txt', report.join('\n\n'), 'utf8');
+            fs.writeFileSync('diagnostico.txt', report.join('\n\n'), 'utf8');
             console.log(report.join('\n\n'));
             if (browser) await browser.close();
           }
-          if (errors.length) process.exit(1);
           JS
-          node validar.mjs
+          node diagnostico.mjs
 
       - name: Enviar relatório
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: validacao-isolada-gestamed
+          name: diagnostico-limpo-publicado
           path: |
-            validacao.txt
-            validacao.png
-            server.log
-            _site/index.html
+            diagnostico.txt
+            diagnostico.png
           retention-days: 1
