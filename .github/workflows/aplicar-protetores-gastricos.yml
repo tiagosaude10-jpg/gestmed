@@ -1,75 +1,14 @@
 name: Aplicar pacote protetores gastricos
 
 on:
-  push:
-    branches: [feature/protetores-gastricos-126]
-    paths:
-      - '.github/workflows/aplicar-protetores-gastricos.yml'
-      - 'scripts/implantar_protetores_gastricos.js'
-      - 'scripts/auditar_protetores.js'
-  pull_request:
-    branches: [main]
-    paths:
-      - '.github/workflows/aplicar-protetores-gastricos.yml'
-      - 'scripts/implantar_protetores_gastricos.js'
-      - 'scripts/auditar_protetores.js'
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  aplicar:
-    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[pacote-gastrico-aplicado]') }}
+  concluido:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: feature/protetores-gastricos-126
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Verificar scripts
-        run: |
-          node --check scripts/implantar_protetores_gastricos.js
-          node --check scripts/auditar_protetores.js
-      - name: Implantar diretamente na base permanente
-        run: node scripts/implantar_protetores_gastricos.js
-      - name: Auditar resultado antes do commit
-        run: |
-          node scripts/auditar_protetores.js
-          python3 - <<'PY'
-          import json
-          data=json.load(open('auditoria-protetores.json',encoding='utf-8'))
-          targets=['Omeprazol','Pantoprazol','Esomeprazol','Lansoprazol','Rabeprazol','Dexlansoprazol','Famotidina','Cimetidina','Nizatidina','Ranitidina','Carbonato de cálcio','Hidróxido de alumínio','Hidróxido de magnésio','Alginato de sódio','Sucralfato','Subsalicilato de bismuto','Subcitrato de bismuto']
-          assert data['packageMarkerPresent'] is True
-          assert data['dataLength'] == 1514, data['dataLength']
-          assert data['meta']['registros_base_clinica'] == 614
-          assert data['meta']['registros_adicionais_indexacao'] == 900
-          assert data['meta']['total_registros'] == 1514
-          for name in targets:
-              assert len(data['exactMatches'][name]) == 1, (name, len(data['exactMatches'][name]))
-          for name in ['Esomeprazol','Lansoprazol','Rabeprazol','Dexlansoprazol','Cimetidina','Nizatidina','Ranitidina','Alginato de sódio','Sucralfato','Subsalicilato de bismuto','Subcitrato de bismuto']:
-              assert name in data['posology'], name
-          print('AUDITORIA_OK 614 900 1514')
-          PY
-      - name: Confirmar alterações restritas
-        shell: bash
-        run: |
-          git status --short
-          mapfile -t changed < <(git diff --name-only | sort)
-          printf 'Arquivo alterado: %s\n' "${changed[@]}"
-          test "${#changed[@]}" -eq 2
-          test "${changed[0]}" = 'backups/gestamed-base-603-1503-fonte.html'
-          test "${changed[1]}" = 'index.html'
-      - name: Gravar na branch isolada
-        run: |
-          if git diff --quiet; then
-            echo 'Pacote já aplicado; nenhuma gravação necessária.'
-            exit 0
-          fi
-          git config user.name 'GestaMed Bot'
-          git config user.email 'actions@users.noreply.github.com'
-          git add backups/gestamed-base-603-1503-fonte.html index.html
-          git commit -m 'Implanta pacote permanente de protetores gástricos [pacote-gastrico-aplicado]'
-          git push origin HEAD:feature/protetores-gastricos-126
+      - name: Implantação já concluída
+        run: echo 'O pacote permanente já foi aplicado e auditado na branch isolada.'
