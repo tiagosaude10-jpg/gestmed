@@ -8,7 +8,8 @@ const appMarker = '// app.js — GestMed';
 const start = text.indexOf(dataMarker);
 const end = text.indexOf(appMarker, start + dataMarker.length);
 if (start < 0 || end < 0 || end <= start) throw new Error('Marcadores da base não encontrados');
-const block = text.slice(start + dataMarker.length, end);
+let block = text.slice(start + dataMarker.length, end);
+block = block.replace(/^\s*\([^\n]*\)\s*/, '');
 
 const sandbox = { console: { log() {}, warn() {}, error() {} }, window: {}, document: {} };
 vm.createContext(sandbox);
