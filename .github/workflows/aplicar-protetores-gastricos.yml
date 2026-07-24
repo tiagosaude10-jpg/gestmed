@@ -54,12 +54,15 @@ jobs:
           print('AUDITORIA_OK 614 900 1514')
           PY
       - name: Confirmar alterações restritas
+        shell: bash
         run: |
           git diff --check
           git status --short
-          CHANGED=$(git diff --name-only | sort)
-          printf '%s\n' "$CHANGED"
-          test "$CHANGED" = $'backups/gestamed-base-603-1503-fonte.html\nindex.html'
+          mapfile -t changed < <(git diff --name-only | sort)
+          printf 'Arquivo alterado: %s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 2
+          test "${changed[0]}" = 'backups/gestamed-base-603-1503-fonte.html'
+          test "${changed[1]}" = 'index.html'
       - name: Gravar na branch isolada
         run: |
           if git diff --quiet; then
