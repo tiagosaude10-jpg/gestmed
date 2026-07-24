@@ -1,0 +1,1 @@
+Verificar publicação funcional 2026.07.23.125 sem incorporar esta branch.
