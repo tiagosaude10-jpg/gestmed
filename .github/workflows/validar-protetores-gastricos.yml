@@ -1,0 +1,55 @@
+name: Validar protetores gastricos 126
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'backups/gestamed-base-603-1503-fonte.html'
+      - 'index.html'
+      - 'scripts/validar_protetores_ui.mjs'
+      - '.github/workflows/validar-protetores-gastricos.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Montar página como o GitHub Pages
+        run: |
+          gem install jekyll -v 4.3.4 --no-document
+          jekyll build --destination _site
+          test -s _site/index.html
+          grep -q '2026.07.24.126' _site/index.html
+          grep -q 'data-base-integrada="614-1514"' _site/index.html
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar navegador de teste
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Testar versão 126 em tela de iPhone
+        run: |
+          python3 -m http.server 4173 --directory _site > servidor-validacao.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 2
+          node scripts/validar_protetores_ui.mjs
+      - name: Enviar evidências
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validacao-protetores-gastricos-126
+          path: |
+            validacao-protetores-126.txt
+            validacao-protetores-126.png
+            servidor-validacao.log
+            _site/index.html
+          retention-days: 1
