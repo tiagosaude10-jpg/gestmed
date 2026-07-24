@@ -1,5 +1,5 @@
 /* GestaMed — identidade visual rosa da tela principal.
-   Patch visual conservador: preserva os elementos, IDs, eventos e funções existentes. */
+   Patch visual seguro: não altera links, eventos, IDs ou funções. */
 (function(){
   'use strict';
   if(document.getElementById('gm-home-pink-style')) return;
@@ -9,9 +9,10 @@
   style.textContent=`
     :root{--gm-pink:#ec3f78;--gm-pink-2:#ff7f9c;--gm-soft:#fff4f7;--gm-ink:#152036;--gm-muted:#71809a}
     body{background:linear-gradient(180deg,#fff8fa 0%,#fff 55%,#fff6f9 100%)!important;color:var(--gm-ink)}
-    .gm-old-header-hidden{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
+    header.gm-legacy-hero-header{display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important;pointer-events:none!important}
+    header.gm-legacy-hero-header>.hero-banner,header.gm-legacy-hero-header>.hero-sr{display:none!important}
     .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 16px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
-    .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%)}
+    .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%);pointer-events:none}
     .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
     .gm-home-brand-copy{min-width:0}.gm-home-brand-logo{font-size:34px;line-height:1;font-weight:800;letter-spacing:-.045em;background:linear-gradient(90deg,#df255f,#ff8da8);-webkit-background-clip:text;background-clip:text;color:transparent}
     .gm-home-brand-tag{margin-top:6px;font-size:12px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:#a94c68;font-weight:650}
@@ -54,30 +55,28 @@
     }
     return null;
   }
-  function hideOldHeader(search){
-    var all=document.querySelectorAll('body header,body section,body div');
-    var sr=search.getBoundingClientRect();
-    var best=null,bestScore=-1;
-    for(var i=0;i<all.length;i++){
-      var el=all[i];
-      if(el.classList.contains('gm-home-brand-panel')||el.contains(search)) continue;
-      var txt=norm(el.textContent);
-      if(txt.indexOf('gestamed')<0||txt.indexOf('medicamentos na gestação')<0) continue;
-      var r=el.getBoundingClientRect();
-      if(r.bottom>sr.top+8||r.height<140||r.width<250) continue;
-      var score=r.height+r.width/10;
-      if(score>bestScore){best=el;bestScore=score;}
-    }
-    if(best) best.classList.add('gm-old-header-hidden');
+  function hideExactLegacyHeader(){
+    var hero=document.querySelector('header > .hero-banner');
+    if(!hero) return false;
+    var header=hero.parentElement;
+    var safe=true;
+    Array.prototype.forEach.call(header.children,function(child){
+      if(!child.classList.contains('hero-banner')&&!child.classList.contains('hero-sr')) safe=false;
+    });
+    if(!safe) return false;
+    header.classList.add('gm-legacy-hero-header');
+    header.setAttribute('aria-hidden','true');
+    return true;
   }
   function apply(){
-    var search=document.querySelector('input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
+    var search=document.querySelector('#search,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
     if(!search) return false;
 
-    hideOldHeader(search);
+    hideExactLegacyHeader();
 
     if(!document.querySelector('.gm-home-brand-panel')){
-      var anchor=search.closest('section,header,main,div')||search.parentElement;
+      var main=search.closest('main');
+      var anchor=main||search.closest('section,div')||search.parentElement;
       var panel=document.createElement('section');
       panel.className='gm-home-brand-panel';
       panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
