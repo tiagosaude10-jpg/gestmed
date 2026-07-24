@@ -18,9 +18,9 @@ layout: null
 {% else %}
   {% assign nucleo_integrado = nucleo_atual %}
 {% endif %}
-{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.146' | replace: '2026.07.23.97', '2026.07.24.146' | replace: '2026.07.24.126', '2026.07.24.146' | replace: '2026.07.24.127', '2026.07.24.146' | replace: '2026.07.24.128', '2026.07.24.146' | replace: '2026.07.24.129', '2026.07.24.146' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.147' | replace: '2026.07.23.97', '2026.07.24.147' | replace: '2026.07.24.126', '2026.07.24.147' | replace: '2026.07.24.127', '2026.07.24.147' | replace: '2026.07.24.128', '2026.07.24.147' | replace: '2026.07.24.129', '2026.07.24.147' | replace: '2026.07.24.146', '2026.07.24.147' %}
 {% capture safe_head %}
-<meta name="gestamed-build" content="2026.07.24.146">
+<meta name="gestamed-build" content="2026.07.24.147">
 <style>
 #gm-entry-approved,#gm-entry-screen,.gm-entry-screen,.entry-screen,[aria-label="Tela de abertura do GestaMed"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;height:0!important;min-height:0!important;overflow:hidden!important}
 html,body{overflow-x:hidden!important;touch-action:auto!important}
@@ -46,12 +46,14 @@ html,body{overflow-x:hidden!important;touch-action:auto!important}
 {% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
 {% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
 {% capture limpar_js %}{% include_relative search-clear-and-size-patch.js %}{% endcapture %}
+{% capture desbloqueio_busca_js %}{% include_relative search-unlock-patch.js %}{% endcapture %}
 {% capture scripts_integracao %}
-<script>(function(){document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');var ids=['gm-entry-approved','gm-entry-screen'];ids.forEach(function(id){var o=document.getElementById(id);if(o)o.remove();});document.documentElement.setAttribute('data-gestamed-build','2026.07.24.146');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');})();</script>
+<script>(function(){document.documentElement.classList.remove('gm-entry-boot','gm-entry-lock');var ids=['gm-entry-approved','gm-entry-screen'];ids.forEach(function(id){var o=document.getElementById(id);if(o)o.remove();});document.documentElement.setAttribute('data-gestamed-build','2026.07.24.147');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');})();</script>
 <script>{{ resumo_js }}</script>
 <script>{{ exames_js }}</script>
 <script>{{ filtros_js }}</script>
 <script>{{ limpar_js }}</script>
+<script>{{ desbloqueio_busca_js }}</script>
 {% endcapture %}
 {% assign fechamento_integrado = scripts_integracao | append: '</body>' %}
 {{ nucleo_integrado | replace: '</body>', fechamento_integrado }}
