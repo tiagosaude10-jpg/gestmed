@@ -1,0 +1,56 @@
+name: Corrigir metadados pacote 126
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/corrigir_metadados_pacote_126.js'
+      - '.github/workflows/corrigir-metadados-pacote-126.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/protetores-gastricos-126
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Corrigir metadados permanentes
+        run: |
+          node --check scripts/corrigir_metadados_pacote_126.js
+          node scripts/corrigir_metadados_pacote_126.js
+      - name: Auditar base corrigida
+        run: |
+          node scripts/auditar_protetores.js
+          python3 - <<'PY'
+          import json
+          data=json.load(open('auditoria-protetores.json',encoding='utf-8'))
+          assert data['dataLength'] == 1514
+          assert data['meta']['nome_base'] == 'GestMed — Base ampliada com 1.514 entradas pesquisáveis'
+          assert data['meta']['registros_base_clinica'] == 614
+          assert data['meta']['registros_adicionais_indexacao'] == 900
+          assert data['meta']['total_registros'] == 1514
+          assert data['meta']['nota_metodologica'].startswith('A base contém 614 registros')
+          print('METADADOS_AUDITADOS')
+          PY
+      - name: Confirmar somente dois arquivos de produção
+        shell: bash
+        run: |
+          mapfile -t changed < <(git diff --name-only | sort)
+          printf 'Arquivo alterado: %s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 2
+          test "${changed[0]}" = 'backups/gestamed-base-603-1503-fonte.html'
+          test "${changed[1]}" = 'index.html'
+      - name: Gravar correção na branch isolada
+        run: |
+          git config user.name 'GestaMed Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add backups/gestamed-base-603-1503-fonte.html index.html
+          git commit -m 'Corrige metadados internos da base 614-1514'
+          git push origin HEAD:feature/protetores-gastricos-126
