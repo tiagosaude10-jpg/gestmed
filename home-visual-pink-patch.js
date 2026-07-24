@@ -58,9 +58,7 @@
   function isSafeVisualShell(el,hiddenChild){
     if(!el||el===document.body||el===document.documentElement) return false;
     if(el.querySelector('a,button,input,select,textarea,[role="button"],[data-action],form')) return false;
-    var children=Array.prototype.filter.call(el.children,function(child){
-      return child.nodeType===1&&child.tagName!=='SOURCE';
-    });
+    var children=Array.prototype.filter.call(el.children,function(child){return child.nodeType===1&&child.tagName!=='SOURCE';});
     if(!children.length) return true;
     return children.every(function(child){
       return child===hiddenChild||child.classList.contains('gm-legacy-blue-visual')||child.classList.contains('gm-legacy-blue-shell')||child.classList.contains('hero-banner')||child.classList.contains('hero-sr');
@@ -71,7 +69,6 @@
     var viewport=Math.max(document.documentElement.clientWidth||0,window.innerWidth||0);
     var imgs=document.querySelectorAll('img,picture,svg,canvas');
     var best=null,bestArea=0;
-
     for(var i=0;i<imgs.length;i++){
       var el=imgs[i];
       if(el.closest('.gm-home-brand-panel')) continue;
@@ -83,22 +80,16 @@
       var area=r.width*r.height;
       if(area>bestArea){best=el;bestArea=area;}
     }
-
     if(!best) return false;
-
     var target=best;
     var parent=best.parentElement;
     if(parent&&parent!==document.body){
       var interactive=parent.querySelector('a,button,input,select,textarea,[role="button"],[data-action]');
-      var meaningful=Array.prototype.filter.call(parent.children,function(child){
-        return child.nodeType===1&&child.tagName!=='SOURCE';
-      });
+      var meaningful=Array.prototype.filter.call(parent.children,function(child){return child.nodeType===1&&child.tagName!=='SOURCE';});
       if(!interactive&&meaningful.length===1) target=parent;
     }
-
     target.classList.add('gm-legacy-blue-visual');
     target.setAttribute('aria-hidden','true');
-
     var shell=target.parentElement;
     var depth=0;
     while(shell&&depth<3&&isSafeVisualShell(shell,target)){
@@ -117,22 +108,30 @@
     host.style.setProperty('margin-top','0','important');
     host.style.setProperty('transform','none','important');
   }
+  function liftPanelToTop(panel){
+    if(!panel) return;
+    window.requestAnimationFrame(function(){
+      var top=panel.getBoundingClientRect().top;
+      if(top>4){
+        panel.style.setProperty('margin-top',(-Math.ceil(top))+'px','important');
+      }
+    });
+  }
   function apply(){
     var search=document.querySelector('#search,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
     if(!search) return false;
-
     hideLegacyBlueVisual(search);
     protectSearchSpacing(search);
-
-    if(!document.querySelector('.gm-home-brand-panel')){
+    var panel=document.querySelector('.gm-home-brand-panel');
+    if(!panel){
       var main=search.closest('main');
       var anchor=main||search.closest('section,div')||search.parentElement;
-      var panel=document.createElement('section');
+      panel=document.createElement('section');
       panel.className='gm-home-brand-panel';
       panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
       anchor.parentNode.insertBefore(panel,anchor);
     }
-
+    liftPanelToTop(panel);
     var labels=[/idade gestacional/,/cálculo de insulina/,/painel de exames/,/ganho de peso gestacional/,/prescrições por trimestre/,/condutas obstétricas/];
     var cards=[];
     labels.forEach(function(rx){var t=findText(rx);var c=t&&cardAncestor(t);if(c&&cards.indexOf(c)<0){c.classList.add('gm-pink-card','gm-pink-accent');cards.push(c);}});
@@ -146,11 +145,7 @@
   }
   function start(){
     var attempts=0;
-    var timer=setInterval(function(){
-      attempts++;
-      apply();
-      if(attempts>=30) clearInterval(timer);
-    },250);
+    var timer=setInterval(function(){attempts++;apply();if(attempts>=30) clearInterval(timer);},250);
     apply();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
