@@ -19,7 +19,7 @@ function readExpr(expr) {
   catch (e) { return { __error: String(e && e.message || e) }; }
 }
 function norm(v) {
-  return String(v == null ? '' : v).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  return String(v == null ? '' : v).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 }
 function recText(r) {
   try { return norm(JSON.stringify(r)); } catch { return ''; }
@@ -34,7 +34,7 @@ for (const name of ['GESTMED_META','GESTMED_STRINGS','GESTMED_COMPACT','GESTMED_
     type,
     isArray: Array.isArray(value),
     length: Array.isArray(value) ? value.length : null,
-    keys: value && !Array.isArray(value) && typeof value === 'object' ? Object.keys(value).slice(0, 30) : null
+    keys: value && !Array.isArray(value) && typeof value === 'object' ? Object.keys(value).slice(0, 60) : null
   };
 }
 
@@ -48,6 +48,7 @@ const targets = [
   'Sucralfato','Subsalicilato de bismuto','Subcitrato de bismuto'
 ];
 const matches = {};
+const exactMatches = {};
 for (const target of targets) {
   const n = norm(target);
   matches[target] = data
@@ -55,24 +56,35 @@ for (const target of targets) {
     .filter(x => x.text.includes(n))
     .slice(0, 12)
     .map(x => ({ index: x.index, record: x.record }));
+  exactMatches[target] = data
+    .map((r, i) => ({ index: i, record: r }))
+    .filter(x => norm(x.record && x.record.principio_ativo) === n || norm(x.record && x.record.principio_ativo_base) === n)
+    .map(x => ({ index: x.index, record: x.record }));
 }
 
 const sampleIndexes = new Set();
-for (const arr of Object.values(matches)) for (const item of arr) sampleIndexes.add(item.index);
-if (!sampleIndexes.size) {
-  [0,1,2,10,50,100,200,400,600].forEach(i => { if (i < data.length) sampleIndexes.add(i); });
-}
-const samples = [...sampleIndexes].slice(0, 30).map(index => ({ index, record: data[index] }));
+for (const arr of Object.values(exactMatches)) for (const item of arr) sampleIndexes.add(item.index);
+if (!sampleIndexes.size) [0,1,2,10,50,100,200,400,600].forEach(i => { if (i < data.length) sampleIndexes.add(i); });
+const samples = [...sampleIndexes].slice(0, 40).map(index => ({ index, record: data[index] }));
 
 const report = {
   sourcePath,
   sourceBytes: Buffer.byteLength(text),
   dataBlockBytes: Buffer.byteLength(block),
+  packageMarkerPresent: text.includes('GESTMED_GASTRIC_PACKAGE_126_START'),
   variables: vars,
+  meta: readExpr(`typeof GESTMED_META !== 'undefined' ? GESTMED_META : null`),
   dataLength: data.length,
   firstRecordKeys: data[0] && typeof data[0] === 'object' ? Object.keys(data[0]) : [],
   matches,
+  exactMatches,
+  posology: readExpr(`typeof GESTMED_POSOLOGIA_ADULTO !== 'undefined' ? GESTMED_POSOLOGIA_ADULTO : null`),
   samples
 };
 fs.writeFileSync('auditoria-protetores.json', JSON.stringify(report, null, 2));
-console.log(JSON.stringify({ dataLength: report.dataLength, variables: report.variables, counts: Object.fromEntries(Object.entries(matches).map(([k,v]) => [k,v.length])) }, null, 2));
+console.log(JSON.stringify({
+  packageMarkerPresent: report.packageMarkerPresent,
+  dataLength: report.dataLength,
+  meta: report.meta,
+  exactCounts: Object.fromEntries(Object.entries(exactMatches).map(([k,v]) => [k,v.length]))
+}, null, 2));
