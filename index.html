@@ -18,19 +18,21 @@ layout: null
 {% else %}
   {% assign nucleo_integrado = nucleo_atual %}
 {% endif %}
-{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.131' | replace: '2026.07.23.97', '2026.07.24.131' | replace: '2026.07.24.126', '2026.07.24.131' | replace: '2026.07.24.127', '2026.07.24.131' | replace: '2026.07.24.128', '2026.07.24.131' | replace: '2026.07.24.129', '2026.07.24.131' | replace: '2026.07.24.130', '2026.07.24.131' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '2026.07.23.91', '2026.07.24.132' | replace: '2026.07.23.97', '2026.07.24.132' | replace: '2026.07.24.126', '2026.07.24.132' | replace: '2026.07.24.127', '2026.07.24.132' | replace: '2026.07.24.128', '2026.07.24.132' | replace: '2026.07.24.129', '2026.07.24.132' | replace: '2026.07.24.130', '2026.07.24.132' | replace: '2026.07.24.131', '2026.07.24.132' %}
 {% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
 {% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
 {% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
 {% capture limpar_js %}{% include_relative search-clear-and-size-patch.js %}{% endcapture %}
 {% capture entrada_aprovada_js %}{% include_relative entry-screen-approved-patch.js %}{% endcapture %}
+{% capture home_rosa_js %}{% include_relative home-visual-pink-patch.js %}{% endcapture %}
 {% capture scripts_integracao %}
-<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.131');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
+<script>document.documentElement.setAttribute('data-gestamed-build','2026.07.24.132');document.documentElement.setAttribute('data-base-integrada','{% if integracao_valida %}614-1514{% else %}fallback{% endif %}');</script>
 <script>{{ resumo_js }}</script>
 <script>{{ exames_js }}</script>
 <script>{{ filtros_js }}</script>
 <script>{{ limpar_js }}</script>
 <script>{{ entrada_aprovada_js }}</script>
+<script>{{ home_rosa_js }}</script>
 {% endcapture %}
 {% assign fechamento_integrado = scripts_integracao | append: '</body>' %}
 {{ nucleo_integrado | replace: '</body>', fechamento_integrado }}
