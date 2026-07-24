@@ -1,5 +1,5 @@
 /* GestaMed — identidade visual rosa da tela principal.
-   Patch visual conservador: preserva os elementos, IDs, eventos e funções existentes. */
+   Remove somente o hero visual antigo; preserva busca, filtros, IDs, eventos e módulos. */
 (function(){
   'use strict';
   if(document.getElementById('gm-home-pink-style')) return;
@@ -9,7 +9,9 @@
   style.textContent=`
     :root{--gm-pink:#ec3f78;--gm-pink-2:#ff7f9c;--gm-soft:#fff4f7;--gm-ink:#152036;--gm-muted:#71809a}
     body{background:linear-gradient(180deg,#fff8fa 0%,#fff 55%,#fff6f9 100%)!important;color:var(--gm-ink)}
-    .gm-old-header-hidden{display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important;visibility:hidden!important}
+    header.gm-legacy-hero-header{display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
+    header.gm-legacy-hero-header>.hero-banner,
+    header.gm-legacy-hero-header>.hero-sr{display:none!important}
     .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 16px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
     .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%)}
     .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
@@ -54,42 +56,33 @@
     }
     return null;
   }
-  function hideOldHeader(panel,search){
-    if(!panel) return false;
-    var pr=panel.getBoundingClientRect();
-    var viewport=Math.max(document.documentElement.clientWidth||0,window.innerWidth||0);
-    var all=document.querySelectorAll('body header,body section,body div,body figure,body picture,body img');
-    var best=null,bestScore=-1;
-    for(var i=0;i<all.length;i++){
-      var el=all[i];
-      if(el===panel||el.contains(panel)||panel.contains(el)||el.contains(search)||el.classList.contains('gm-old-header-hidden')) continue;
-      var r=el.getBoundingClientRect();
-      if(r.width<viewport*.82||r.height<260||r.height>760) continue;
-      if(r.top<-10||r.bottom>pr.top+12) continue;
-      var visible=getComputedStyle(el);
-      if(visible.display==='none'||visible.visibility==='hidden'||Number(visible.opacity)===0) continue;
-      var closeness=Math.max(0,500-Math.abs(pr.top-r.bottom));
-      var score=(r.width*r.height)+closeness*1000;
-      if(score>bestScore){best=el;bestScore=score;}
-    }
-    if(!best) return false;
-    best.classList.add('gm-old-header-hidden');
+  function removeExactLegacyHero(){
+    var hero=document.querySelector('header > .hero-banner');
+    if(!hero) return false;
+    var header=hero.parentElement;
+    var allowed=true;
+    Array.prototype.forEach.call(header.children,function(child){
+      if(!child.classList.contains('hero-banner')&&!child.classList.contains('hero-sr')) allowed=false;
+    });
+    if(!allowed) return false;
+    header.classList.add('gm-legacy-hero-header');
+    header.setAttribute('aria-hidden','true');
     return true;
   }
   function apply(){
-    var search=document.querySelector('input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
+    var search=document.querySelector('#search,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
     if(!search) return false;
 
-    var panel=document.querySelector('.gm-home-brand-panel');
-    if(!panel){
-      var anchor=search.closest('section,header,main,div')||search.parentElement;
-      panel=document.createElement('section');
+    removeExactLegacyHero();
+
+    if(!document.querySelector('.gm-home-brand-panel')){
+      var main=search.closest('main');
+      var anchor=main||search.closest('section,div')||search.parentElement;
+      var panel=document.createElement('section');
       panel.className='gm-home-brand-panel';
       panel.innerHTML='<div class="gm-home-brand-top"><div class="gm-home-brand-copy"><div class="gm-home-brand-logo">GestaMed</div><div class="gm-home-brand-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-home-professional" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-home-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-home-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
       anchor.parentNode.insertBefore(panel,anchor);
     }
-
-    hideOldHeader(panel,search);
 
     var labels=[/idade gestacional/,/cálculo de insulina/,/painel de exames/,/ganho de peso gestacional/,/prescrições por trimestre/,/condutas obstétricas/];
     var cards=[];
@@ -107,7 +100,7 @@
     var timer=setInterval(function(){
       attempts++;
       apply();
-      if(attempts>=60||document.querySelector('.gm-old-header-hidden')) clearInterval(timer);
+      if(attempts>=60||document.querySelector('header.gm-legacy-hero-header')) clearInterval(timer);
     },200);
     apply();
   }
