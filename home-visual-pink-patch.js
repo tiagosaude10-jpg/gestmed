@@ -54,32 +54,27 @@
     }
     return null;
   }
-  function hideOldHeader(search,panel){
-    var panelRect=panel.getBoundingClientRect();
-    var all=document.querySelectorAll('body header,body section,body div,body img');
-    var best=null,bestGap=Infinity;
+  function hideOldHeader(panel,search){
+    if(!panel) return false;
+    var pr=panel.getBoundingClientRect();
+    var viewport=Math.max(document.documentElement.clientWidth||0,window.innerWidth||0);
+    var all=document.querySelectorAll('body header,body section,body div,body figure,body picture,body img');
+    var best=null,bestScore=-1;
     for(var i=0;i<all.length;i++){
       var el=all[i];
-      if(el===panel||el.contains(panel)||panel.contains(el)||el.contains(search)) continue;
+      if(el===panel||el.contains(panel)||panel.contains(el)||el.contains(search)||el.classList.contains('gm-old-header-hidden')) continue;
       var r=el.getBoundingClientRect();
-      if(r.width<window.innerWidth*.78||r.height<250||r.height>760) continue;
-      if(r.bottom>panelRect.top+8||r.top<0) continue;
-      var gap=panelRect.top-r.bottom;
-      var txt=norm(el.textContent);
-      var hasBrand=txt.indexOf('gestamed')>=0||txt.indexOf('medicamentos na gestação')>=0;
-      var hasVisual=el.tagName==='IMG'||!!el.querySelector('img,svg,canvas');
-      if(!hasBrand&&!hasVisual) continue;
-      if(gap<bestGap){best=el;bestGap=gap;}
+      if(r.width<viewport*.82||r.height<260||r.height>760) continue;
+      if(r.top<-10||r.bottom>pr.top+12) continue;
+      var visible=getComputedStyle(el);
+      if(visible.display==='none'||visible.visibility==='hidden'||Number(visible.opacity)===0) continue;
+      var closeness=Math.max(0,500-Math.abs(pr.top-r.bottom));
+      var score=(r.width*r.height)+closeness*1000;
+      if(score>bestScore){best=el;bestScore=score;}
     }
-    if(best){
-      var target=best;
-      if(best.tagName==='IMG'&&best.parentElement){
-        var pr=best.parentElement.getBoundingClientRect();
-        if(pr.width>=window.innerWidth*.78&&pr.height>=250&&pr.height<=760) target=best.parentElement;
-      }
-      target.classList.add('gm-old-header-hidden');
-      target.setAttribute('aria-hidden','true');
-    }
+    if(!best) return false;
+    best.classList.add('gm-old-header-hidden');
+    return true;
   }
   function apply(){
     var search=document.querySelector('input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
@@ -94,7 +89,7 @@
       anchor.parentNode.insertBefore(panel,anchor);
     }
 
-    hideOldHeader(search,panel);
+    hideOldHeader(panel,search);
 
     var labels=[/idade gestacional/,/cálculo de insulina/,/painel de exames/,/ganho de peso gestacional/,/prescrições por trimestre/,/condutas obstétricas/];
     var cards=[];
@@ -109,7 +104,11 @@
   }
   function start(){
     var attempts=0;
-    var timer=setInterval(function(){attempts++;if(apply()||attempts>=50) clearInterval(timer);},200);
+    var timer=setInterval(function(){
+      attempts++;
+      apply();
+      if(attempts>=60||document.querySelector('.gm-old-header-hidden')) clearInterval(timer);
+    },200);
     apply();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
