@@ -10,13 +10,14 @@
     :root{--gm-pink:#ec3f78;--gm-pink-2:#ff7f9c;--gm-soft:#fff4f7;--gm-ink:#152036;--gm-muted:#71809a}
     body{background:linear-gradient(180deg,#fff8fa 0%,#fff 55%,#fff6f9 100%)!important;color:var(--gm-ink)}
     .hero-banner,.hero-sr,.gm-legacy-blue-visual{display:none!important}
-    .gm-home-brand-panel{margin:0 0 18px;padding:18px 20px 16px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
+    .gm-home-brand-panel{margin:0 0 22px;padding:18px 20px 24px;border-radius:0 0 34px 34px;background:linear-gradient(135deg,#fff6f9 0%,#ffe9f1 100%);box-shadow:0 12px 30px rgba(224,63,115,.10);position:relative;overflow:hidden}
     .gm-home-brand-panel:after{content:"";position:absolute;right:-30px;top:-35px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,142,175,.26),rgba(255,142,175,0) 70%);pointer-events:none}
     .gm-home-brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
     .gm-home-brand-copy{min-width:0}.gm-home-brand-logo{font-size:34px;line-height:1;font-weight:800;letter-spacing:-.045em;background:linear-gradient(90deg,#df255f,#ff8da8);-webkit-background-clip:text;background-clip:text;color:transparent}
     .gm-home-brand-tag{margin-top:6px;font-size:12px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:#a94c68;font-weight:650}
     .gm-home-professional{width:94px;height:94px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,#ffe0e9,#fff);font-size:52px;box-shadow:0 10px 22px rgba(222,61,111,.14)}
-    .gm-home-hello{margin:14px 0 3px;font-size:26px;font-weight:800;letter-spacing:-.025em;color:#231b2c}.gm-home-desc{margin:0;color:#59647a;font-size:14px;line-height:1.45}
+    .gm-home-hello{margin:14px 0 3px;font-size:26px;font-weight:800;letter-spacing:-.025em;color:#231b2c}.gm-home-desc{margin:0;color:#59647a;font-size:14px;line-height:1.45;position:relative;z-index:1}
+    .gm-search-safe-host{margin-top:0!important;transform:none!important;position:relative!important;z-index:2!important}
     input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]{border-color:#f2c6d3!important;box-shadow:0 9px 20px rgba(217,77,119,.08)!important;background:#fff!important}
     button,[role="button"],a{-webkit-tap-highlight-color:transparent}
     .gm-pink-card{border-radius:22px!important;box-shadow:0 9px 22px rgba(37,46,70,.07)!important;overflow:hidden}
@@ -88,11 +89,19 @@
     target.setAttribute('aria-hidden','true');
     return true;
   }
+  function protectSearchSpacing(search){
+    var host=search.parentElement;
+    if(!host) return;
+    host.classList.add('gm-search-safe-host');
+    host.style.setProperty('margin-top','0','important');
+    host.style.setProperty('transform','none','important');
+  }
   function apply(){
     var search=document.querySelector('#search,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i]');
     if(!search) return false;
 
     hideLegacyBlueVisual(search);
+    protectSearchSpacing(search);
 
     if(!document.querySelector('.gm-home-brand-panel')){
       var main=search.closest('main');
