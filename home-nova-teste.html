@@ -1,0 +1,70 @@
+---
+layout: null
+---
+{% assign marcador_dados = '// data.js — GestMed' %}
+{% assign marcador_app = '// app.js — GestMed' %}
+{% capture nucleo_atual %}{% include_relative app-core-stable.html %}{% endcapture %}
+{% capture fonte_603 %}{% include_relative backups/gestamed-base-603-1503-fonte.html %}{% endcapture %}
+{% assign integracao_valida = false %}
+{% if nucleo_atual contains marcador_dados and nucleo_atual contains marcador_app and fonte_603 contains marcador_dados and fonte_603 contains marcador_app and fonte_603 contains '"total_registros":1514' and fonte_603 contains '"registros_base_clinica":614' and fonte_603 contains '"registros_adicionais_indexacao":900' and fonte_603 contains 'GESTMED_GASTRIC_PACKAGE_126_START' %}
+  {% assign integracao_valida = true %}
+{% endif %}
+{% if integracao_valida %}
+  {% assign antes_dados = nucleo_atual | split: marcador_dados | first %}
+  {% assign depois_app = nucleo_atual | split: marcador_app | last %}
+  {% assign fonte_apos_dados = fonte_603 | split: marcador_dados | last %}
+  {% assign dados_603 = fonte_apos_dados | split: marcador_app | first %}
+  {% assign nucleo_integrado = antes_dados | append: marcador_dados | append: dados_603 | append: marcador_app | append: depois_app %}
+{% else %}
+  {% assign nucleo_integrado = nucleo_atual %}
+{% endif %}
+{% capture teste_head %}
+<meta name="theme-color" content="#fff5f8">
+<style>
+html,body{background:#fff8fa!important}
+.gm-test-hide{display:none!important}
+#gm-test-hero{margin:0;padding:20px 22px 18px;background:linear-gradient(135deg,#fff7fa 0%,#ffe8f0 100%);border-radius:0 0 34px 34px;box-shadow:0 12px 30px rgba(224,63,115,.12);position:relative;overflow:hidden}
+#gm-test-hero:after{content:"";position:absolute;right:-30px;top:-45px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(255,127,156,.28),rgba(255,127,156,0) 70%)}
+.gm-test-top{display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1}
+.gm-test-brand{min-width:0}.gm-test-logo{font-size:36px;line-height:1;font-weight:800;letter-spacing:-.045em;background:linear-gradient(90deg,#df255f,#ff8da8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gm-test-tag{margin-top:8px;font-size:12px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:#aa4d69;font-weight:700}
+.gm-test-doctor{width:106px;height:106px;border-radius:30px;display:grid;place-items:center;background:linear-gradient(145deg,#ffdce7,#fff);font-size:58px;box-shadow:0 10px 24px rgba(222,61,111,.16)}
+.gm-test-hello{margin:17px 0 5px;font-size:28px;font-weight:800;letter-spacing:-.03em;color:#241a2c;position:relative;z-index:1}.gm-test-desc{margin:0;color:#5f6b82;font-size:15px;line-height:1.45;position:relative;z-index:1}
+@media(max-width:390px){.gm-test-logo{font-size:31px}.gm-test-doctor{width:90px;height:90px;font-size:50px}.gm-test-hello{font-size:24px}}
+</style>
+{% endcapture %}
+{% assign head_integrado = teste_head | append: '</head>' %}
+{% assign nucleo_integrado = nucleo_integrado | replace: '</head>', head_integrado %}
+{% capture resumo_js %}{% include_relative summary-panel-patch.js %}{% endcapture %}
+{% capture exames_js %}{% include_relative exam-panel-patch.js %}{% endcapture %}
+{% capture filtros_js %}{% include_relative quick-filter-bar-patch.js %}{% endcapture %}
+{% capture limpar_js %}{% include_relative search-clear-and-size-patch.js %}{% endcapture %}
+{% capture scripts_teste %}
+<script>document.documentElement.setAttribute('data-gestamed-test','home-nova-1');</script>
+<script>{{ resumo_js }}</script>
+<script>{{ exames_js }}</script>
+<script>{{ filtros_js }}</script>
+<script>{{ limpar_js }}</script>
+<script>
+(function(){
+'use strict';
+function findSearch(){return document.querySelector('#searchInput,input[type="search"],input[placeholder*="medicamento" i],input[placeholder*="princípio" i],input[placeholder*="principio" i]');}
+function mount(){
+ var input=findSearch(); if(!input) return false;
+ var top=input; while(top.parentElement&&top.parentElement!==document.body) top=top.parentElement;
+ var hero=document.getElementById('gm-test-hero');
+ if(!hero){
+   hero=document.createElement('section'); hero.id='gm-test-hero';
+   hero.innerHTML='<div class="gm-test-top"><div class="gm-test-brand"><div class="gm-test-logo">GestaMed</div><div class="gm-test-tag">Cuidar com conhecimento.<br>Decidir com segurança.</div></div><div class="gm-test-doctor" aria-hidden="true">👩🏻‍⚕️</div></div><div class="gm-test-hello">Olá, Profissional! <span style="color:#f06b93">♥</span></div><p class="gm-test-desc">Acesse conteúdos confiáveis para apoiar sua prática com excelência.</p>';
+   document.body.insertBefore(hero,top);
+ }
+ var node=document.body.firstElementChild;
+ while(node&&node!==hero){var next=node.nextElementSibling; if(node!==top&&node.id!=='gm-entry-approved') node.classList.add('gm-test-hide'); node=next;}
+ return true;
+}
+var tries=0;(function start(){tries++;if(mount()||tries>80)return;setTimeout(start,150);})();
+})();
+</script>
+{% endcapture %}
+{% assign fechamento_integrado = scripts_teste | append: '</body>' %}
+{{ nucleo_integrado | replace: '</body>', fechamento_integrado }}
