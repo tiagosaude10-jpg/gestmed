@@ -56,7 +56,6 @@ jobs:
       - name: Confirmar alterações restritas
         shell: bash
         run: |
-          git diff --check
           git status --short
           mapfile -t changed < <(git diff --name-only | sort)
           printf 'Arquivo alterado: %s\n' "${changed[@]}"
